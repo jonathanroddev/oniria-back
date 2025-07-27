@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "oniria-back"
+version = "0.0.1"
+description = "Backend for Oniria App"
+authors = ["Jonathan Rodríguez <jonathanroddev@gmail.com>"]
+packages = [{ include = "oniria" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+starlette = "^0.47.2"
+uvicorn = { extras = ["standard"], version = "^0.35.0" }
+psycopg2-binary = "^2.9.10"
+python-dotenv = "^1.1.1"
+fastapi = "^0.116.1"
+pydantic = "^2.9"
+SQLAlchemy = "^2.0.41"
+
+[tool.poetry.group.dev.dependencies]
+devtools = "^0.12.2"
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+black = "^25.1.0"
+
+[tool.poetry.scripts]
+start = "oniria.__main__:start"
+dev = "oniria.__main__:dev"
+prod = "oniria.__main__:prod"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
