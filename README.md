@@ -12,8 +12,6 @@ Backend for the **Oniria** project built with **FastAPI**, following **Hexagonal
 - [Poetry](https://python-poetry.org/)
 - [Docker](https://www.docker.com/)
 - [Black](https://black.readthedocs.io/)
-- [isort](https://pycqa.github.io/isort/)
-- [mypy](https://mypy-lang.org/)
 
 ---
 
@@ -118,8 +116,6 @@ Run the following tools to maintain formatting and typing:
 
 ```bash
 poetry run black .
-poetry run isort .
-poetry run mypy .
 ```
 
 We recommend setting up pre-commit hooks using [pre-commit](https://pre-commit.com/).
@@ -269,10 +265,7 @@ POSTGRES_USER=devuser
 POSTGRES_PASSWORD=devpass
 POSTGRES_DB=devdb
 DB_HOST=localhost
-DATABASE_URL=postgresql+psycopg2://devuser:devpass@db:5432/devdb
-
-# For production, override this with your external Railway DATABASE_URL
-# DATABASE_URL=postgresql+psycopg2://username:password@hostname:port/dbname
+DATABASE_URL=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:5432/${POSTGRES_DB}
 ```
 
 ---
@@ -286,9 +279,8 @@ oniria/
     ├── application/
     ├── infrastructure/
     ├── interfaces/
-├── config/
 ├── db/
-├── __main__.py      # Entry point for FastAPI
+├── __main__.py
 ```
 
 Routers are loaded modularly and mounted in `__main__.py` based on the hexagonal architecture.

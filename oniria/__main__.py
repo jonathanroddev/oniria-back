@@ -1,14 +1,38 @@
 import os
 import uvicorn
 from fastapi import FastAPI
+from pathlib import Path
 
-from oniria import Base, engine
+from oniria import Base, engine, Renown
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 from oniria.auth.interfaces.routes import router as auth_routes
 
 
 def create_tables():
     Base.metadata.create_all(bind=engine)
     print("Tables created successfully.")
+    with Session(engine) as session:
+        if session.query(Renown).count() == 0:
+            load_data()
+        else:
+            print("Data already loaded, skipping DML execution.")
+
+
+def load_data():
+    sql_file = Path(__file__).resolve().parents[1] / "resources" / "oniria.dml"
+    if not os.path.isfile(sql_file):
+        print(f"Cannot find DML file: {sql_file}")
+        return
+    with engine.connect() as connection:
+        with open(sql_file, "r", encoding="utf-8") as file:
+            sql_script = file.read()
+            try:
+                connection.execute(text(sql_script))
+                connection.commit()
+                print("DML loaded successfully.")
+            except Exception as e:
+                print("Error while loading DML:", e)
 
 
 def get_application() -> FastAPI:

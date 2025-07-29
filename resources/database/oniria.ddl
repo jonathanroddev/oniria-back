@@ -30,7 +30,7 @@ CREATE TABLE user_status (
 	CONSTRAINT check_empty_name CHECK ((TRIM(BOTH FROM name) <> ''::text))
 );
 
-CREATE TABLE game_session (
+CREATE TABLE game_sessions (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE users (
     "player_type" VARCHAR(50) NOT NULL REFERENCES players_types(name),
     "user_status" VARCHAR(50) NOT NULL REFERENCES user_status(name),
     "plan" VARCHAR(50) NOT NULL REFERENCES plans(name),
-    "game_session_uuid" UUID NOT NULL REFERENCES game_session(uuid),
+    "game_sessions" UUID NOT NULL REFERENCES game_sessions(uuid),
     "character_sheet_uuid" UUID NOT NULL REFERENCES characters_sheets(uuid)
 );
 
@@ -70,21 +70,21 @@ CREATE TABLE permissions_plans_player_type (
     PRIMARY KEY (permission_uuid, plan, player_type)
 );
 
+CREATE TABLE renown (
+    "name" VARCHAR(50) PRIMARY KEY NOT NULL,
+    "level" INTEGER NOT NULL
+);
+
 CREATE TABLE experiences (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "max" INTEGER NOT NULL
+    "max" INTEGER NOT NULL,
+    "renown_name" VARCHAR(50) NOT NULL REFERENCES renown(name)
 );
 
 CREATE TABLE improvements (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "max" INTEGER NOT NULL
-);
-
-CREATE TABLE renown (
-    "name" VARCHAR(50) PRIMARY KEY NOT NULL,
-    "level" INTEGER NOT NULL,
-    "experience_uuid" UUID NOT NULL REFERENCES experiences(uuid),
-    "improvement_uuid" UUID NOT NULL REFERENCES improvements(uuid)
+    "max" INTEGER NOT NULL,
+    "renown_name" VARCHAR(50) NOT NULL REFERENCES renown(name)
 );
 
 CREATE TABLE characters_renown (
