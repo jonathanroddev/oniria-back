@@ -20,7 +20,7 @@ def create_tables():
 
 
 def load_data():
-    sql_file = Path(__file__).resolve().parents[1] / "resources" / "oniria.dml"
+    sql_file = f"{Path(__file__).resolve().parents[1]}/resources/database/oniria.dml"
     if not os.path.isfile(sql_file):
         print(f"Cannot find DML file: {sql_file}")
         return

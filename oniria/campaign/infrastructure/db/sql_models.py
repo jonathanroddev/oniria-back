@@ -135,6 +135,9 @@ class Experience(Base):
     )
     max: Mapped[int] = mapped_column(Integer, nullable=False)
     desc: Mapped[str] = mapped_column(String(100))
+    renown_name: Mapped[str] = mapped_column(
+        String(50), ForeignKey("renown.name"), nullable=False
+    )
     renown: Mapped[List["Renown"]] = relationship("Renown", back_populates="experience")
 
 
@@ -146,6 +149,9 @@ class Improvement(Base):
     )
     desc: Mapped[str] = mapped_column(String(100))
     max: Mapped[int] = mapped_column(Integer, nullable=False)
+    renown_name: Mapped[str] = mapped_column(
+        String(50), ForeignKey("renown.name"), nullable=False
+    )
     renown: Mapped[List["Renown"]] = relationship(
         "Renown", back_populates="improvement"
     )

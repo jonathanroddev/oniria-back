@@ -157,7 +157,7 @@ class User(Base):
     game_sessions_uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("game_sessions.uuid"), nullable=False
     )
-    character_sheet_uuid: Optional[Mapped[UUID]] = mapped_column(
+    character_sheet_uuid: Mapped[Optional[UUID]] = mapped_column(
         UUID(as_uuid=True), ForeignKey("characters_sheets.uuid"), nullable=True
     )
 

@@ -78,12 +78,14 @@ CREATE TABLE renown (
 CREATE TABLE experiences (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "max" INTEGER NOT NULL,
+    "desc" VARCHAR(50) NOT NULL,
     "renown_name" VARCHAR(50) NOT NULL REFERENCES renown(name)
 );
 
 CREATE TABLE improvements (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "max" INTEGER NOT NULL,
+    "desc" VARCHAR(50) NOT NULL,
     "renown_name" VARCHAR(50) NOT NULL REFERENCES renown(name)
 );
 

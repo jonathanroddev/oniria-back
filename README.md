@@ -79,6 +79,13 @@ RELOAD=true poetry run start
 
 ---
 
+##  🧹 Remove the container by doing:
+
+```bash
+docker-compose down -v
+```
+---
+
 ## 🔧 Available Scripts
 
 Defined in `pyproject.toml`:
