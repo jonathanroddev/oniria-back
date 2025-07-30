@@ -1,1 +1,6 @@
-# TODO: Add models with data classes
+from dataclasses import dataclass
+
+
+@dataclass
+class PlanDomain:
+    name: str

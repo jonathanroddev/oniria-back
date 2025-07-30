@@ -1,9 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from typing import List
+from sqlalchemy.orm import Session
+from oniria.auth import PlanDTO, PlanService
+from oniria.db import get_session, engine, Base
 
 router = APIRouter()
-router.prefix = "/v1/auth"
+router.prefix = "/v1"
 
 
-@router.get("/dummy")
-def dummy():
-    return {"messag": "Working on something big!"}
+@router.get("/public/plans", response_model=List[PlanDTO], tags=["public"])
+def get_plans(db_session: Session = Depends(get_session)):
+    return PlanService.get_all_plans(db_session)

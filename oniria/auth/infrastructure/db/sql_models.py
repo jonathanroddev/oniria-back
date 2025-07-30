@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from uuid import uuid4
 
-from oniria import Base
+from oniria.db import Base
 from oniria.campaign.infrastructure.db import CharacterSheet
 
 
