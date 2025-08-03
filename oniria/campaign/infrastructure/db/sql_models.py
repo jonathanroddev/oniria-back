@@ -80,6 +80,7 @@ class CharacterSheet(Base):
         "CharactersRenownHistory", back_populates="character"
     )
 
+
 class MasterWorkshop(Base):
     __tablename__ = "masters_workshops"
 

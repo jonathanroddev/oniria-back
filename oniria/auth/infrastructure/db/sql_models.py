@@ -46,8 +46,8 @@ class Plan(Base):
         CheckConstraint("TRIM(BOTH FROM name) <> ''", name="check_empty_name"),
     )
 
-    permissions_plans: Mapped[List["PermissionPlan"]] = (
-        relationship("PermissionPlan", back_populates="plan_rel")
+    permissions_plans: Mapped[List["PermissionPlan"]] = relationship(
+        "PermissionPlan", back_populates="plan_rel"
     )
     users: Mapped[List["User"]] = relationship("User", backref="plan_rel")
 
@@ -85,8 +85,8 @@ class Permission(Base):
     operation_rel: Mapped["Operation"] = relationship(
         "Operation", back_populates="permissions"
     )
-    permissions_plans: Mapped[List["PermissionPlan"]] = (
-        relationship("PermissionPlan", back_populates="permission")
+    permissions_plans: Mapped[List["PermissionPlan"]] = relationship(
+        "PermissionPlan", back_populates="permission"
     )
 
 
@@ -103,9 +103,7 @@ class PermissionPlan(Base):
     permission: Mapped["Permission"] = relationship(
         "Permission", back_populates="permissions_plans"
     )
-    plan_rel: Mapped["Plan"] = relationship(
-        "Plan", back_populates="permissions_plans"
-    )
+    plan_rel: Mapped["Plan"] = relationship("Plan", back_populates="permissions_plans")
 
 
 class GameSession(Base):
