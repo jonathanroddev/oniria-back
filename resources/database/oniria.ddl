@@ -20,11 +20,6 @@ CREATE TABLE plans (
 	CONSTRAINT check_empty_name CHECK ((TRIM(BOTH FROM name) <> ''::text))
 );
 
-CREATE TABLE players_types (
-    "name" VARCHAR(50) PRIMARY KEY,
-	CONSTRAINT check_empty_name CHECK ((TRIM(BOTH FROM name) <> ''::text))
-);
-
 CREATE TABLE user_status (
     "name" VARCHAR(50) PRIMARY KEY,
 	CONSTRAINT check_empty_name CHECK ((TRIM(BOTH FROM name) <> ''::text))
@@ -32,6 +27,8 @@ CREATE TABLE user_status (
 
 CREATE TABLE game_sessions (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "name" VARCHAR(50) NOT NULL,
+    "password" VARCHAR(250) NULL,
 );
 
 CREATE TABLE inventories (
@@ -48,26 +45,31 @@ CREATE TABLE heroic_paths (
 
 CREATE TABLE characters_sheets (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "user_uuid" UUID NOT NULL REFERENCES users(uuid),
+    "game_session_uuid" UUID NULL REFERENCES game_sessions(uuid),
     "biography_uuid" UUID NOT NULL REFERENCES biographies(uuid),
     "heroic_path_uuid" UUID NOT NULL REFERENCES heroic_paths(uuid),
     "inventory_uuid" UUID NOT NULL REFERENCES inventories(uuid)
 );
 
+CREATE TABLE masters_workshops (
+    "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "user_uuid" UUID NOT NULL REFERENCES users(uuid),
+    "game_session_uuid" UUID NOT NULL REFERENCES game_sessions(uuid)
+);
+
 CREATE TABLE users (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "external_uuid" VARCHAR(50) NOT NULL,
-    "player_type" VARCHAR(50) NOT NULL REFERENCES players_types(name),
+    "dreamer_tag" VARCHAR(50) NOT NULL,
     "user_status" VARCHAR(50) NOT NULL REFERENCES user_status(name),
     "plan" VARCHAR(50) NOT NULL REFERENCES plans(name),
-    "game_sessions" UUID NOT NULL REFERENCES game_sessions(uuid),
-    "character_sheet_uuid" UUID NOT NULL REFERENCES characters_sheets(uuid)
 );
 
-CREATE TABLE permissions_plans_player_type (
+CREATE TABLE permissions_plans (
     "permission_uuid" UUID NOT NULL REFERENCES permissions(uuid),
     "plan" VARCHAR(50) NOT NULL REFERENCES plans(name),
-    "player_type" VARCHAR(50) NOT NULL REFERENCES players_types(name),
-    PRIMARY KEY (permission_uuid, plan, player_type)
+    PRIMARY KEY (permission_uuid, plan)
 );
 
 CREATE TABLE renown (

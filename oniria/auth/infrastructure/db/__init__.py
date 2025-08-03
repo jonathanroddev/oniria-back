@@ -4,8 +4,7 @@ from .sql_models import (
     Resource,
     Operation,
     Plan,
-    PlayerType,
     UserStatus,
     GameSession,
-    PermissionPlanPlayerType,
+    PermissionPlan,
 )

@@ -21,7 +21,7 @@ Backend for the **Oniria** project built with **FastAPI**, following **Hexagonal
 
 ```bash
 git clone https://github.com/your-user/oniria-backend.git
-cd oniria-backend
+cd oniria-back
 ```
 
 ### 2. Install dependencies with Poetry
@@ -32,10 +32,10 @@ poetry install
 
 ### 3. Create a `.env` file
 
-Use `.env.example` as a reference:
+Use `.env` as a reference:
 
 ```bash
-cp .env.example .env
+cp .env .
 ```
 
 ---
@@ -282,10 +282,10 @@ DATABASE_URL=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HO
 ```
 oniria/
 ├── auth/
-    ├── domain/
-    ├── application/
-    ├── infrastructure/
-    ├── interfaces/
+|   ├── domain/
+|   ├── application/
+|   ├── infrastructure/
+|   ├── interfaces/
 ├── db/
 ├── __main__.py
 ```

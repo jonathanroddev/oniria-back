@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from uuid import uuid4
 
 from oniria.db import Base
-from oniria.campaign.infrastructure.db import CharacterSheet
+from oniria.campaign.infrastructure.db import CharacterSheet, MasterWorkshop
 
 
 class Resource(Base):
@@ -46,25 +46,10 @@ class Plan(Base):
         CheckConstraint("TRIM(BOTH FROM name) <> ''", name="check_empty_name"),
     )
 
-    permissions_plans_player_types: Mapped[List["PermissionPlanPlayerType"]] = (
-        relationship("PermissionPlanPlayerType", back_populates="plan_rel")
+    permissions_plans: Mapped[List["PermissionPlan"]] = (
+        relationship("PermissionPlan", back_populates="plan_rel")
     )
     users: Mapped[List["User"]] = relationship("User", backref="plan_rel")
-
-
-class PlayerType(Base):
-    __tablename__ = "players_types"
-
-    name: Mapped[str] = mapped_column(String(50), primary_key=True)
-
-    __table_args__ = (
-        CheckConstraint("TRIM(BOTH FROM name) <> ''", name="check_empty_name"),
-    )
-
-    permissions_plans_player_types: Mapped[List["PermissionPlanPlayerType"]] = (
-        relationship("PermissionPlanPlayerType", back_populates="player_type_rel")
-    )
-    users: Mapped[List["User"]] = relationship("User", backref="player_type_rel")
 
 
 class UserStatus(Base):
@@ -100,13 +85,13 @@ class Permission(Base):
     operation_rel: Mapped["Operation"] = relationship(
         "Operation", back_populates="permissions"
     )
-    permissions_plans_player_types: Mapped[List["PermissionPlanPlayerType"]] = (
-        relationship("PermissionPlanPlayerType", back_populates="permission")
+    permissions_plans: Mapped[List["PermissionPlan"]] = (
+        relationship("PermissionPlan", back_populates="permission")
     )
 
 
-class PermissionPlanPlayerType(Base):
-    __tablename__ = "permissions_plans_player_type"
+class PermissionPlan(Base):
+    __tablename__ = "permissions_plans"
 
     permission_uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("permissions.uuid"), primary_key=True
@@ -114,18 +99,12 @@ class PermissionPlanPlayerType(Base):
     plan: Mapped[str] = mapped_column(
         String(50), ForeignKey("plans.name"), primary_key=True
     )
-    player_type: Mapped[str] = mapped_column(
-        String(50), ForeignKey("players_types.name"), primary_key=True
-    )
 
     permission: Mapped["Permission"] = relationship(
-        "Permission", back_populates="permissions_plans_player_types"
+        "Permission", back_populates="permissions_plans"
     )
     plan_rel: Mapped["Plan"] = relationship(
-        "Plan", back_populates="permissions_plans_player_types"
-    )
-    player_type_rel: Mapped["PlayerType"] = relationship(
-        "PlayerType", back_populates="permissions_plans_player_types"
+        "Plan", back_populates="permissions_plans"
     )
 
 
@@ -135,7 +114,14 @@ class GameSession(Base):
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
-    users: Mapped[List["User"]] = relationship("User", back_populates="game_sessions")
+    name: Mapped[str] = mapped_column(String(50), nullable=False)
+    password: Mapped[str] = mapped_column(String(250), nullable=False)
+    character_sheets: Mapped[Optional[List["CharacterSheet"]]] = relationship(
+        "CharacterSheet", back_populates="game_session"
+    )
+    master_workshop: Mapped["MasterWorkshop"] = relationship(
+        "MasterWorkshop", back_populates="game_session"
+    )
 
 
 class User(Base):
@@ -145,25 +131,17 @@ class User(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
     external_uuid: Mapped[str] = mapped_column(String(50), nullable=False)
-    player_type: Mapped[str] = mapped_column(
-        String(50), ForeignKey("players_types.name"), nullable=False
-    )
+    dreamer_tag: Mapped[str] = mapped_column(String(50), nullable=False)
     user_status: Mapped[str] = mapped_column(
         String(50), ForeignKey("user_status.name"), nullable=False
     )
     plan: Mapped[str] = mapped_column(
         String(50), ForeignKey("plans.name"), nullable=False
     )
-    game_sessions_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("game_sessions.uuid"), nullable=False
-    )
-    character_sheet_uuid: Mapped[Optional[UUID]] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("characters_sheets.uuid"), nullable=True
-    )
 
-    game_sessions: Mapped["GameSession"] = relationship(
-        "GameSession", back_populates="users"
-    )
-    character_sheet: Mapped["CharacterSheet"] = relationship(
+    character_sheets: Mapped[List["CharacterSheet"]] = relationship(
         "CharacterSheet", back_populates="user"
+    )
+    masters_workshops: Mapped[List["MasterWorkshop"]] = relationship(
+        "MasterWorkshop", back_populates="user"
     )

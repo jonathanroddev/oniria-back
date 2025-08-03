@@ -14,20 +14,15 @@ INSERT INTO permissions (resource, operation, uuid) VALUES ('bestiary', 'write',
 INSERT INTO plans (name) VALUES ('free');
 INSERT INTO plans (name) VALUES ('premium');
 
-INSERT INTO players_types (name) VALUES ('master');
-INSERT INTO players_types (name) VALUES ('player');
 
-INSERT INTO permissions_plans_player_type (permission_uuid, plan, player_type) VALUES ('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'free', 'player');
-INSERT INTO permissions_plans_player_type (permission_uuid, plan, player_type) VALUES ('3707e539-1cf7-40f6-9183-8525ef2757c6', 'free', 'player');
+INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'free');
+INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('3707e539-1cf7-40f6-9183-8525ef2757c6', 'free');
+INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('8de5dc29-d5e9-4080-931f-8723245e7b1a', 'free');
 
-INSERT INTO permissions_plans_player_type (permission_uuid, plan, player_type) VALUES ('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'free', 'master');
-INSERT INTO permissions_plans_player_type (permission_uuid, plan, player_type) VALUES ('3707e539-1cf7-40f6-9183-8525ef2757c6', 'free', 'master');
-INSERT INTO permissions_plans_player_type (permission_uuid, plan, player_type) VALUES ('8de5dc29-d5e9-4080-931f-8723245e7b1a', 'free', 'master');
-
-INSERT INTO permissions_plans_player_type (permission_uuid, plan, player_type) VALUES ('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'premium', 'master');
-INSERT INTO permissions_plans_player_type (permission_uuid, plan, player_type) VALUES ('3707e539-1cf7-40f6-9183-8525ef2757c6', 'premium', 'master');
-INSERT INTO permissions_plans_player_type (permission_uuid, plan, player_type) VALUES ('8de5dc29-d5e9-4080-931f-8723245e7b1a', 'premium', 'master');
-INSERT INTO permissions_plans_player_type (permission_uuid, plan, player_type) VALUES ('d0fc60ff-8e62-4c95-871d-513577ef5e0b', 'premium', 'master');
+INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'premium');
+INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('3707e539-1cf7-40f6-9183-8525ef2757c6', 'premium');
+INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('8de5dc29-d5e9-4080-931f-8723245e7b1a', 'premium');
+INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('d0fc60ff-8e62-4c95-871d-513577ef5e0b', 'premium');
 
 INSERT INTO user_status (name) VALUES ('active');
 INSERT INTO user_status (name) VALUES ('inactive');

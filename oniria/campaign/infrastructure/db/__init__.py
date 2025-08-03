@@ -10,4 +10,5 @@ from .sql_models import (
     Biography,
     HeroicPath,
     Inventory,
+    MasterWorkshop,
 )

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from uuid import uuid4
 
 from sqlalchemy import Boolean, ForeignKey, Integer, String
@@ -47,6 +47,9 @@ class CharacterSheet(Base):
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
+    user_uuid: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
+    )
     biography_uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("biographies.uuid"), nullable=False
     )
@@ -55,6 +58,9 @@ class CharacterSheet(Base):
     )
     inventory_uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("inventories.uuid"), nullable=False
+    )
+    game_session_uuid: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("game_sessions.uuid"), nullable=True
     )
 
     user: Mapped["User"] = relationship("User", back_populates="character_sheet")
@@ -67,8 +73,29 @@ class CharacterSheet(Base):
     inventory: Mapped["Inventory"] = relationship(
         "Inventory", back_populates="character_sheet"
     )
+    game_session: Mapped[Optional["GameSession"]] = relationship(
+        "GameSession", back_populates="character_sheets"
+    )
     character_renown_history: Mapped[List["CharactersRenownHistory"]] = relationship(
         "CharactersRenownHistory", back_populates="character"
+    )
+
+class MasterWorkshop(Base):
+    __tablename__ = "masters_workshops"
+
+    uuid: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid4
+    )
+    user_uuid: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
+    )
+    game_session_uuid: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("game_sessions.uuid"), nullable=False
+    )
+
+    user: Mapped["User"] = relationship("User", back_populates="masters_workshops")
+    game_session: Mapped["GameSession"] = relationship(
+        "GameSession", back_populates="master_workshop"
     )
 
 
