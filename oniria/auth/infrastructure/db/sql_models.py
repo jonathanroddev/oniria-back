@@ -137,7 +137,7 @@ class User(Base):
         String(50), ForeignKey("plans.name"), nullable=False
     )
 
-    character_sheets: Mapped[List["CharacterSheet"]] = relationship(
+    characters_sheets: Mapped[List["CharacterSheet"]] = relationship(
         "CharacterSheet", back_populates="user"
     )
     masters_workshops: Mapped[List["MasterWorkshop"]] = relationship(

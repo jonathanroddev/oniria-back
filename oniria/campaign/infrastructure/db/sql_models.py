@@ -63,7 +63,7 @@ class CharacterSheet(Base):
         UUID(as_uuid=True), ForeignKey("game_sessions.uuid"), nullable=True
     )
 
-    user: Mapped["User"] = relationship("User", back_populates="character_sheet")
+    user: Mapped["User"] = relationship("User", back_populates="characters_sheets")
     biography: Mapped["Biography"] = relationship(
         "Biography", back_populates="character_sheet"
     )
