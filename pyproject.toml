@@ -12,8 +12,10 @@ uvicorn = { extras = ["standard"], version = "^0.35.0" }
 psycopg2-binary = "^2.9.10"
 python-dotenv = "^1.1.1"
 fastapi = "^0.116.1"
-pydantic = "^2.9"
+pydantic = {extras = ["email"], version = "^2.11.7"}
 SQLAlchemy = "^2.0.41"
+python-jose = "^3.5.0"
+firebase-admin = "^7.1.0"
 
 [tool.poetry.group.dev.dependencies]
 devtools = "^0.12.2"

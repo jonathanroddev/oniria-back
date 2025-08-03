@@ -266,13 +266,25 @@ volumes:
 
 ### `.env.example`
 
+All the Google credentials could be found in the keys file downloaded from Firebase Console.
+
 ```env
-# For development (override.yml)
 POSTGRES_USER=devuser
 POSTGRES_PASSWORD=devpass
 POSTGRES_DB=devdb
 DB_HOST=localhost
 DATABASE_URL=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:5432/${POSTGRES_DB}
+GOOGLE_TYPE=service_account
+GOOGLE_PROJECT_ID=your-project-id
+GOOGLE_PRIVATE_KEY_ID=xxx
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nABCDEF...\n-----END PRIVATE KEY-----\n"
+GOOGLE_CLIENT_EMAIL=firebase-adminsdk-xxx@your-project-id.iam.gserviceaccount.com
+GOOGLE_CLIENT_ID=1234567890
+GOOGLE_AUTH_URI=https://accounts.google.com/o/oauth2/auth
+GOOGLE_TOKEN_URI=https://oauth2.googleapis.com/token
+GOOGLE_AUTH_PROVIDER_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+GOOGLE_CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/...
+GOOGLE_UNIVERSE_DOMAIN=googleapis.com
 ```
 
 ---

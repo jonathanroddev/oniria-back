@@ -37,6 +37,20 @@ class Operation(Base):
     )
 
 
+class UserStatus(Base):
+    __tablename__ = "user_status"
+
+    name: Mapped[str] = mapped_column(String(50), primary_key=True)
+
+    __table_args__ = (
+        CheckConstraint("TRIM(BOTH FROM name) <> ''", name="check_empty_name"),
+    )
+
+    users: Mapped[Optional[List["User"]]] = relationship(
+        "User", back_populates="user_status_rel"
+    )
+
+
 class Plan(Base):
     __tablename__ = "plans"
 
@@ -49,19 +63,9 @@ class Plan(Base):
     permissions_plans: Mapped[List["PermissionPlan"]] = relationship(
         "PermissionPlan", back_populates="plan_rel"
     )
-    users: Mapped[List["User"]] = relationship("User", backref="plan_rel")
-
-
-class UserStatus(Base):
-    __tablename__ = "user_status"
-
-    name: Mapped[str] = mapped_column(String(50), primary_key=True)
-
-    __table_args__ = (
-        CheckConstraint("TRIM(BOTH FROM name) <> ''", name="check_empty_name"),
+    users: Mapped[Optional[List["User"]]] = relationship(
+        "User", back_populates="plan_rel"
     )
-
-    users: Mapped[List["User"]] = relationship("User", backref="user_status_rel")
 
 
 class Permission(Base):
@@ -129,7 +133,7 @@ class User(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
     external_uuid: Mapped[str] = mapped_column(String(50), nullable=False)
-    dreamer_tag: Mapped[str] = mapped_column(String(50), nullable=False)
+    dreamer_tag: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     user_status: Mapped[str] = mapped_column(
         String(50), ForeignKey("user_status.name"), nullable=False
     )
@@ -137,6 +141,10 @@ class User(Base):
         String(50), ForeignKey("plans.name"), nullable=False
     )
 
+    user_status_rel: Mapped["UserStatus"] = relationship(
+        "UserStatus", back_populates="users"
+    )
+    plan_rel: Mapped["Plan"] = relationship("Plan", back_populates="users")
     characters_sheets: Mapped[List["CharacterSheet"]] = relationship(
         "CharacterSheet", back_populates="user"
     )

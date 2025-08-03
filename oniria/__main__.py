@@ -3,6 +3,7 @@ import uvicorn
 from fastapi import FastAPI
 from pathlib import Path
 
+from oniria.auth.infrastructure.firebase.firebase_config import *
 from oniria.db import Base, engine
 from oniria.campaign.infrastructure.db import Renown
 from sqlalchemy import text
