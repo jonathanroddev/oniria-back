@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Request
+from oniria.auth.infrastructure.firebase.firebase_service import get_current_user
 from sqlalchemy.orm import Session
 from oniria.auth import SignUp, PlanDTO, PlanService, UserService, UserDTO
 from oniria.db import get_session, engine, Base
@@ -17,3 +18,10 @@ def signup(sign_up: SignUp, db: Session = Depends(get_session)):
 @router.get("/public/plans", response_model=List[PlanDTO], tags=["public"])
 def get_plans(db_session: Session = Depends(get_session)):
     return PlanService.get_all_plans(db_session)
+
+
+@router.get("/users/me", response_model=UserDTO, tags=["users"])
+def get_current_user(
+    user_data=Depends(get_current_user), db_session: Session = Depends(get_session)
+):
+    return UserService.get_self_user(user_data, db_session)

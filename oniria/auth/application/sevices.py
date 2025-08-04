@@ -1,6 +1,6 @@
 import uuid
 from random import Random
-from typing import List, Sequence
+from typing import List, Sequence, Optional
 
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
@@ -56,3 +56,19 @@ class UserService:
         )
         UserRepository.create_user(db_session, new_user)
         return UserMapper.to_dto_from_entity(new_user)
+
+    @staticmethod
+    def get_user_by_external_uuid(external_uuid: str, db_session: Session) -> UserDTO:
+        user_entity = UserRepository.get_user_by_external_uuid(
+            db_session, external_uuid
+        )
+        if not user_entity:
+            # TODO: Handle this raise in a common error handler
+            raise HTTPException(status_code=204, detail="User not found")
+        return UserMapper.to_dto_from_entity(user_entity)
+
+    @staticmethod
+    def get_self_user(
+        user_data: firebase_auth.UserRecord, db_session: Session
+    ) -> Optional[UserDTO]:
+        return UserService.get_user_by_external_uuid(user_data["uid"], db_session)

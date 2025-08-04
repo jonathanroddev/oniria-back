@@ -64,9 +64,7 @@ class CharacterSheet(Base):
     )
 
     user: Mapped["User"] = relationship("User", back_populates="characters_sheets")
-    avatar: Mapped["Avatar"] = relationship(
-        "Avatar", back_populates="character_sheet"
-    )
+    avatar: Mapped["Avatar"] = relationship("Avatar", back_populates="character_sheet")
     oneironaut: Mapped["Oneironaut"] = relationship(
         "Oneironaut", back_populates="character_sheet"
     )
