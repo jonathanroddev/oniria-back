@@ -8,25 +8,25 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from oniria.db import Base
 
 
-class Biography(Base):
-    __tablename__ = "biographies"
+class Avatar(Base):
+    __tablename__ = "avatars"
 
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
     character_sheet: Mapped["CharacterSheet"] = relationship(
-        "CharacterSheet", back_populates="biography"
+        "CharacterSheet", back_populates="avatar"
     )
 
 
-class HeroicPath(Base):
-    __tablename__ = "heroic_paths"
+class Oneironaut(Base):
+    __tablename__ = "oneironauts"
 
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
     character_sheet: Mapped["CharacterSheet"] = relationship(
-        "CharacterSheet", back_populates="heroic_path"
+        "CharacterSheet", back_populates="oneironaut"
     )
 
 
@@ -50,11 +50,11 @@ class CharacterSheet(Base):
     user_uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
     )
-    biography_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("biographies.uuid"), nullable=False
+    avatar_uuid: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("avatars.uuid"), nullable=False
     )
-    heroic_path_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("heroic_paths.uuid"), nullable=False
+    oneironaut_uuid: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("oneironauts.uuid"), nullable=False
     )
     inventory_uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("inventories.uuid"), nullable=False
@@ -64,11 +64,11 @@ class CharacterSheet(Base):
     )
 
     user: Mapped["User"] = relationship("User", back_populates="characters_sheets")
-    biography: Mapped["Biography"] = relationship(
-        "Biography", back_populates="character_sheet"
+    avatar: Mapped["Avatar"] = relationship(
+        "Avatar", back_populates="character_sheet"
     )
-    heroic_path: Mapped["HeroicPath"] = relationship(
-        "HeroicPath", back_populates="character_sheet"
+    oneironaut: Mapped["Oneironaut"] = relationship(
+        "Oneironaut", back_populates="character_sheet"
     )
     inventory: Mapped["Inventory"] = relationship(
         "Inventory", back_populates="character_sheet"

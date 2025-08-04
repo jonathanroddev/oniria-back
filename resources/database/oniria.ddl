@@ -35,11 +35,11 @@ CREATE TABLE inventories (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 );
 
-CREATE TABLE biographies (
+CREATE TABLE avatars (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 );
 
-CREATE TABLE heroic_paths (
+CREATE TABLE oneironauts (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 );
 
@@ -47,8 +47,8 @@ CREATE TABLE characters_sheets (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "user_uuid" UUID NOT NULL REFERENCES users(uuid),
     "game_session_uuid" UUID NULL REFERENCES game_sessions(uuid),
-    "biography_uuid" UUID NOT NULL REFERENCES biographies(uuid),
-    "heroic_path_uuid" UUID NOT NULL REFERENCES heroic_paths(uuid),
+    "avatar_uuid" UUID NOT NULL REFERENCES avatars(uuid),
+    "oneironaut_uuid" UUID NOT NULL REFERENCES oneironauts(uuid),
     "inventory_uuid" UUID NOT NULL REFERENCES inventories(uuid)
 );
 

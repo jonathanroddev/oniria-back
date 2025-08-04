@@ -7,8 +7,8 @@ from .sql_models import (
     ExperienceAcquired,
     ImprovementAcquired,
     CharacterSheet,
-    Biography,
-    HeroicPath,
+    Avatar,
+    Oneironaut,
     Inventory,
     MasterWorkshop,
 )
