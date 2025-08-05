@@ -6,10 +6,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from uuid import uuid4
 
 from oniria.db import Base
-from oniria.campaign.infrastructure.db import CharacterSheet, MasterWorkshop
+from oniria.campaign.infrastructure.db import CharacterSheetDB, MasterWorkshopDB
 
 
-class Resource(Base):
+class ResourceDB(Base):
     __tablename__ = "resources"
 
     name: Mapped[str] = mapped_column(String(50), primary_key=True)
@@ -18,12 +18,12 @@ class Resource(Base):
         CheckConstraint("TRIM(BOTH FROM name) <> ''", name="check_empty_name"),
     )
 
-    permissions: Mapped[List["Permission"]] = relationship(
-        "Permission", back_populates="resource_rel"
+    permissions: Mapped[List["PermissionDB"]] = relationship(
+        "PermissionDB", back_populates="resource_rel"
     )
 
 
-class Operation(Base):
+class OperationDB(Base):
     __tablename__ = "operations"
 
     name: Mapped[str] = mapped_column(String(50), primary_key=True)
@@ -32,12 +32,12 @@ class Operation(Base):
         CheckConstraint("TRIM(BOTH FROM name) <> ''", name="check_empty_name"),
     )
 
-    permissions: Mapped[List["Permission"]] = relationship(
-        "Permission", back_populates="operation_rel"
+    permissions: Mapped[List["PermissionDB"]] = relationship(
+        "PermissionDB", back_populates="operation_rel"
     )
 
 
-class UserStatus(Base):
+class UserStatusDB(Base):
     __tablename__ = "user_status"
 
     name: Mapped[str] = mapped_column(String(50), primary_key=True)
@@ -46,12 +46,12 @@ class UserStatus(Base):
         CheckConstraint("TRIM(BOTH FROM name) <> ''", name="check_empty_name"),
     )
 
-    users: Mapped[Optional[List["User"]]] = relationship(
-        "User", back_populates="user_status_rel"
+    users: Mapped[Optional[List["UserDB"]]] = relationship(
+        "UserDB", back_populates="user_status_rel"
     )
 
 
-class Plan(Base):
+class PlanDB(Base):
     __tablename__ = "plans"
 
     name: Mapped[str] = mapped_column(String(50), primary_key=True)
@@ -60,15 +60,15 @@ class Plan(Base):
         CheckConstraint("TRIM(BOTH FROM name) <> ''", name="check_empty_name"),
     )
 
-    permissions_plans: Mapped[List["PermissionPlan"]] = relationship(
-        "PermissionPlan", back_populates="plan_rel"
+    permissions_plans: Mapped[List["PermissionPlanDB"]] = relationship(
+        "PermissionPlanDB", back_populates="plan_rel"
     )
-    users: Mapped[Optional[List["User"]]] = relationship(
-        "User", back_populates="plan_rel"
+    users: Mapped[Optional[List["UserDB"]]] = relationship(
+        "UserDB", back_populates="plan_rel"
     )
 
 
-class Permission(Base):
+class PermissionDB(Base):
     __tablename__ = "permissions"
 
     uuid: Mapped[UUID] = mapped_column(
@@ -83,18 +83,18 @@ class Permission(Base):
 
     __table_args__ = (UniqueConstraint("resource", "operation"),)
 
-    resource_rel: Mapped["Resource"] = relationship(
-        "Resource", back_populates="permissions"
+    resource_rel: Mapped["ResourceDB"] = relationship(
+        "ResourceDB", back_populates="permissions"
     )
-    operation_rel: Mapped["Operation"] = relationship(
-        "Operation", back_populates="permissions"
+    operation_rel: Mapped["OperationDB"] = relationship(
+        "OperationDB", back_populates="permissions"
     )
-    permissions_plans: Mapped[List["PermissionPlan"]] = relationship(
-        "PermissionPlan", back_populates="permission"
+    permissions_plans: Mapped[List["PermissionPlanDB"]] = relationship(
+        "PermissionPlanDB", back_populates="permission"
     )
 
 
-class PermissionPlan(Base):
+class PermissionPlanDB(Base):
     __tablename__ = "permissions_plans"
 
     permission_uuid: Mapped[UUID] = mapped_column(
@@ -104,13 +104,15 @@ class PermissionPlan(Base):
         String(50), ForeignKey("plans.name"), primary_key=True
     )
 
-    permission: Mapped["Permission"] = relationship(
-        "Permission", back_populates="permissions_plans"
+    permission: Mapped["PermissionDB"] = relationship(
+        "PermissionDB", back_populates="permissions_plans"
     )
-    plan_rel: Mapped["Plan"] = relationship("Plan", back_populates="permissions_plans")
+    plan_rel: Mapped["PlanDB"] = relationship(
+        "PlanDB", back_populates="permissions_plans"
+    )
 
 
-class GameSession(Base):
+class GameSessionDB(Base):
     __tablename__ = "game_sessions"
 
     uuid: Mapped[UUID] = mapped_column(
@@ -118,15 +120,15 @@ class GameSession(Base):
     )
     name: Mapped[str] = mapped_column(String(50), nullable=False)
     password: Mapped[str] = mapped_column(String(250), nullable=False)
-    character_sheets: Mapped[Optional[List["CharacterSheet"]]] = relationship(
-        "CharacterSheet", back_populates="game_session"
+    character_sheets: Mapped[Optional[List["CharacterSheetDB"]]] = relationship(
+        "CharacterSheetDB", back_populates="game_session"
     )
-    master_workshop: Mapped["MasterWorkshop"] = relationship(
-        "MasterWorkshop", back_populates="game_session"
+    master_workshop: Mapped["MasterWorkshopDB"] = relationship(
+        "MasterWorkshopDB", back_populates="game_session"
     )
 
 
-class User(Base):
+class UserDB(Base):
     __tablename__ = "users"
 
     uuid: Mapped[UUID] = mapped_column(
@@ -141,13 +143,13 @@ class User(Base):
         String(50), ForeignKey("plans.name"), nullable=False
     )
 
-    user_status_rel: Mapped["UserStatus"] = relationship(
-        "UserStatus", back_populates="users"
+    user_status_rel: Mapped["UserStatusDB"] = relationship(
+        "UserStatusDB", back_populates="users"
     )
-    plan_rel: Mapped["Plan"] = relationship("Plan", back_populates="users")
-    characters_sheets: Mapped[List["CharacterSheet"]] = relationship(
-        "CharacterSheet", back_populates="user"
+    plan_rel: Mapped["PlanDB"] = relationship("PlanDB", back_populates="users")
+    characters_sheets: Mapped[List["CharacterSheetDB"]] = relationship(
+        "CharacterSheetDB", back_populates="user"
     )
-    masters_workshops: Mapped[List["MasterWorkshop"]] = relationship(
-        "MasterWorkshop", back_populates="user"
+    masters_workshops: Mapped[List["MasterWorkshopDB"]] = relationship(
+        "MasterWorkshopDB", back_populates="user"
     )

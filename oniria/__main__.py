@@ -5,7 +5,7 @@ from pathlib import Path
 
 from oniria.auth.infrastructure.firebase.firebase_config import *
 from oniria.db import Base, engine
-from oniria.campaign.infrastructure.db import Renown
+from oniria.campaign.infrastructure.db import RenownDB
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from oniria.auth.interfaces.routes import router as auth_routes
@@ -15,7 +15,7 @@ def create_tables():
     Base.metadata.create_all(bind=engine)
     print("Tables created successfully.")
     with Session(engine) as session:
-        if session.query(Renown).count() == 0:
+        if session.query(RenownDB).count() == 0:
             load_data()
         else:
             print("Data already loaded, skipping DML execution.")

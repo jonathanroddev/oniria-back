@@ -1,5 +1,5 @@
-from oniria.auth.domain.models import PlanDomain
+from oniria.auth.domain.models import Plan
 
 __all__ = [
-    "PlanDomain",
+    "Plan",
 ]

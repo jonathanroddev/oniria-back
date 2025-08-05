@@ -2,5 +2,5 @@ from dataclasses import dataclass
 
 
 @dataclass
-class PlanDomain:
+class Plan:
     name: str

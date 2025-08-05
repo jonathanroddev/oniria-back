@@ -1,10 +1,10 @@
 from .sql_models import (
-    User,
-    Permission,
-    Resource,
-    Operation,
-    Plan,
-    UserStatus,
-    GameSession,
-    PermissionPlan,
+    UserDB,
+    PermissionDB,
+    ResourceDB,
+    OperationDB,
+    PlanDB,
+    UserStatusDB,
+    GameSessionDB,
+    PermissionPlanDB,
 )

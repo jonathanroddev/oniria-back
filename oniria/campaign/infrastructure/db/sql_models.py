@@ -8,40 +8,40 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from oniria.db import Base
 
 
-class Avatar(Base):
+class AvatarDB(Base):
     __tablename__ = "avatars"
 
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
-    character_sheet: Mapped["CharacterSheet"] = relationship(
-        "CharacterSheet", back_populates="avatar"
+    character_sheet: Mapped["CharacterSheetDB"] = relationship(
+        "CharacterSheetDB", back_populates="avatar"
     )
 
 
-class Oneironaut(Base):
+class OneironautDB(Base):
     __tablename__ = "oneironauts"
 
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
-    character_sheet: Mapped["CharacterSheet"] = relationship(
-        "CharacterSheet", back_populates="oneironaut"
+    character_sheet: Mapped["CharacterSheetDB"] = relationship(
+        "CharacterSheetDB", back_populates="oneironaut"
     )
 
 
-class Inventory(Base):
+class InventoryDB(Base):
     __tablename__ = "inventories"
 
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
-    character_sheet: Mapped["CharacterSheet"] = relationship(
-        "CharacterSheet", back_populates="inventory"
+    character_sheet: Mapped["CharacterSheetDB"] = relationship(
+        "CharacterSheetDB", back_populates="inventory"
     )
 
 
-class CharacterSheet(Base):
+class CharacterSheetDB(Base):
     __tablename__ = "characters_sheets"
 
     uuid: Mapped[UUID] = mapped_column(
@@ -63,23 +63,25 @@ class CharacterSheet(Base):
         UUID(as_uuid=True), ForeignKey("game_sessions.uuid"), nullable=True
     )
 
-    user: Mapped["User"] = relationship("User", back_populates="characters_sheets")
-    avatar: Mapped["Avatar"] = relationship("Avatar", back_populates="character_sheet")
-    oneironaut: Mapped["Oneironaut"] = relationship(
-        "Oneironaut", back_populates="character_sheet"
+    user: Mapped["User"] = relationship("UserDB", back_populates="characters_sheets")
+    avatar: Mapped["AvatarDB"] = relationship(
+        "AvatarDB", back_populates="character_sheet"
     )
-    inventory: Mapped["Inventory"] = relationship(
-        "Inventory", back_populates="character_sheet"
+    oneironaut: Mapped["OneironautDB"] = relationship(
+        "OneironautDB", back_populates="character_sheet"
+    )
+    inventory: Mapped["InventoryDB"] = relationship(
+        "InventoryDB", back_populates="character_sheet"
     )
     game_session: Mapped[Optional["GameSession"]] = relationship(
-        "GameSession", back_populates="character_sheets"
+        "GameSessionDB", back_populates="character_sheets"
     )
-    character_renown_history: Mapped[List["CharactersRenownHistory"]] = relationship(
-        "CharactersRenownHistory", back_populates="character"
+    character_renown_history: Mapped[List["CharactersRenownHistoryDB"]] = relationship(
+        "CharactersRenownHistoryDB", back_populates="character"
     )
 
 
-class MasterWorkshop(Base):
+class MasterWorkshopDB(Base):
     __tablename__ = "masters_workshops"
 
     uuid: Mapped[UUID] = mapped_column(
@@ -92,27 +94,27 @@ class MasterWorkshop(Base):
         UUID(as_uuid=True), ForeignKey("game_sessions.uuid"), nullable=False
     )
 
-    user: Mapped["User"] = relationship("User", back_populates="masters_workshops")
+    user: Mapped["User"] = relationship("UserDB", back_populates="masters_workshops")
     game_session: Mapped["GameSession"] = relationship(
-        "GameSession", back_populates="master_workshop"
+        "GameSessionDB", back_populates="master_workshop"
     )
 
 
-class Renown(Base):
+class RenownDB(Base):
     __tablename__ = "renown"
 
     name: Mapped[str] = mapped_column(String(50), primary_key=True)
     level: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    experience: Mapped["Experience"] = relationship(
-        "Experience", back_populates="renown"
+    experience: Mapped["ExperienceDB"] = relationship(
+        "ExperienceDB", back_populates="renown"
     )
-    improvement: Mapped["Improvement"] = relationship(
-        "Improvement", back_populates="renown"
+    improvement: Mapped["ImprovementDB"] = relationship(
+        "ImprovementDB", back_populates="renown"
     )
 
 
-class CharacterRenown(Base):
+class CharacterRenownDB(Base):
     __tablename__ = "characters_renown"
 
     uuid: Mapped[UUID] = mapped_column(
@@ -126,12 +128,12 @@ class CharacterRenown(Base):
     )
     is_current: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
-    character_renown_history: Mapped[List["CharactersRenownHistory"]] = relationship(
-        "CharactersRenownHistory", back_populates="character_renown"
+    character_renown_history: Mapped[List["CharactersRenownHistoryDB"]] = relationship(
+        "CharactersRenownHistoryDB", back_populates="character_renown"
     )
 
 
-class CharactersRenownHistory(Base):
+class CharactersRenownHistoryDB(Base):
     __tablename__ = "characters_renown_history"
 
     character_uuid: Mapped[UUID] = mapped_column(
@@ -141,19 +143,19 @@ class CharactersRenownHistory(Base):
         UUID(as_uuid=True), ForeignKey("characters_renown.uuid"), primary_key=True
     )
 
-    character: Mapped["CharacterSheet"] = relationship(
-        "CharacterSheet",
+    character: Mapped["CharacterSheetDB"] = relationship(
+        "CharacterSheetDB",
         back_populates="character_renown_history",
         foreign_keys=[character_uuid],
     )
-    character_renown: Mapped["CharacterRenown"] = relationship(
-        "CharacterRenown",
+    character_renown: Mapped["CharacterRenownDB"] = relationship(
+        "CharacterRenownDB",
         back_populates="character_renown_history",
         foreign_keys=[character_renown_uuid],
     )
 
 
-class Experience(Base):
+class ExperienceDB(Base):
     __tablename__ = "experiences"
 
     uuid: Mapped[UUID] = mapped_column(
@@ -164,10 +166,12 @@ class Experience(Base):
     renown_name: Mapped[str] = mapped_column(
         String(50), ForeignKey("renown.name"), nullable=False
     )
-    renown: Mapped[List["Renown"]] = relationship("Renown", back_populates="experience")
+    renown: Mapped[List["RenownDB"]] = relationship(
+        "RenownDB", back_populates="experience"
+    )
 
 
-class Improvement(Base):
+class ImprovementDB(Base):
     __tablename__ = "improvements"
 
     uuid: Mapped[UUID] = mapped_column(
@@ -178,12 +182,12 @@ class Improvement(Base):
     renown_name: Mapped[str] = mapped_column(
         String(50), ForeignKey("renown.name"), nullable=False
     )
-    renown: Mapped[List["Renown"]] = relationship(
-        "Renown", back_populates="improvement"
+    renown: Mapped[List["RenownDB"]] = relationship(
+        "RenownDB", back_populates="improvement"
     )
 
 
-class ExperienceAcquired(Base):
+class ExperienceAcquiredDB(Base):
     __tablename__ = "experiences_acquired"
 
     uuid: Mapped[UUID] = mapped_column(
@@ -198,7 +202,7 @@ class ExperienceAcquired(Base):
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
 
-class ImprovementAcquired(Base):
+class ImprovementAcquiredDB(Base):
     __tablename__ = "improvements_acquired"
 
     uuid: Mapped[UUID] = mapped_column(

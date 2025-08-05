@@ -13,13 +13,13 @@ from oniria.auth.infrastructure.db.repositories import (
     UserRepository,
     UserStatusRepository,
 )
-from oniria.auth.infrastructure.db.sql_models import Plan, User
+from oniria.auth.infrastructure.db.sql_models import PlanDB, UserDB
 
 
 class PlanService:
     @staticmethod
     def get_all_plans(db_session: Session) -> List[PlanDTO]:
-        plans_entities: Sequence[Plan] = PlanRepository.get_all_plans(db_session)
+        plans_entities: Sequence[PlanDB] = PlanRepository.get_all_plans(db_session)
         if plans_entities:
             return [
                 PlanMapper.to_dto_from_domain(PlanMapper.to_domain_from_entity(plan))
@@ -45,7 +45,7 @@ class UserService:
             # TODO: Handle user already exists case and send 409 response
             pass
         # TODO: dreamer_tag should be unique, consider adding a check by creating an endpoint to check if the tag exists
-        new_user = User(
+        new_user = UserDB(
             uuid=uuid.uuid4(),
             external_uuid=external_uuid,
             dreamer_tag=f"{str(sign_up.email).split('@')[0]}#{Random().randint(0, 9999)}",
