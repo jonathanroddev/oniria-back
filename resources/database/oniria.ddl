@@ -25,7 +25,7 @@ CREATE TABLE user_status (
 	CONSTRAINT check_empty_name CHECK ((TRIM(BOTH FROM name) <> ''::text))
 );
 
-CREATE TABLE game_sessions (
+CREATE TABLE games_sessions (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "owner" UUID NOT NULL REFERENCES users(uuid),
     "name" VARCHAR(50) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE oneironauts (
 CREATE TABLE characters_sheets (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "user_uuid" UUID NOT NULL REFERENCES users(uuid),
-    "game_session_uuid" UUID NULL REFERENCES game_sessions(uuid),
+    "game_session_uuid" UUID NULL REFERENCES games_sessions(uuid),
     "avatar_uuid" UUID NOT NULL REFERENCES avatars(uuid),
     "oneironaut_uuid" UUID NOT NULL REFERENCES oneironauts(uuid),
     "inventory_uuid" UUID NOT NULL REFERENCES inventories(uuid)
@@ -57,7 +57,7 @@ CREATE TABLE masters_workshops (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     "user_uuid" UUID NOT NULL REFERENCES users(uuid),
-    "game_session_uuid" UUID NOT NULL REFERENCES game_sessions(uuid)
+    "game_session_uuid" UUID NOT NULL REFERENCES games_sessions(uuid) UNIQUE,
 );
 
 CREATE TABLE users (

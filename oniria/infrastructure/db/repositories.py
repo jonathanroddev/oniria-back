@@ -1,8 +1,13 @@
 from typing import List, Sequence, Optional
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
-from oniria.infrastructure.db.sql_models import PlanDB, UserDB, UserStatusDB
+from oniria.infrastructure.db.sql_models import (
+    PlanDB,
+    UserDB,
+    UserStatusDB,
+    GameSessionDB,
+)
 
 
 class PlanRepository:
@@ -25,7 +30,16 @@ class UserRepository:
         db_session: Session, external_uuid: str
     ) -> Optional[UserDB]:
         stmt = select(UserDB)
-        result = db_session.execute(stmt.filter_by(external_uuid=external_uuid))
+        result = db_session.execute(
+            stmt.filter_by(external_uuid=external_uuid).options(
+                selectinload(
+                    UserDB.plan,
+                    UserDB.user_status,
+                    UserDB.characters_sheets,
+                    UserDB.masters_workshops,
+                )
+            )
+        )
         return result.scalars().first()
 
     @staticmethod
@@ -42,5 +56,15 @@ class UserStatusRepository:
         db_session: Session, name: str
     ) -> Optional[UserStatusDB]:
         stmt = select(UserStatusDB).filter_by(name=name)
+        result = db_session.execute(stmt)
+        return result.scalars().first()
+
+
+class GameSessionRepository:
+    @staticmethod
+    def get_game_session_by_uuid(
+        db_session: Session, uuid: str
+    ) -> Optional[GameSessionDB]:
+        stmt = select(GameSessionDB).filter_by(uuid=uuid)
         result = db_session.execute(stmt)
         return result.scalars().first()

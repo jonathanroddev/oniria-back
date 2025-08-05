@@ -155,7 +155,7 @@ class UserDB(Base):
 
 
 class GameSessionDB(Base):
-    __tablename__ = "game_sessions"
+    __tablename__ = "games_sessions"
 
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
@@ -225,7 +225,7 @@ class CharacterSheetDB(Base):
         UUID(as_uuid=True), ForeignKey("inventories.uuid"), nullable=False
     )
     game_session_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("game_sessions.uuid"), nullable=True
+        UUID(as_uuid=True), ForeignKey("games_sessions.uuid"), nullable=True
     )
 
     user: Mapped["UserDB"] = relationship("UserDB", back_populates="characters_sheets")
@@ -259,7 +259,10 @@ class MasterWorkshopDB(Base):
         UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
     )
     game_session_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("game_sessions.uuid"), nullable=False
+        UUID(as_uuid=True),
+        ForeignKey("games_sessions.uuid"),
+        nullable=False,
+        unique=True,
     )
 
     user: Mapped["UserDB"] = relationship("UserDB", back_populates="masters_workshops")

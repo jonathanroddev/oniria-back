@@ -14,7 +14,7 @@ from oniria.infrastructure.db.repositories import (
     UserStatusRepository,
 )
 from oniria.infrastructure.db.sql_models import PlanDB, UserDB
-from oniria.domain import User
+from oniria.domain import User, NoContentException, ConflictException
 
 
 class PlanService:
@@ -26,8 +26,7 @@ class PlanService:
                 PlanMapper.to_dto_from_domain(PlanMapper.to_domain_from_entity(plan))
                 for plan in plans_entities
             ]
-        # TODO: Handle empty list case to send 204 response
-        return []
+        raise NoContentException("No plans found")
 
 
 class UserService:
@@ -38,13 +37,11 @@ class UserService:
                 email=sign_up.email, password=sign_up.password
             )
         except firebase_exceptions.FirebaseError as e:
-            # TODO: Handle this raise in a common error handler
-            raise HTTPException(status_code=409, detail=str(e))
+            raise ConflictException("Error creating user in external service") from e
         external_uuid = user_record.uid
         existing = UserRepository.get_user_by_external_uuid(db_session, external_uuid)
         if existing:
-            # TODO: Handle user already exists case and send 409 response
-            pass
+            raise ConflictException("User already exists with this external UUID")
         # TODO: dreamer_tag should be unique, consider adding a check by creating an endpoint to check if the tag exists
         new_user = UserDB(
             uuid=uuid.uuid4(),
@@ -64,8 +61,9 @@ class UserService:
             db_session, external_uuid
         )
         if not user_entity:
-            # TODO: Handle this raise in a common error handler
-            raise HTTPException(status_code=204, detail="User not found")
+            raise NoContentException(
+                f"No user found with external UUID: {external_uuid}"
+            )
         return UserMapper.to_domain_from_entity(user_entity)
 
     @staticmethod

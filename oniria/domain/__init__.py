@@ -9,8 +9,16 @@ from oniria.domain.models import (
     MasterWorkshop,
     User,
 )
+from oniria.domain.exceptions import (
+    NoContentException,
+    ConflictException,
+    UnauthorizedException,
+)
 
 __all__ = [
+    "NoContentException",
+    "ConflictException",
+    "UnauthorizedException",
     "Plan",
     "UserStatus",
     "Avatar",

@@ -3,6 +3,14 @@ from fastapi import FastAPI
 from pathlib import Path
 
 from oniria.infrastructure.firebase.firebase_config import *
+from oniria.application.middlewares import (
+    handle_unauthorized,
+    UnauthorizedException,
+    handle_no_content,
+    NoContentException,
+    handle_conflict,
+    ConflictException,
+)
 from oniria.infrastructure.db import Base, engine
 from oniria.infrastructure.db import RenownDB
 from sqlalchemy import text
@@ -39,6 +47,7 @@ def load_data():
 def get_application() -> FastAPI:
     prefix: str = "/code"
     app = FastAPI(title="Oniria API")
+    app.add_exception_handler(UnauthorizedException, handle_unauthorized)
     app.include_router(auth_routes, prefix=prefix)
     return app
 
