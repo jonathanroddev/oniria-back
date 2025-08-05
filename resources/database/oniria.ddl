@@ -27,6 +27,7 @@ CREATE TABLE user_status (
 
 CREATE TABLE game_sessions (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "owner" UUID NOT NULL REFERENCES users(uuid),
     "name" VARCHAR(50) NOT NULL,
     "password" VARCHAR(250) NULL,
 );
@@ -54,6 +55,7 @@ CREATE TABLE characters_sheets (
 
 CREATE TABLE masters_workshops (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     "user_uuid" UUID NOT NULL REFERENCES users(uuid),
     "game_session_uuid" UUID NOT NULL REFERENCES game_sessions(uuid)
 );
@@ -64,6 +66,8 @@ CREATE TABLE users (
     "dreamer_tag" VARCHAR(50) NOT NULL,
     "user_status" VARCHAR(50) NOT NULL REFERENCES user_status(name),
     "plan" VARCHAR(50) NOT NULL REFERENCES plans(name),
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    "updated_at" TIMESTAMP NOT NULL
 );
 
 CREATE TABLE permissions_plans (

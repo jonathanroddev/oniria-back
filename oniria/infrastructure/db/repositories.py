@@ -2,8 +2,7 @@ from typing import List, Sequence, Optional
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from oniria.auth.infrastructure.db import PlanDB
-from oniria.auth.infrastructure.db.sql_models import PlanDB, UserDB, UserStatusDB
+from oniria.infrastructure.db.sql_models import PlanDB, UserDB, UserStatusDB
 
 
 class PlanRepository:

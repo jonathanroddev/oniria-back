@@ -1,14 +1,13 @@
-import os
 import uvicorn
 from fastapi import FastAPI
 from pathlib import Path
 
-from oniria.auth.infrastructure.firebase.firebase_config import *
-from oniria.db import Base, engine
-from oniria.campaign.infrastructure.db import RenownDB
+from oniria.infrastructure.firebase.firebase_config import *
+from oniria.infrastructure.db import Base, engine
+from oniria.infrastructure.db import RenownDB
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-from oniria.auth.interfaces.routes import router as auth_routes
+from oniria.interfaces.routes import router as auth_routes
 
 
 def create_tables():
@@ -38,7 +37,7 @@ def load_data():
 
 
 def get_application() -> FastAPI:
-    prefix: str = "/oniria"
+    prefix: str = "/code"
     app = FastAPI(title="Oniria API")
     app.include_router(auth_routes, prefix=prefix)
     return app

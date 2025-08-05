@@ -1,9 +1,10 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Request
-from oniria.auth.infrastructure.firebase.firebase_service import get_current_user
+from oniria.infrastructure.firebase.firebase_service import get_current_user
 from sqlalchemy.orm import Session
-from oniria.auth import SignUp, PlanDTO, PlanService, UserService, UserDTO
-from oniria.db import get_session, engine, Base
+from oniria.interfaces import SignUp, PlanDTO, UserDTO
+from oniria.application import UserService, PlanService
+from oniria.infrastructure.db import get_session, engine, Base
 
 
 router = APIRouter()

@@ -6,14 +6,15 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from firebase_admin import auth as firebase_auth, exceptions as firebase_exceptions
-from oniria.auth.interfaces import SignUp, PlanDTO, UserDTO
-from oniria.auth.application import PlanMapper, UserMapper
-from oniria.auth.infrastructure.db.repositories import (
+from oniria.interfaces import SignUp, PlanDTO, UserDTO
+from oniria.application import PlanMapper, UserMapper
+from oniria.infrastructure.db.repositories import (
     PlanRepository,
     UserRepository,
     UserStatusRepository,
 )
-from oniria.auth.infrastructure.db.sql_models import PlanDB, UserDB
+from oniria.infrastructure.db.sql_models import PlanDB, UserDB
+from oniria.domain import User
 
 
 class PlanService:
@@ -58,17 +59,19 @@ class UserService:
         return UserMapper.to_dto_from_entity(new_user)
 
     @staticmethod
-    def get_user_by_external_uuid(external_uuid: str, db_session: Session) -> UserDTO:
+    def get_user_by_external_uuid(external_uuid: str, db_session: Session) -> User:
         user_entity = UserRepository.get_user_by_external_uuid(
             db_session, external_uuid
         )
         if not user_entity:
             # TODO: Handle this raise in a common error handler
             raise HTTPException(status_code=204, detail="User not found")
-        return UserMapper.to_dto_from_entity(user_entity)
+        return UserMapper.to_domain_from_entity(user_entity)
 
     @staticmethod
     def get_self_user(
         user_data: firebase_auth.UserRecord, db_session: Session
-    ) -> Optional[UserDTO]:
-        return UserService.get_user_by_external_uuid(user_data["uid"], db_session)
+    ) -> UserDTO:
+        return UserMapper.to_dto_from_domain(
+            UserService.get_user_by_external_uuid(user_data["uid"], db_session)
+        )
