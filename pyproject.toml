@@ -16,6 +16,7 @@ pydantic = {extras = ["email"], version = "^2.11.7"}
 SQLAlchemy = "^2.0.41"
 python-jose = "^3.5.0"
 firebase-admin = "^7.1.0"
+bcrypt = "^4.3.0"
 
 [tool.poetry.group.dev.dependencies]
 devtools = "^0.12.2"

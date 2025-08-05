@@ -1,37 +1,37 @@
 import uuid
+import bcrypt
 from random import Random
 from typing import List, Sequence, Optional
 
-from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from firebase_admin import auth as firebase_auth, exceptions as firebase_exceptions
-from oniria.interfaces import SignUp, PlanDTO, UserDTO
+
+from oniria.application.mappers import GameSessionMapper
+from oniria.interfaces import SignUp, GameSessionDTO, GameSessionRequest
 from oniria.application import PlanMapper, UserMapper
 from oniria.infrastructure.db.repositories import (
     PlanRepository,
     UserRepository,
     UserStatusRepository,
+    GameSessionRepository,
 )
-from oniria.infrastructure.db.sql_models import PlanDB, UserDB
-from oniria.domain import User, NoContentException, ConflictException
+from oniria.infrastructure.db.sql_models import PlanDB, UserDB, GameSessionDB
+from oniria.domain import User, NoContentException, ConflictException, Plan, GameSession
 
 
 class PlanService:
     @staticmethod
-    def get_all_plans(db_session: Session) -> List[PlanDTO]:
+    def get_all_plans(db_session: Session) -> List[Plan]:
         plans_entities: Sequence[PlanDB] = PlanRepository.get_all_plans(db_session)
         if plans_entities:
-            return [
-                PlanMapper.to_dto_from_domain(PlanMapper.to_domain_from_entity(plan))
-                for plan in plans_entities
-            ]
+            return [PlanMapper.to_domain_from_entity(plan) for plan in plans_entities]
         raise NoContentException("No plans found")
 
 
 class UserService:
     @staticmethod
-    def sign_up(sign_up: SignUp, db_session: Session) -> UserDTO:
+    def sign_up(sign_up: SignUp, db_session: Session) -> User:
         try:
             user_record = firebase_auth.create_user(
                 email=sign_up.email, password=sign_up.password
@@ -53,7 +53,7 @@ class UserService:
             plan=PlanRepository.get_plan_by_name(db_session, "free").name,
         )
         UserRepository.create_user(db_session, new_user)
-        return UserMapper.to_dto_from_entity(new_user)
+        return UserMapper.to_domain_from_entity(new_user)
 
     @staticmethod
     def get_user_by_external_uuid(external_uuid: str, db_session: Session) -> User:
@@ -67,9 +67,42 @@ class UserService:
         return UserMapper.to_domain_from_entity(user_entity)
 
     @staticmethod
-    def get_self_user(
-        user_data: firebase_auth.UserRecord, db_session: Session
-    ) -> UserDTO:
-        return UserMapper.to_dto_from_domain(
-            UserService.get_user_by_external_uuid(user_data["uid"], db_session)
+    def get_self_user(user_data: firebase_auth.UserRecord, db_session: Session) -> User:
+        return UserService.get_user_by_external_uuid(user_data["uid"], db_session)
+
+
+class GameSessionService:
+    @staticmethod
+    def hash_password(plain_password: str) -> str:
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(plain_password.encode("utf-8"), salt)
+        return hashed.decode("utf-8")
+
+    @staticmethod
+    def verify_password(plain_password: str, hashed_password: str) -> bool:
+        return bcrypt.checkpw(
+            plain_password.encode("utf-8"), hashed_password.encode("utf-8")
         )
+
+    @staticmethod
+    def create_game_session(
+        user_data: firebase_auth.UserRecord,
+        db_session: Session,
+        game_session_request: GameSessionRequest,
+    ) -> GameSession:
+        user = UserService.get_user_by_external_uuid(user_data["uid"], db_session)
+        game_session_db: GameSessionDB = GameSessionDB(
+            uuid=uuid.uuid4(),  # Generate a new UUID for the game session
+            owner=user.uuid,  # Set the owner to the current user's UUID
+            name=game_session_request.name,
+            password=(
+                GameSessionService.hash_password(game_session_request.password)
+                if game_session_request.password
+                else None
+            ),  # If not provided, it will be considered as public
+        )
+        # TODO: Check public games sessions
+        game_session_recorded: GameSessionDB = (
+            GameSessionRepository.create_game_session(db_session, game_session_db)
+        )
+        return GameSessionMapper.to_domain_from_entity(game_session_recorded)

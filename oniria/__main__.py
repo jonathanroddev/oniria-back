@@ -45,7 +45,7 @@ def load_data():
 
 
 def get_application() -> FastAPI:
-    prefix: str = "/code"
+    prefix: str = "/oniria"
     app = FastAPI(title="Oniria API")
     app.add_exception_handler(UnauthorizedException, handle_unauthorized)
     app.include_router(auth_routes, prefix=prefix)

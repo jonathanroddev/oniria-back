@@ -1,6 +1,6 @@
 from typing import List, Sequence, Optional
 from sqlalchemy import select
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session, selectinload, joinedload
 
 from oniria.infrastructure.db.sql_models import (
     PlanDB,
@@ -32,12 +32,10 @@ class UserRepository:
         stmt = select(UserDB)
         result = db_session.execute(
             stmt.filter_by(external_uuid=external_uuid).options(
-                selectinload(
-                    UserDB.plan,
-                    UserDB.user_status,
-                    UserDB.characters_sheets,
-                    UserDB.masters_workshops,
-                )
+                joinedload(UserDB.plan_rel),
+                joinedload(UserDB.user_status_rel),
+                joinedload(UserDB.characters_sheets),
+                joinedload(UserDB.masters_workshops),
             )
         )
         return result.scalars().first()
@@ -68,3 +66,12 @@ class GameSessionRepository:
         stmt = select(GameSessionDB).filter_by(uuid=uuid)
         result = db_session.execute(stmt)
         return result.scalars().first()
+
+    @staticmethod
+    def create_game_session(
+        db_session: Session, game_session: GameSessionDB
+    ) -> GameSessionDB:
+        db_session.add(game_session)
+        db_session.commit()
+        db_session.refresh(game_session)
+        return game_session

@@ -18,10 +18,12 @@ class UserStatusDTO(BaseModel):
 class GameSessionDTO(BaseModel):
     uuid: str
     owner: str
+    name: str
+
+
+class GameSessionRequest(BaseModel):
     name: constr(strip_whitespace=True, min_length=5, max_length=50)
-    password: Optional[constr(strip_whitespace=True, min_length=8, max_length=100)] = (
-        None
-    )
+    password: Optional[constr(strip_whitespace=True, min_length=8, max_length=100)]
 
 
 class AvatarDTO(BaseModel):

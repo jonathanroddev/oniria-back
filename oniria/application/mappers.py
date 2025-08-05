@@ -153,6 +153,14 @@ class GameSessionMapper:
             owner=domain.owner,
         )
 
+    @staticmethod
+    def to_entity_from_dto(game_session_dto: GameSessionDTO) -> GameSessionDB:
+        return GameSessionDB(
+            name=game_session_dto.name,
+            password=game_session_dto.password,
+            owner=game_session_dto.owner,
+        )
+
 
 class CharacterSheetMapper:
     @staticmethod
