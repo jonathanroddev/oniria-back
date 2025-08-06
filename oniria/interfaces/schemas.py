@@ -19,6 +19,7 @@ class GameSessionDTO(BaseModel):
     uuid: str
     owner: str
     name: str
+    max_players: int
 
 
 class GameSessionRequest(BaseModel):
@@ -26,6 +27,7 @@ class GameSessionRequest(BaseModel):
     password: Optional[constr(strip_whitespace=True, min_length=8, max_length=100)] = (
         None
     )
+    max_players: Optional[int] = 6
 
 
 class AvatarDTO(BaseModel):

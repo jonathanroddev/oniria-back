@@ -115,6 +115,7 @@ class GameSessionService:
                 if game_session_request.password
                 else None
             ),  # If not provided, it will be considered as public
+            max_players=game_session_request.max_players or 6,
         )
         # TODO: Check public games sessions
         game_session_recorded: GameSessionDB = (

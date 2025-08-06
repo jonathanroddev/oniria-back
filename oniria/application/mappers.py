@@ -134,6 +134,7 @@ class GameSessionMapper:
             uuid=str(game_session.uuid),
             name=game_session.name,
             owner=str(game_session.owner),
+            max_players=game_session.max_players,
         )
 
     @staticmethod
@@ -143,14 +144,16 @@ class GameSessionMapper:
             name=game_session.name,
             password=game_session.password,
             owner=str(game_session.owner),
+            max_players=game_session.max_players,
         )
 
     @staticmethod
-    def to_dto_from_domain(domain: GameSession) -> GameSessionDTO:
+    def to_dto_from_domain(game_session: GameSession) -> GameSessionDTO:
         return GameSessionDTO(
-            uuid=domain.uuid,
-            name=domain.name,
-            owner=domain.owner,
+            uuid=game_session.uuid,
+            name=game_session.name,
+            owner=game_session.owner,
+            max_players=game_session.max_players,
         )
 
     @staticmethod
@@ -159,6 +162,7 @@ class GameSessionMapper:
             name=game_session_dto.name,
             password=game_session_dto.password,
             owner=game_session_dto.owner,
+            max_players=game_session_dto.max_players,
         )
 
 

@@ -30,6 +30,8 @@ CREATE TABLE games_sessions (
     "owner" UUID NOT NULL REFERENCES users(uuid),
     "name" VARCHAR(50) NOT NULL,
     "password" VARCHAR(250) NULL,
+    "max_players" INTEGER NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
 );
 
 CREATE TABLE inventories (
@@ -68,6 +70,12 @@ CREATE TABLE users (
     "plan" VARCHAR(50) NOT NULL REFERENCES plans(name),
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     "updated_at" TIMESTAMP NOT NULL
+);
+
+CREATE TABLE games_sessions_users (
+    "game_session_uuid" UUID NOT NULL REFERENCES games_sessions(uuid),
+    "user_uuid" UUID NOT NULL REFERENCES users(uuid),
+    PRIMARY KEY (game_session_uuid, user_uuid)
 );
 
 CREATE TABLE permissions_plans (

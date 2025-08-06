@@ -13,6 +13,7 @@ class GameSession:
     owner: str
     name: str
     password: str
+    max_players: int
 
 
 @dataclass
