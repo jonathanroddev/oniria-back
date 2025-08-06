@@ -252,14 +252,16 @@ class CharacterSheetService:
             db_session, character_sheet_request.game_session.name
         )
         # TODO: Consider limiting the number of attempts to avoid brute force attacks
-        if (
-            game_session.password and not character_sheet_request.game_session.password
-        ) or (
-            not GameSessionService.verify_password(
-                character_sheet_request.game_session.password, game_session.password
-            )
-        ):
-            raise ForbiddenException("Invalid password for this game session")
+        if game_session.password:
+            if not character_sheet_request.game_session.password:
+                raise UnauthorizedException(
+                    "Password is required for this game session"
+                )
+            else:
+                if not GameSessionService.verify_password(
+                    character_sheet_request.game_session.password, game_session.password
+                ):
+                    raise ForbiddenException("Invalid password for this game session")
         character_sheet_exists = CharacterSheetRepository.get_character_sheet_by_user_uuid_and_game_session_uuid(
             db_session, user.uuid, game_session.uuid
         )
