@@ -164,7 +164,7 @@ class GameSessionDB(Base):
         UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
     )
     name: Mapped[str] = mapped_column(String(50), nullable=False)
-    password: Mapped[str] = mapped_column(String(250), nullable=False)
+    password: Mapped[str] = mapped_column(String(250), nullable=True)
     character_sheets: Mapped[Optional[List["CharacterSheetDB"]]] = relationship(
         "CharacterSheetDB", back_populates="game_session"
     )

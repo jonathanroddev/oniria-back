@@ -66,10 +66,6 @@ class UserService:
             )
         return UserMapper.to_domain_from_entity(user_entity)
 
-    @staticmethod
-    def get_self_user(user_data: firebase_auth.UserRecord, db_session: Session) -> User:
-        return UserService.get_user_by_external_uuid(user_data["uid"], db_session)
-
 
 class GameSessionService:
     @staticmethod
@@ -86,11 +82,10 @@ class GameSessionService:
 
     @staticmethod
     def create_game_session(
-        user_data: firebase_auth.UserRecord,
+        user: User,
         db_session: Session,
         game_session_request: GameSessionRequest,
     ) -> GameSession:
-        user = UserService.get_user_by_external_uuid(user_data["uid"], db_session)
         game_session_db: GameSessionDB = GameSessionDB(
             uuid=uuid.uuid4(),  # Generate a new UUID for the game session
             owner=user.uuid,  # Set the owner to the current user's UUID
@@ -106,3 +101,17 @@ class GameSessionService:
             GameSessionRepository.create_game_session(db_session, game_session_db)
         )
         return GameSessionMapper.to_domain_from_entity(game_session_recorded)
+
+    @staticmethod
+    def get_game_sessions_by_owner(
+        user: User, db_session: Session
+    ) -> List[GameSession]:
+        game_sessions_entities: Sequence[GameSessionDB] = (
+            GameSessionRepository.get_game_sessions_by_owner(db_session, user.uuid)
+        )
+        if game_sessions_entities:
+            return [
+                GameSessionMapper.to_domain_from_entity(game_session)
+                for game_session in game_sessions_entities
+            ]
+        raise NoContentException("No game sessions found for this user")

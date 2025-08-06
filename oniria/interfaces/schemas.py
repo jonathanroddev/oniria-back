@@ -23,7 +23,7 @@ class GameSessionDTO(BaseModel):
 
 class GameSessionRequest(BaseModel):
     name: constr(strip_whitespace=True, min_length=5, max_length=50)
-    password: Optional[constr(strip_whitespace=True, min_length=8, max_length=100)]
+    password: Optional[constr(strip_whitespace=True, min_length=8, max_length=100)] = None
 
 
 class AvatarDTO(BaseModel):

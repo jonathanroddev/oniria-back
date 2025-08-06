@@ -75,3 +75,11 @@ class GameSessionRepository:
         db_session.commit()
         db_session.refresh(game_session)
         return game_session
+
+    @staticmethod
+    def get_game_sessions_by_owner(
+        db_session: Session, owner_uuid: str
+    ) -> Sequence[GameSessionDB]:
+        stmt = select(GameSessionDB).filter_by(owner=owner_uuid)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
