@@ -52,7 +52,7 @@ class CharacterSheetDTO(BaseModel):
 
 
 class CharacterSheetRequest(BaseModel):
-    game_session_uuid: str
+    game_session: GameSessionRequest
 
 
 class MasterWorkshopDTO(BaseModel):

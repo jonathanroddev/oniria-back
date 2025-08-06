@@ -72,12 +72,6 @@ CREATE TABLE users (
     "updated_at" TIMESTAMP NOT NULL
 );
 
-CREATE TABLE games_sessions_users (
-    "game_session_uuid" UUID NOT NULL REFERENCES games_sessions(uuid),
-    "user_uuid" UUID NOT NULL REFERENCES users(uuid),
-    PRIMARY KEY (game_session_uuid, user_uuid)
-);
-
 CREATE TABLE permissions_plans (
     "permission_uuid" UUID NOT NULL REFERENCES permissions(uuid),
     "plan" VARCHAR(50) NOT NULL REFERENCES plans(name),

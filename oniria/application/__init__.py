@@ -4,12 +4,14 @@ from oniria.application.mappers import (
     UserStatusMapper,
     GameSessionMapper,
     MasterWorkshopMapper,
+    CharacterSheetMapper,
 )
 from oniria.application.sevices import (
     PlanService,
     UserService,
     GameSessionService,
     MasterWorkshopService,
+    CharacterSheetService,
 )
 
 __all__ = [
@@ -22,4 +24,6 @@ __all__ = [
     "UserService",
     "GameSessionService",
     "MasterWorkshopService",
+    "CharacterSheetService",
+    "CharacterSheetMapper",
 ]

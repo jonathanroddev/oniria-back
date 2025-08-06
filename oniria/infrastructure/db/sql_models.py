@@ -163,7 +163,7 @@ class GameSessionDB(Base):
     owner: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
     )
-    name: Mapped[str] = mapped_column(String(50), nullable=False)
+    name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(250), nullable=True)
     max_players: Mapped[int] = mapped_column(Integer, nullable=False, default=6)
     created_at: Mapped[datetime] = mapped_column(

@@ -7,12 +7,19 @@ from sqlalchemy.orm import Session
 
 from firebase_admin import auth as firebase_auth, exceptions as firebase_exceptions
 
-from oniria.application.mappers import GameSessionMapper, MasterWorkshopMapper
+from oniria.application.mappers import (
+    GameSessionMapper,
+    MasterWorkshopMapper,
+    CharacterSheetMapper,
+)
+from oniria.infrastructure.db import AvatarDB, InventoryDB
 from oniria.interfaces import (
     SignUp,
     GameSessionDTO,
     GameSessionRequest,
     MasterWorkshopRequest,
+    CharacterSheetDTO,
+    CharacterSheetRequest,
 )
 from oniria.application import PlanMapper, UserMapper
 from oniria.infrastructure.db.repositories import (
@@ -21,12 +28,18 @@ from oniria.infrastructure.db.repositories import (
     UserStatusRepository,
     GameSessionRepository,
     MasterWorkshopRepository,
+    CharacterSheetRepository,
+    AvatarRepository,
+    OneironautRepository,
+    InventoryRepository,
 )
 from oniria.infrastructure.db.sql_models import (
     PlanDB,
     UserDB,
     GameSessionDB,
     MasterWorkshopDB,
+    CharacterSheetDB,
+    OneironautDB,
 )
 from oniria.domain import (
     User,
@@ -37,6 +50,7 @@ from oniria.domain import (
     UnauthorizedException,
     ForbiddenException,
     MasterWorkshop,
+    CharacterSheet,
 )
 
 
@@ -107,8 +121,8 @@ class GameSessionService:
         game_session_request: GameSessionRequest,
     ) -> GameSession:
         game_session_db: GameSessionDB = GameSessionDB(
-            uuid=uuid.uuid4(),  # Generate a new UUID for the game session
-            owner=user.uuid,  # Set the owner to the current user's UUID
+            uuid=uuid.uuid4(),
+            owner=user.uuid,
             name=game_session_request.name,
             password=(
                 GameSessionService.hash_password(game_session_request.password)
@@ -117,7 +131,6 @@ class GameSessionService:
             ),  # If not provided, it will be considered as public
             max_players=game_session_request.max_players or 6,
         )
-        # TODO: Check public games sessions
         game_session_recorded: GameSessionDB = (
             GameSessionRepository.create_game_session(db_session, game_session_db)
         )
@@ -148,10 +161,53 @@ class GameSessionService:
         )
         if not game_session_entity:
             raise NoContentException(f"No game session found with UUID: {uuid}")
-        if game_session_entity.owner != user.uuid:
+        print(user.uuid)
+        print(game_session_entity.owner)
+        if str(game_session_entity.owner) not in str(user.uuid):
             raise ForbiddenException(
                 f"User {user.uuid} is not the owner of this game session"
             )
+        return GameSessionMapper.to_domain_from_entity(game_session_entity)
+
+    @staticmethod
+    def get_game_session_by_name(db_session: Session, name: str) -> GameSession:
+        game_session_entity: Optional[GameSessionDB] = (
+            GameSessionRepository.get_game_session_by_name(db_session, name)
+        )
+        if not game_session_entity:
+            raise NoContentException(f"No game session found with name: {name}")
+        return GameSessionMapper.to_domain_from_entity(game_session_entity)
+
+    @staticmethod
+    def get_public_games_sessions(db_session: Session) -> List[GameSession]:
+        public_game_sessions: Sequence[GameSessionDB] = (
+            GameSessionRepository.get_public_games_sessions(db_session)
+        )
+        if public_game_sessions:
+            return [
+                GameSessionMapper.to_domain_from_entity(session)
+                for session in public_game_sessions
+            ]
+        raise NoContentException("No public game sessions found")
+
+    @staticmethod
+    def get_private_game_session(
+        db_session: Session, game_session_request: GameSessionRequest
+    ) -> GameSession:
+        game_session_entity: Optional[GameSessionDB] = (
+            GameSessionRepository.get_game_session_by_name(
+                db_session, game_session_request.name
+            )
+        )
+        if not game_session_entity:
+            raise NoContentException(
+                f"No private game session found with name: {game_session_request.name}"
+            )
+        if not GameSessionService.verify_password(
+            game_session_request.password, game_session_entity.password
+        ):
+            # TODO: Consider limiting the number of attempts to avoid brute force attacks
+            raise ForbiddenException("Invalid password for this game session")
         return GameSessionMapper.to_domain_from_entity(game_session_entity)
 
 
@@ -179,9 +235,64 @@ class MasterWorkshopService:
         master_workshop_db = MasterWorkshopDB(
             uuid=uuid.uuid4(),
             user_uuid=user.uuid,
-            game_session=game_session.uuid,
+            game_session_uuid=game_session.uuid,
         )
         master_workshop_recorded = MasterWorkshopRepository.create_master_workshop(
             db_session, master_workshop_db
         )
         return MasterWorkshopMapper.to_domain_from_entity(master_workshop_recorded)
+
+
+class CharacterSheetService:
+    @staticmethod
+    def create_character_sheet(
+        user: User,
+        db_session: Session,
+        character_sheet_request: CharacterSheetRequest,
+    ) -> CharacterSheet:
+        game_session: GameSession = GameSessionService.get_game_session_by_name(
+            db_session, character_sheet_request.game_session.name
+        )
+        # TODO: Consider limiting the number of attempts to avoid brute force attacks
+        if (
+            game_session.password and not character_sheet_request.game_session.password
+        ) or (
+            not GameSessionService.verify_password(
+                character_sheet_request.game_session.password, game_session.password
+            )
+        ):
+            raise ForbiddenException("Invalid password for this game session")
+        character_sheet_exists = CharacterSheetRepository.get_character_sheet_by_user_uuid_and_game_session_uuid(
+            db_session, user.uuid, game_session.uuid
+        )
+        if character_sheet_exists:
+            raise ConflictException(
+                "Character sheet already exists for this user in this game session"
+            )
+        characters_sheets_on_this_game_session = (
+            CharacterSheetRepository.get_characters_sheets_by_game_session_uuid(
+                db_session, game_session.uuid
+            )
+        )
+        if len(characters_sheets_on_this_game_session) >= game_session.max_players:
+            raise ConflictException(
+                "Maximum number of players reached for this game session"
+            )
+        character_sheet_db = CharacterSheetDB(
+            uuid=uuid.uuid4(),
+            user_uuid=user.uuid,
+            avatar_uuid=AvatarRepository.create_avatar(
+                db_session, AvatarDB(uuid=uuid.uuid4())
+            ).uuid,
+            oneironaut_uuid=OneironautRepository.create_oneironaut(
+                db_session, OneironautDB(uuid=uuid.uuid4())
+            ).uuid,
+            inventory_uuid=InventoryRepository.create_inventory(
+                db_session, InventoryDB(uuid=uuid.uuid4())
+            ).uuid,
+            game_session_uuid=game_session.uuid,
+        )
+        character_sheet_recorded = CharacterSheetRepository.create_character_sheet(
+            db_session, character_sheet_db
+        )
+        return CharacterSheetMapper.to_domain_from_entity(character_sheet_recorded)

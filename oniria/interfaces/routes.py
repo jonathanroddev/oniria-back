@@ -12,6 +12,8 @@ from oniria.interfaces import (
     GameSessionRequest,
     MasterWorkshopRequest,
     MasterWorkshopDTO,
+    CharacterSheetDTO,
+    CharacterSheetRequest,
 )
 from oniria.application import (
     UserService,
@@ -22,6 +24,8 @@ from oniria.application import (
     GameSessionMapper,
     GameSessionService,
     MasterWorkshopService,
+    CharacterSheetMapper,
+    CharacterSheetService,
 )
 from oniria.infrastructure.db import get_session
 
@@ -83,5 +87,32 @@ def create_master_workshop(
     return MasterWorkshopMapper.to_dto_from_domain(
         MasterWorkshopService.create_master_workshop(
             user, db_session, master_workshop_request
+        )
+    )
+
+
+@router.get(
+    "/games-sessions/public", response_model=List[GameSessionDTO], tags=["campaigns"]
+)
+def get_public_game_sessions(
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> List[GameSessionDTO]:
+    public_game_sessions = GameSessionService.get_public_games_sessions(db_session)
+    return [
+        GameSessionMapper.to_dto_from_domain(session)
+        for session in public_game_sessions
+    ]
+
+
+@router.post("/characters-sheets", response_model=CharacterSheetDTO, tags=["campaigns"])
+def create_character_sheet(
+    character_sheet_request: CharacterSheetRequest,
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+):
+    return CharacterSheetMapper.to_dto_from_domain(
+        CharacterSheetService.create_character_sheet(
+            user, db_session, character_sheet_request
         )
     )
