@@ -161,8 +161,6 @@ class GameSessionService:
         )
         if not game_session_entity:
             raise NoContentException(f"No game session found with UUID: {uuid}")
-        print(user.uuid)
-        print(game_session_entity.owner)
         if str(game_session_entity.owner) not in str(user.uuid):
             raise ForbiddenException(
                 f"User {user.uuid} is not the owner of this game session"
