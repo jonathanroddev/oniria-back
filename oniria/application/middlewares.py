@@ -2,7 +2,12 @@ from fastapi import FastAPI, Request, status
 from fastapi.encoders import jsonable_encoder
 from starlette.responses import JSONResponse
 
-from oniria.domain import NoContentException, ConflictException, UnauthorizedException
+from oniria.domain import (
+    NoContentException,
+    ConflictException,
+    UnauthorizedException,
+    ForbiddenException,
+)
 
 
 async def handle_no_content(request: Request, exc: NoContentException) -> JSONResponse:
@@ -24,5 +29,12 @@ async def handle_unauthorized(
 ) -> JSONResponse:
     return JSONResponse(
         status_code=status.HTTP_401_UNAUTHORIZED,
+        content=jsonable_encoder({"detail": str(exc)}),
+    )
+
+
+async def handle_forbidden(request: Request, exc: ForbiddenException) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_403_FORBIDDEN,
         content=jsonable_encoder({"detail": str(exc)}),
     )

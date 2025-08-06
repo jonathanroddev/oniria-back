@@ -10,6 +10,8 @@ from oniria.application.middlewares import (
     NoContentException,
     handle_conflict,
     ConflictException,
+    handle_forbidden,
+    ForbiddenException,
 )
 from oniria.infrastructure.db import Base, engine
 from oniria.infrastructure.db import RenownDB
@@ -48,6 +50,9 @@ def get_application() -> FastAPI:
     prefix: str = "/oniria"
     app = FastAPI(title="Oniria API")
     app.add_exception_handler(UnauthorizedException, handle_unauthorized)
+    app.add_exception_handler(NoContentException, handle_no_content)
+    app.add_exception_handler(ConflictException, handle_conflict)
+    app.add_exception_handler(ForbiddenException, handle_forbidden)
     app.include_router(auth_routes, prefix=prefix)
     return app
 

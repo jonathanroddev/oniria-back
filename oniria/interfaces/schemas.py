@@ -23,7 +23,9 @@ class GameSessionDTO(BaseModel):
 
 class GameSessionRequest(BaseModel):
     name: constr(strip_whitespace=True, min_length=5, max_length=50)
-    password: Optional[constr(strip_whitespace=True, min_length=8, max_length=100)] = None
+    password: Optional[constr(strip_whitespace=True, min_length=8, max_length=100)] = (
+        None
+    )
 
 
 class AvatarDTO(BaseModel):
@@ -47,10 +49,18 @@ class CharacterSheetDTO(BaseModel):
     game_session: GameSessionDTO
 
 
+class CharacterSheetRequest(BaseModel):
+    game_session_uuid: str
+
+
 class MasterWorkshopDTO(BaseModel):
     uuid: str
     user_uuid: str
     game_session: GameSessionDTO
+
+
+class MasterWorkshopRequest(BaseModel):
+    game_session_uuid: str
 
 
 class UserDTO(BaseModel):

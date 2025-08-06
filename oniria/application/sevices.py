@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from firebase_admin import auth as firebase_auth, exceptions as firebase_exceptions
 
-from oniria.application.mappers import GameSessionMapper
+from oniria.application.mappers import GameSessionMapper, MasterWorkshopMapper
 from oniria.interfaces import SignUp, GameSessionDTO, GameSessionRequest
 from oniria.application import PlanMapper, UserMapper
 from oniria.infrastructure.db.repositories import (
@@ -15,9 +15,24 @@ from oniria.infrastructure.db.repositories import (
     UserRepository,
     UserStatusRepository,
     GameSessionRepository,
+    MasterWorkshopRepository,
 )
-from oniria.infrastructure.db.sql_models import PlanDB, UserDB, GameSessionDB
-from oniria.domain import User, NoContentException, ConflictException, Plan, GameSession
+from oniria.infrastructure.db.sql_models import (
+    PlanDB,
+    UserDB,
+    GameSessionDB,
+    MasterWorkshopDB,
+)
+from oniria.domain import (
+    User,
+    NoContentException,
+    ConflictException,
+    Plan,
+    GameSession,
+    UnauthorizedException,
+    ForbiddenException,
+    MasterWorkshop,
+)
 
 
 class PlanService:
@@ -115,3 +130,52 @@ class GameSessionService:
                 for game_session in game_sessions_entities
             ]
         raise NoContentException("No game sessions found for this user")
+
+    @staticmethod
+    def get_game_session_by_uuid_and_owner(
+        user: User, db_session: Session, uuid
+    ) -> GameSession:
+        game_session_entity: Optional[GameSessionDB] = (
+            GameSessionRepository.get_game_session_by_uuid_and_owner(
+                db_session, uuid, user.uuid
+            )
+        )
+        if not game_session_entity:
+            raise NoContentException(f"No game session found with UUID: {uuid}")
+        if game_session_entity.owner != user.uuid:
+            raise ForbiddenException(
+                f"User {user.uuid} is not the owner of this game session"
+            )
+        return GameSessionMapper.to_domain_from_entity(game_session_entity)
+
+
+class MasterWorkshopService:
+    @staticmethod
+    def create_master_workshop(
+        user: User,
+        db_session: Session,
+        game_session_uuid: str,
+    ) -> MasterWorkshop:
+        game_session: GameSession = (
+            GameSessionService.get_game_session_by_uuid_and_owner(
+                user, db_session, game_session_uuid
+            )
+        )
+        master_workshop_exists = (
+            MasterWorkshopRepository.get_master_workshop_by_game_session_uuid(
+                db_session, game_session_uuid
+            )
+        )
+        if master_workshop_exists:
+            raise ConflictException(
+                "Master workshop already exists for this game session"
+            )
+        master_workshop_db = MasterWorkshopDB(
+            uuid=uuid.uuid4(),
+            user_uuid=user.uuid,
+            game_session=game_session.uuid,
+        )
+        master_workshop_recorded = MasterWorkshopRepository.create_master_workshop(
+            db_session, master_workshop_db
+        )
+        return MasterWorkshopMapper.to_domain_from_entity(master_workshop_recorded)

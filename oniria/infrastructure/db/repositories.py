@@ -83,3 +83,34 @@ class GameSessionRepository:
         stmt = select(GameSessionDB).filter_by(owner=owner_uuid)
         result = db_session.execute(stmt)
         return result.scalars().all()
+
+    @staticmethod
+    def get_game_session_by_uuid_and_owner(
+        db_session: Session, uuid: str, owner_uuid: str
+    ) -> Optional[GameSessionDB]:
+        stmt = (
+            select(GameSessionDB)
+            .filter_by(uuid=uuid, owner=owner_uuid)
+            .options(selectinload(GameSessionDB.master_workshop_rel))
+        )
+        result = db_session.execute(stmt)
+        return result.scalars().first()
+
+
+class MasterWorkshopRepository:
+    @staticmethod
+    def create_master_workshop(
+        db_session: Session, master_workshop: GameSessionDB
+    ) -> GameSessionDB:
+        db_session.add(master_workshop)
+        db_session.commit()
+        db_session.refresh(master_workshop)
+        return master_workshop
+
+    @staticmethod
+    def get_master_workshop_by_game_session_uuid(
+        db_session: Session, game_session_uuid: str
+    ) -> Optional[GameSessionDB]:
+        stmt = select(GameSessionDB).filter_by(game_session_uuid=game_session_uuid)
+        result = db_session.execute(stmt)
+        return result.scalars().first()
