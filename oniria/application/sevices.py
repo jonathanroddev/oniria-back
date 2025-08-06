@@ -8,7 +8,12 @@ from sqlalchemy.orm import Session
 from firebase_admin import auth as firebase_auth, exceptions as firebase_exceptions
 
 from oniria.application.mappers import GameSessionMapper, MasterWorkshopMapper
-from oniria.interfaces import SignUp, GameSessionDTO, GameSessionRequest
+from oniria.interfaces import (
+    SignUp,
+    GameSessionDTO,
+    GameSessionRequest,
+    MasterWorkshopRequest,
+)
 from oniria.application import PlanMapper, UserMapper
 from oniria.infrastructure.db.repositories import (
     PlanRepository,
@@ -154,16 +159,16 @@ class MasterWorkshopService:
     def create_master_workshop(
         user: User,
         db_session: Session,
-        game_session_uuid: str,
+        master_workshop_request: MasterWorkshopRequest,
     ) -> MasterWorkshop:
         game_session: GameSession = (
             GameSessionService.get_game_session_by_uuid_and_owner(
-                user, db_session, game_session_uuid
+                user, db_session, master_workshop_request.game_session_uuid
             )
         )
         master_workshop_exists = (
             MasterWorkshopRepository.get_master_workshop_by_game_session_uuid(
-                db_session, game_session_uuid
+                db_session, master_workshop_request.game_session_uuid
             )
         )
         if master_workshop_exists:

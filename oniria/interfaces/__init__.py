@@ -9,6 +9,7 @@ from oniria.interfaces.schemas import (
     InventoryDTO,
     CharacterSheetDTO,
     MasterWorkshopDTO,
+    MasterWorkshopRequest,
     UserDTO,
 )
 
@@ -23,5 +24,6 @@ __all__ = [
     "InventoryDTO",
     "CharacterSheetDTO",
     "MasterWorkshopDTO",
+    "MasterWorkshopRequest",
     "UserDTO",
 ]

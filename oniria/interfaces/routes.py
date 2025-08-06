@@ -1,8 +1,6 @@
 from typing import List, Generator
 from fastapi import APIRouter, Depends
 
-from oniria.application.mappers import GameSessionMapper
-from oniria.application.sevices import GameSessionService
 from oniria.domain import User
 from oniria.infrastructure.firebase.firebase_service import get_current_user
 from sqlalchemy.orm import Session
@@ -12,8 +10,19 @@ from oniria.interfaces import (
     UserDTO,
     GameSessionDTO,
     GameSessionRequest,
+    MasterWorkshopRequest,
+    MasterWorkshopDTO,
 )
-from oniria.application import UserService, PlanService, PlanMapper, UserMapper
+from oniria.application import (
+    UserService,
+    PlanService,
+    PlanMapper,
+    UserMapper,
+    MasterWorkshopMapper,
+    GameSessionMapper,
+    GameSessionService,
+    MasterWorkshopService,
+)
 from oniria.infrastructure.db import get_session
 
 
@@ -63,3 +72,16 @@ def get_game_sessions_by_owner(
             user, db_session
         )
     ]
+
+
+@router.post("/master-workshop", response_model=MasterWorkshopDTO, tags=["campaigns"])
+def create_master_workshop(
+    master_workshop_request: MasterWorkshopRequest,
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+):
+    return MasterWorkshopMapper.to_dto_from_domain(
+        MasterWorkshopService.create_master_workshop(
+            user, db_session, master_workshop_request
+        )
+    )
