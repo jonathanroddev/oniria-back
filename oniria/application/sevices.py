@@ -44,7 +44,7 @@ from oniria.infrastructure.db.sql_models import (
 )
 from oniria.domain import (
     User,
-    NoContentException,
+    NotFoundException,
     ConflictException,
     Plan,
     GameSession,
@@ -61,7 +61,7 @@ class PlanService:
         plans_entities: Sequence[PlanDB] = PlanRepository.get_all_plans(db_session)
         if plans_entities:
             return [PlanMapper.to_domain_from_entity(plan) for plan in plans_entities]
-        raise NoContentException("No plans found")
+        raise NotFoundException("No plans found")
 
 
 class UserService:
@@ -96,7 +96,7 @@ class UserService:
             db_session, external_uuid
         )
         if not user_entity:
-            raise NoContentException(
+            raise NotFoundException(
                 f"No user found with external UUID: {external_uuid}"
             )
         return UserMapper.to_domain_from_entity(user_entity)
@@ -151,19 +151,21 @@ class GameSessionService:
                 GameSessionMapper.to_domain_from_entity(game_session)
                 for game_session in game_sessions_entities
             ]
-        raise NoContentException("No game sessions found for this user")
+        raise NotFoundException("No game sessions found for this user")
 
     @staticmethod
     def get_game_session_by_uuid_and_owner(
-        user: User, db_session: Session, uuid
+        db_session: Session, game_session_uuid: str, user: User
     ) -> GameSession:
         game_session_entity: Optional[GameSessionDB] = (
             GameSessionRepository.get_game_session_by_uuid_and_owner(
-                db_session, uuid, user.uuid
+                db_session, game_session_uuid, user.uuid
             )
         )
         if not game_session_entity:
-            raise NoContentException(f"No game session found with UUID: {uuid}")
+            raise NotFoundException(
+                f"No game session found with UUID: {game_session_uuid}"
+            )
         if str(game_session_entity.owner) not in str(user.uuid):
             raise ForbiddenException(
                 f"User {user.uuid} is not the owner of this game session"
@@ -176,7 +178,7 @@ class GameSessionService:
             GameSessionRepository.get_game_session_by_name(db_session, name)
         )
         if not game_session_entity:
-            raise NoContentException(f"No game session found with name: {name}")
+            raise NotFoundException(f"No game session found with name: {name}")
         return GameSessionMapper.to_domain_from_entity(game_session_entity)
 
     @staticmethod
@@ -189,7 +191,7 @@ class GameSessionService:
                 GameSessionMapper.to_domain_from_entity(session)
                 for session in public_game_sessions
             ]
-        raise NoContentException("No public game sessions found")
+        raise NotFoundException("No public game sessions found")
 
     @staticmethod
     def get_private_game_session(
@@ -201,7 +203,7 @@ class GameSessionService:
             )
         )
         if not game_session_entity:
-            raise NoContentException(
+            raise NotFoundException(
                 f"No private game session found with name: {game_session_request.name}"
             )
         if not GameSessionService.verify_password(
@@ -221,7 +223,7 @@ class MasterWorkshopService:
     ) -> MasterWorkshop:
         game_session: GameSession = (
             GameSessionService.get_game_session_by_uuid_and_owner(
-                user, db_session, master_workshop_request.game_session_uuid
+                db_session, master_workshop_request.game_session_uuid, user
             )
         )
         master_workshop_exists = (
@@ -298,3 +300,30 @@ class CharacterSheetService:
             db_session, character_sheet_db
         )
         return CharacterSheetMapper.to_domain_from_entity(character_sheet_recorded)
+
+    @staticmethod
+    def get_characters_sheets_by_game_session_uuid(
+        db_session: Session, game_session_uuid: str, user: User
+    ) -> List[CharacterSheet]:
+        game_session: GameSession = (
+            GameSessionService.get_game_session_by_uuid_and_owner(
+                db_session,
+                game_session_uuid,
+                user,
+            )
+        )
+        if not game_session:
+            raise NotFoundException(
+                f"No game session found with UUID: {game_session_uuid} or user {user.uuid} is not the owner"
+            )
+        character_sheets_entities: Sequence[CharacterSheetDB] = (
+            CharacterSheetRepository.get_characters_sheets_by_game_session_uuid(
+                db_session, game_session.uuid
+            )
+        )
+        if character_sheets_entities:
+            return [
+                CharacterSheetMapper.to_domain_from_entity(sheet)
+                for sheet in character_sheets_entities
+            ]
+        raise NotFoundException("No character sheets found for this game session")

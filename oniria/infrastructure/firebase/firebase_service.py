@@ -2,7 +2,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Depends
 from firebase_admin import auth as firebase_auth, exceptions as firebase_exceptions
 
-from oniria.domain import UnauthorizedException, User
+from oniria.domain import UnauthorizedException
 
 security = HTTPBearer(auto_error=False)
 

@@ -6,8 +6,8 @@ from oniria.infrastructure.firebase.firebase_config import *
 from oniria.application.middlewares import (
     handle_unauthorized,
     UnauthorizedException,
-    handle_no_content,
-    NoContentException,
+    handle_not_found,
+    NotFoundException,
     handle_conflict,
     ConflictException,
     handle_forbidden,
@@ -50,7 +50,7 @@ def get_application() -> FastAPI:
     prefix: str = "/oniria"
     app = FastAPI(title="Oniria API")
     app.add_exception_handler(UnauthorizedException, handle_unauthorized)
-    app.add_exception_handler(NoContentException, handle_no_content)
+    app.add_exception_handler(NotFoundException, handle_not_found)
     app.add_exception_handler(ConflictException, handle_conflict)
     app.add_exception_handler(ForbiddenException, handle_forbidden)
     app.include_router(auth_routes, prefix=prefix)

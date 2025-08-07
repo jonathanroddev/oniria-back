@@ -117,3 +117,22 @@ def create_character_sheet(
             user, db_session, character_sheet_request
         )
     )
+
+
+@router.get(
+    "/characters-sheets/games-sessions/{game_session_uuid}",
+    response_model=List[CharacterSheetDTO],
+    tags=["campaigns"],
+)
+def get_characters_sheets_by_game_session_uuid(
+    game_session_uuid: str,
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> List[CharacterSheetDTO]:
+    check_permissions(user, "characters_sheets", "read")
+    character_sheets = CharacterSheetService.get_characters_sheets_by_game_session_uuid(
+        db_session, game_session_uuid, user
+    )
+    return [
+        CharacterSheetMapper.to_dto_from_domain(sheet) for sheet in character_sheets
+    ]

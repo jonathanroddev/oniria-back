@@ -1,4 +1,4 @@
-class NoContentException(Exception):
+class NotFoundException(Exception):
     pass
 
 

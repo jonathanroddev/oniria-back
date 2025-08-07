@@ -13,14 +13,14 @@ from oniria.domain.models import (
     User,
 )
 from oniria.domain.exceptions import (
-    NoContentException,
+    NotFoundException,
     ConflictException,
     UnauthorizedException,
     ForbiddenException,
 )
 
 __all__ = [
-    "NoContentException",
+    "NotFoundException",
     "ConflictException",
     "UnauthorizedException",
     "ForbiddenException",

@@ -3,16 +3,16 @@ from fastapi.encoders import jsonable_encoder
 from starlette.responses import JSONResponse
 
 from oniria.domain import (
-    NoContentException,
+    NotFoundException,
     ConflictException,
     UnauthorizedException,
     ForbiddenException,
 )
 
 
-async def handle_no_content(request: Request, exc: NoContentException) -> JSONResponse:
+async def handle_not_found(request: Request, exc: NotFoundException) -> JSONResponse:
     return JSONResponse(
-        status_code=status.HTTP_204_NO_CONTENT,
+        status_code=status.HTTP_404_NOT_FOUND,
         content=jsonable_encoder({"detail": str(exc)}),
     )
 
