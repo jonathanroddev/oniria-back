@@ -74,15 +74,15 @@ class PermissionMapper:
     @staticmethod
     def to_domain_from_entity(permission: PermissionDB) -> Permission:
         return Permission(
-            resources=ResourceMapper.to_domain_from_entity(permission.resource_rel),
-            operations=OperationMapper.to_domain_from_entity(permission.operation_rel),
+            resource=ResourceMapper.to_domain_from_entity(permission.resource_rel),
+            operation=OperationMapper.to_domain_from_entity(permission.operation_rel),
         )
 
     @staticmethod
     def to_dto_from_domain(domain: Permission) -> PermissionDTO:
         return PermissionDTO(
-            resources=ResourceMapper.to_dto_from_domain(domain.resources),
-            operations=OperationMapper.to_dto_from_domain(domain.operations),
+            resource=ResourceMapper.to_dto_from_domain(domain.resource),
+            operation=OperationMapper.to_dto_from_domain(domain.operation),
         )
 
 

@@ -16,8 +16,8 @@ class OperationDTO(BaseModel):
 
 
 class PermissionDTO(BaseModel):
-    resources: ResourceDTO
-    operations: OperationDTO
+    resource: ResourceDTO
+    operation: OperationDTO
 
 
 class PlanDTO(BaseModel):

@@ -14,8 +14,8 @@ class Operation:
 
 @dataclass
 class Permission:
-    resources: Resource
-    operations: Operation
+    resource: Resource
+    operation: Operation
 
 
 @dataclass

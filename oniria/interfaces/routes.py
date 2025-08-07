@@ -2,7 +2,7 @@ from typing import List, Generator
 from fastapi import APIRouter, Depends
 
 from oniria.domain import User
-from oniria.infrastructure.firebase.firebase_service import get_current_user
+from oniria.application.utils import get_current_user, check_permissions
 from sqlalchemy.orm import Session
 from oniria.interfaces import (
     SignUp,
@@ -111,6 +111,7 @@ def create_character_sheet(
     db_session: Session = Depends(get_session),
     user: User = Depends(get_current_user),
 ):
+    check_permissions(user, "characters_sheets", "write")
     return CharacterSheetMapper.to_dto_from_domain(
         CharacterSheetService.create_character_sheet(
             user, db_session, character_sheet_request
