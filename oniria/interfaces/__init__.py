@@ -1,5 +1,8 @@
 from oniria.interfaces.schemas import (
     SignUp,
+    ResourceDTO,
+    OperationDTO,
+    PermissionDTO,
     PlanDTO,
     UserStatusDTO,
     GameSessionDTO,
@@ -16,6 +19,9 @@ from oniria.interfaces.schemas import (
 
 __all__ = [
     "SignUp",
+    "ResourceDTO",
+    "OperationDTO",
+    "PermissionDTO",
     "PlanDTO",
     "UserStatusDTO",
     "GameSessionDTO",

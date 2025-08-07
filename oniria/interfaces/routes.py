@@ -78,7 +78,7 @@ def get_game_sessions_by_owner(
     ]
 
 
-@router.post("/master-workshop", response_model=MasterWorkshopDTO, tags=["campaigns"])
+@router.post("/masters-workshops", response_model=MasterWorkshopDTO, tags=["campaigns"])
 def create_master_workshop(
     master_workshop_request: MasterWorkshopRequest,
     db_session: Session = Depends(get_session),

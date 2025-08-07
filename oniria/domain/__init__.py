@@ -1,4 +1,7 @@
 from oniria.domain.models import (
+    Resource,
+    Operation,
+    Permission,
     Plan,
     UserStatus,
     Avatar,
@@ -21,6 +24,9 @@ __all__ = [
     "ConflictException",
     "UnauthorizedException",
     "ForbiddenException",
+    "Resource",
+    "Operation",
+    "Permission",
     "Plan",
     "UserStatus",
     "Avatar",

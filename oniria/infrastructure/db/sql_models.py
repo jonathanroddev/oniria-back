@@ -72,6 +72,12 @@ class PlanDB(Base):
     permissions_plans: Mapped[List["PermissionPlanDB"]] = relationship(
         "PermissionPlanDB", back_populates="plan_rel"
     )
+    permissions: Mapped[List["PermissionDB"]] = relationship(
+        "PermissionDB",
+        secondary="permissions_plans",
+        back_populates="plans",
+        viewonly=True,
+    )
     users: Mapped[Optional[List["UserDB"]]] = relationship(
         "UserDB", back_populates="plan_rel"
     )
@@ -100,6 +106,12 @@ class PermissionDB(Base):
     )
     permissions_plans: Mapped[List["PermissionPlanDB"]] = relationship(
         "PermissionPlanDB", back_populates="permission"
+    )
+    plans: Mapped[List["PlanDB"]] = relationship(
+        "PlanDB",
+        secondary="permissions_plans",
+        back_populates="permissions",
+        viewonly=True,
     )
 
 

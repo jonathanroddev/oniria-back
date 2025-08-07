@@ -7,8 +7,22 @@ class SignUp(BaseModel):
     password: constr(strip_whitespace=True, min_length=8, max_length=100)
 
 
+class ResourceDTO(BaseModel):
+    name: str
+
+
+class OperationDTO(BaseModel):
+    name: str
+
+
+class PermissionDTO(BaseModel):
+    resources: ResourceDTO
+    operations: OperationDTO
+
+
 class PlanDTO(BaseModel):
     name: constr(strip_whitespace=True, min_length=4, max_length=50)
+    permissions: List[PermissionDTO] = []
 
 
 class UserStatusDTO(BaseModel):

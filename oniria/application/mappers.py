@@ -1,4 +1,7 @@
 from oniria.domain import (
+    Resource,
+    Operation,
+    Permission,
     Plan,
     User,
     UserStatus,
@@ -10,6 +13,9 @@ from oniria.domain import (
     MasterWorkshop,
 )
 from oniria.interfaces import (
+    ResourceDTO,
+    OperationDTO,
+    PermissionDTO,
     PlanDTO,
     UserStatusDTO,
     AvatarDTO,
@@ -21,6 +27,9 @@ from oniria.interfaces import (
     UserDTO,
 )
 from oniria.infrastructure.db import (
+    ResourceDB,
+    OperationDB,
+    PermissionDB,
     PlanDB,
     UserStatusDB,
     UserDB,
@@ -33,17 +42,69 @@ from oniria.infrastructure.db import (
 )
 
 
+class ResourceMapper:
+    @staticmethod
+    def to_domain_from_entity(resource: ResourceDB) -> Resource:
+        return Resource(
+            name=resource.name,
+        )
+
+    @staticmethod
+    def to_dto_from_domain(domain: Resource) -> ResourceDTO:
+        return ResourceDTO(
+            name=domain.name,
+        )
+
+
+class OperationMapper:
+    @staticmethod
+    def to_domain_from_entity(operation: OperationDB) -> Operation:
+        return Operation(
+            name=operation.name,
+        )
+
+    @staticmethod
+    def to_dto_from_domain(domain: Operation) -> OperationDTO:
+        return OperationDTO(
+            name=domain.name,
+        )
+
+
+class PermissionMapper:
+    @staticmethod
+    def to_domain_from_entity(permission: PermissionDB) -> Permission:
+        return Permission(
+            resources=ResourceMapper.to_domain_from_entity(permission.resource_rel),
+            operations=OperationMapper.to_domain_from_entity(permission.operation_rel),
+        )
+
+    @staticmethod
+    def to_dto_from_domain(domain: Permission) -> PermissionDTO:
+        return PermissionDTO(
+            resources=ResourceMapper.to_dto_from_domain(domain.resources),
+            operations=OperationMapper.to_dto_from_domain(domain.operations),
+        )
+
+
 class PlanMapper:
     @staticmethod
     def to_domain_from_entity(plan: PlanDB) -> Plan:
         return Plan(
             name=plan.name,
+            permissions=[
+                PermissionMapper.to_domain_from_entity(permission)
+                for permission in plan.permissions
+            ],
         )
 
     @staticmethod
     def to_dto_from_domain(domain: Plan) -> PlanDTO:
         return PlanDTO(
             name=domain.name,
+            permissions=[
+                PermissionMapper.to_dto_from_domain(permission)
+                for permission in domain.permissions
+            ],
         )
 
 

@@ -12,6 +12,8 @@ from oniria.infrastructure.db.sql_models import (
     AvatarDB,
     OneironautDB,
     InventoryDB,
+    PermissionPlanDB,
+    PermissionDB,
 )
 
 
@@ -37,7 +39,14 @@ class UserRepository:
         stmt = select(UserDB)
         result = db_session.execute(
             stmt.filter_by(external_uuid=external_uuid).options(
-                joinedload(UserDB.plan_rel),
+                joinedload(UserDB.plan_rel)
+                .joinedload(PlanDB.permissions_plans)
+                .joinedload(PermissionPlanDB.permission)
+                .joinedload(PermissionDB.resource_rel),
+                joinedload(UserDB.plan_rel)
+                .joinedload(PlanDB.permissions_plans)
+                .joinedload(PermissionPlanDB.permission)
+                .joinedload(PermissionDB.operation_rel),
                 joinedload(UserDB.user_status_rel),
                 joinedload(UserDB.characters_sheets),
                 joinedload(UserDB.masters_workshops),

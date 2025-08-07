@@ -1,4 +1,5 @@
 import uuid
+
 import bcrypt
 from random import Random
 from typing import List, Sequence, Optional
@@ -120,6 +121,8 @@ class GameSessionService:
         db_session: Session,
         game_session_request: GameSessionRequest,
     ) -> GameSession:
+        if not game_session_request.max_players or game_session_request.max_players < 1:
+            game_session_request.max_players = 6
         game_session_db: GameSessionDB = GameSessionDB(
             uuid=uuid.uuid4(),
             owner=user.uuid,
@@ -129,7 +132,7 @@ class GameSessionService:
                 if game_session_request.password
                 else None
             ),  # If not provided, it will be considered as public
-            max_players=game_session_request.max_players or 6,
+            max_players=game_session_request.max_players,
         )
         game_session_recorded: GameSessionDB = (
             GameSessionRepository.create_game_session(db_session, game_session_db)

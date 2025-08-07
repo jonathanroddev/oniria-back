@@ -3,8 +3,25 @@ from typing import List
 
 
 @dataclass
+class Resource:
+    name: str
+
+
+@dataclass
+class Operation:
+    name: str
+
+
+@dataclass
+class Permission:
+    resources: Resource
+    operations: Operation
+
+
+@dataclass
 class Plan:
     name: str
+    permissions: List[Permission]
 
 
 @dataclass
