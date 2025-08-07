@@ -1,4 +1,6 @@
+import os
 import uvicorn
+import json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -47,10 +49,7 @@ def load_data():
                 print("Error while loading DML:", e)
 
 
-# TODO: Fill this with .env
-origins = [
-    "http://localhost:5173",
-]
+origins = json.loads(os.environ["ORIGINS"])
 
 
 def get_application() -> FastAPI:

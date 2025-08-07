@@ -269,6 +269,7 @@ volumes:
 All the Google credentials could be found in the keys file downloaded from Firebase Console.
 
 ```env
+ORIGINS=["http://localhost:5173"]
 POSTGRES_USER=devuser
 POSTGRES_PASSWORD=devpass
 POSTGRES_DB=devdb
