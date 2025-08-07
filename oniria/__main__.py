@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 
 from oniria.infrastructure.firebase.firebase_config import *
@@ -46,6 +47,12 @@ def load_data():
                 print("Error while loading DML:", e)
 
 
+# TODO: Fill this with .env
+origins = [
+    "http://localhost:5173",
+]
+
+
 def get_application() -> FastAPI:
     prefix: str = "/oniria"
     app = FastAPI(title="Oniria API")
@@ -53,6 +60,13 @@ def get_application() -> FastAPI:
     app.add_exception_handler(NotFoundException, handle_not_found)
     app.add_exception_handler(ConflictException, handle_conflict)
     app.add_exception_handler(ForbiddenException, handle_forbidden)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.include_router(auth_routes, prefix=prefix)
     return app
 
