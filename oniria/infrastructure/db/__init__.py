@@ -1,5 +1,5 @@
 from oniria.infrastructure.db.database import Base, engine, SessionLocal, get_session
-from .sql_models import (
+from .base_sql_models import (
     UserDB,
     PermissionDB,
     ResourceDB,
@@ -8,13 +8,11 @@ from .sql_models import (
     UserStatusDB,
     PermissionPlanDB,
     GameSessionDB,
-    RenownDB,
-    CharacterRenownDB,
-    CharactersRenownHistoryDB,
-    ExperienceDB,
-    ImprovementDB,
-    ExperienceAcquiredDB,
-    ImprovementAcquiredDB,
     CharacterSheetDB,
     MasterWorkshopDB,
+)
+from .cs_sql_models import (
+    RenownDB,
+    ExperienceDB,
+    ImprovementDB,
 )

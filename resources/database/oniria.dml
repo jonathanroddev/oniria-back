@@ -28,36 +28,21 @@ INSERT INTO user_status (name) VALUES ('active');
 INSERT INTO user_status (name) VALUES ('inactive');
 INSERT INTO user_status (name) VALUES ('banned');
 
-INSERT INTO renown (name, level) VALUES ('aspirant', 0);
-INSERT INTO renown (name, level) VALUES ('promise', 1);
-INSERT INTO renown (name, level) VALUES ('celebrity', 2);
-INSERT INTO renown (name, level) VALUES ('legend', 3);
+INSERT INTO renown (key, level) VALUES ('aspirant');
+INSERT INTO renown (key, level) VALUES ('promise');
+INSERT INTO renown (key, level) VALUES ('celebrity');
+INSERT INTO renown (key, level) VALUES ('legend');
 
-INSERT INTO experiences ("desc", "max", uuid, renown_name) VALUES ('create-a-character', 1, '5f87d78e-8e5b-4bea-921b-853ddb489d19', 'aspirant');
+INSERT INTO experiences (key) VALUES ('resolve-obj-med-long-term');
+INSERT INTO experiences (key) VALUES ('defeat-pow-enemy');
+INSERT INTO experiences (key) VALUES ('resolve-obj-med-long-term');
+INSERT INTO experiences (key) VALUES ('defeat-pow-enemy');
+INSERT INTO experiences (key) VALUES ('resolve-obj-med-long-term');
+INSERT INTO experiences (key) VALUES ('defeat-pow-enemy');
 
-INSERT INTO experiences ("desc", "max", uuid, renown_name) VALUES ('resolve-obj-med-long-term', 2, '4e6f0216-b16f-4b5f-a0e1-efecb23d8fc9', 'promise');
-INSERT INTO experiences ("desc", "max", uuid, renown_name) VALUES ('defeat-pow-enemy', 2, 'b3daeea6-3d3e-451a-98f7-e1025b490a88', 'promise');
-
-INSERT INTO experiences ("desc", "max", uuid, renown_name) VALUES ('resolve-obj-med-long-term', 3, '1aceddc2-2241-4584-9d33-792853aeefc5', 'celebrity');
-INSERT INTO experiences ("desc", "max", uuid, renown_name) VALUES ('defeat-pow-enemy', 3, '7555c15d-092e-485b-bfc9-8c8d06cf184a', 'celebrity');
-
-INSERT INTO experiences ("desc", "max", uuid, renown_name) VALUES ('resolve-obj-med-long-term', 4, '1c8ea7fe-3320-4560-a8ea-1e3486d7ad3a', 'legend');
-INSERT INTO experiences ("desc", "max", uuid, renown_name) VALUES ('defeat-pow-enemy', 4, '85ea69ad-214c-4682-a9ed-e2150c2708f0', 'legend');
-
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('biography', 1, '3a461177-c34e-44ca-a1cc-2f87c265f48e', 'aspirant');
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('training', 1, '22909433-b1dd-489b-a8a0-595a6277f9af', 'aspirant');
-
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('characteristic', 2, '9ff3a8c6-92db-4981-b4ac-1ca97954e12f', 'promise');
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('martial', 1, '8c69fef6-d04c-4e0e-b41b-8b49ffc8234c', 'promise');
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('arcane', 1, 'f4084ec2-c110-4c90-81da-a051b720516b', 'promise');
-
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('characteristic', 3, 'd69e6a47-f966-4f60-b729-dbc83f52a83f', 'celebrity');
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('martial-2', 1, '0c10b70d-86d2-4202-af52-08687b5308d3', 'celebrity');
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('arcane-2', 1, '76aefc20-57f8-4670-abe8-02430342529e', 'celebrity');
-
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('characteristic', 4, 'cdb4b576-5868-4256-ba6e-6b49aca379c5', 'legend');
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('martial-3', 1, 'af562d6d-7da9-4e24-ae0a-742f29428762', 'legend');
-INSERT INTO improvements ("desc", "max", uuid, renown_name) VALUES ('arcane-3', 1, 'ebe470de-0262-44cc-8424-c723110e7a77', 'legend');
+INSERT INTO improvements (key, "max", renown_key) VALUES ('bonus-totem-mantra-recipe-book', 4, 'promise');
+INSERT INTO improvements (key, "max", renown_key) VALUES ('resistant', 1, 'promise');
+INSERT INTO improvements (key, "max", renown_key) VALUES ('adaptable', 1, 'promise');
 
 COMMIT;
 

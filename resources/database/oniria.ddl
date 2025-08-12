@@ -63,47 +63,15 @@ CREATE TABLE permissions_plans (
 );
 
 CREATE TABLE renown (
-    "name" VARCHAR(50) PRIMARY KEY NOT NULL,
-    "level" INTEGER NOT NULL
+    "key" VARCHAR(50) PRIMARY KEY NOT NULL
 );
 
 CREATE TABLE experiences (
-    "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "max" INTEGER NOT NULL,
-    "desc" VARCHAR(50) NOT NULL,
-    "renown_name" VARCHAR(50) NOT NULL REFERENCES renown(name)
+    "key" VARCHAR(50) PRIMARY KEY NOT NULL
 );
 
 CREATE TABLE improvements (
-    "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "key" VARCHAR(100) PRIMARY KEY NOT NULL,
     "max" INTEGER NOT NULL,
-    "desc" VARCHAR(50) NOT NULL,
-    "renown_name" VARCHAR(50) NOT NULL REFERENCES renown(name)
-);
-
-CREATE TABLE characters_renown (
-    "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "character_uuid" UUID NOT NULL REFERENCES characters_sheets(uuid),
-    "renown_name" VARCHAR(50) NOT NULL REFERENCES renown(name),
-    "is_current" BOOLEAN NOT NULL
-);
-
-CREATE TABLE characters_renown_history (
-    "character_uuid" UUID NOT NULL REFERENCES characters_sheets(uuid),
-    "character_renown_uuid" UUID NOT NULL REFERENCES characters_renown(uuid),
-    PRIMARY KEY (character_uuid, character_renown_uuid)
-);
-
-CREATE TABLE experiences_acquired (
-    "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "experience_uuid" UUID NOT NULL REFERENCES experiences(uuid),
-    "character_renown_uuid" UUID NOT NULL REFERENCES characters_renown(uuid),
-    "quantity" INTEGER NOT NULL
-);
-
-CREATE TABLE improvements_acquired (
-    "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "improvement_uuid" UUID NOT NULL REFERENCES improvements(uuid),
-    "character_renown_uuid" UUID NOT NULL REFERENCES characters_renown(uuid),
-    "quantity" INTEGER NOT NULL
+    "renown_key" VARCHAR(50) NOT NULL REFERENCES renown(key)
 );
