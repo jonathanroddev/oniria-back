@@ -39,27 +39,9 @@ class UserStatus:
 
 
 @dataclass
-class Avatar:
-    uuid: str
-
-
-@dataclass
-class Oneironaut:
-    uuid: str
-
-
-@dataclass
-class Inventory:
-    uuid: str
-
-
-@dataclass
 class CharacterSheet:
     uuid: str
     user_uuid: str
-    avatar: Avatar
-    oneironaut: Oneironaut
-    inventory: Inventory
     game_session: GameSession
 
 

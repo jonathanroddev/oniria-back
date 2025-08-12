@@ -189,39 +189,6 @@ class GameSessionDB(Base):
     )
 
 
-class AvatarDB(Base):
-    __tablename__ = "avatars"
-
-    uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid4
-    )
-    character_sheet: Mapped["CharacterSheetDB"] = relationship(
-        "CharacterSheetDB", back_populates="avatar"
-    )
-
-
-class OneironautDB(Base):
-    __tablename__ = "oneironauts"
-
-    uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid4
-    )
-    character_sheet: Mapped["CharacterSheetDB"] = relationship(
-        "CharacterSheetDB", back_populates="oneironaut"
-    )
-
-
-class InventoryDB(Base):
-    __tablename__ = "inventories"
-
-    uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid4
-    )
-    character_sheet: Mapped["CharacterSheetDB"] = relationship(
-        "CharacterSheetDB", back_populates="inventory"
-    )
-
-
 class CharacterSheetDB(Base):
     __tablename__ = "characters_sheets"
 
@@ -231,29 +198,11 @@ class CharacterSheetDB(Base):
     user_uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
     )
-    avatar_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("avatars.uuid"), nullable=False
-    )
-    oneironaut_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("oneironauts.uuid"), nullable=False
-    )
-    inventory_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("inventories.uuid"), nullable=False
-    )
     game_session_uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("games_sessions.uuid"), nullable=True
     )
 
     user: Mapped["UserDB"] = relationship("UserDB", back_populates="characters_sheets")
-    avatar: Mapped["AvatarDB"] = relationship(
-        "AvatarDB", back_populates="character_sheet"
-    )
-    oneironaut: Mapped["OneironautDB"] = relationship(
-        "OneironautDB", back_populates="character_sheet"
-    )
-    inventory: Mapped["InventoryDB"] = relationship(
-        "InventoryDB", back_populates="character_sheet"
-    )
     game_session: Mapped[Optional["GameSessionDB"]] = relationship(
         "GameSessionDB", back_populates="character_sheets"
     )

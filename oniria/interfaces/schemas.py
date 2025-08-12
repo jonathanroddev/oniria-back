@@ -44,24 +44,9 @@ class GameSessionRequest(BaseModel):
     max_players: Optional[int] = 6
 
 
-class AvatarDTO(BaseModel):
-    uuid: str
-
-
-class OneironautDTO(BaseModel):
-    uuid: str
-
-
-class InventoryDTO(BaseModel):
-    uuid: str
-
-
 class CharacterSheetDTO(BaseModel):
     uuid: str
     user_uuid: str
-    avatar: AvatarDTO
-    oneironaut: OneironautDTO
-    inventory: InventoryDTO
     game_session: GameSessionDTO
 
 

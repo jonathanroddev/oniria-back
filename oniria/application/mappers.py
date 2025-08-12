@@ -5,9 +5,6 @@ from oniria.domain import (
     Plan,
     User,
     UserStatus,
-    Avatar,
-    Oneironaut,
-    Inventory,
     CharacterSheet,
     GameSession,
     MasterWorkshop,
@@ -18,10 +15,7 @@ from oniria.interfaces import (
     PermissionDTO,
     PlanDTO,
     UserStatusDTO,
-    AvatarDTO,
     GameSessionDTO,
-    OneironautDTO,
-    InventoryDTO,
     CharacterSheetDTO,
     MasterWorkshopDTO,
     UserDTO,
@@ -33,10 +27,7 @@ from oniria.infrastructure.db import (
     PlanDB,
     UserStatusDB,
     UserDB,
-    AvatarDB,
     GameSessionDB,
-    OneironautDB,
-    InventoryDB,
     CharacterSheetDB,
     MasterWorkshopDB,
 )
@@ -125,66 +116,6 @@ class UserStatusMapper:
     def to_dto_from_domain(domain: UserStatus) -> UserStatusDTO:
         return UserStatusDTO(
             name=domain.name,
-        )
-
-
-class AvatarMapper:
-    @staticmethod
-    def to_dto_from_entity(avatar: AvatarDB) -> AvatarDTO:
-        return AvatarDTO(
-            uuid=str(avatar.uuid),
-        )
-
-    @staticmethod
-    def to_domain_from_entity(avatar: AvatarDB) -> Avatar:
-        return Avatar(
-            uuid=str(avatar.uuid),
-        )
-
-    @staticmethod
-    def to_dto_from_domain(domain: Avatar) -> AvatarDTO:
-        return AvatarDTO(
-            uuid=domain.uuid,
-        )
-
-
-class OneironautMapper:
-    @staticmethod
-    def to_dto_from_entity(oneironaut: OneironautDB) -> OneironautDTO:
-        return OneironautDTO(
-            uuid=str(oneironaut.uuid),
-        )
-
-    @staticmethod
-    def to_domain_from_entity(oneironaut: OneironautDB) -> Oneironaut:
-        return Oneironaut(
-            uuid=str(oneironaut.uuid),
-        )
-
-    @staticmethod
-    def to_dto_from_domain(domain: Oneironaut) -> OneironautDTO:
-        return OneironautDTO(
-            uuid=domain.uuid,
-        )
-
-
-class InventoryMapper:
-    @staticmethod
-    def to_dto_from_entity(inventory: InventoryDB) -> InventoryDTO:
-        return InventoryDTO(
-            uuid=str(inventory.uuid),
-        )
-
-    @staticmethod
-    def to_domain_from_entity(inventory: InventoryDB) -> Inventory:
-        return Inventory(
-            uuid=str(inventory.uuid),
-        )
-
-    @staticmethod
-    def to_dto_from_domain(domain: Inventory) -> InventoryDTO:
-        return InventoryDTO(
-            uuid=domain.uuid,
         )
 
 

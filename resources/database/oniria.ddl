@@ -34,26 +34,10 @@ CREATE TABLE games_sessions (
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
 );
 
-CREATE TABLE inventories (
-    "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-);
-
-CREATE TABLE avatars (
-    "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-);
-
-CREATE TABLE oneironauts (
-    "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-);
-
 CREATE TABLE characters_sheets (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "user_uuid" UUID NOT NULL REFERENCES users(uuid),
-    "game_session_uuid" UUID NULL REFERENCES games_sessions(uuid),
-    "avatar_uuid" UUID NOT NULL REFERENCES avatars(uuid),
-    "oneironaut_uuid" UUID NOT NULL REFERENCES oneironauts(uuid),
-    "inventory_uuid" UUID NOT NULL REFERENCES inventories(uuid)
-);
+    "game_session_uuid" UUID NULL REFERENCES games_sessions(uuid)
 
 CREATE TABLE masters_workshops (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),

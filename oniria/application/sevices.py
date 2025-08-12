@@ -13,7 +13,6 @@ from oniria.application.mappers import (
     MasterWorkshopMapper,
     CharacterSheetMapper,
 )
-from oniria.infrastructure.db import AvatarDB, InventoryDB
 from oniria.interfaces import (
     SignUp,
     GameSessionDTO,
@@ -30,9 +29,6 @@ from oniria.infrastructure.db.repositories import (
     GameSessionRepository,
     MasterWorkshopRepository,
     CharacterSheetRepository,
-    AvatarRepository,
-    OneironautRepository,
-    InventoryRepository,
 )
 from oniria.infrastructure.db.sql_models import (
     PlanDB,
@@ -40,7 +36,6 @@ from oniria.infrastructure.db.sql_models import (
     GameSessionDB,
     MasterWorkshopDB,
     CharacterSheetDB,
-    OneironautDB,
 )
 from oniria.domain import (
     User,
@@ -285,15 +280,6 @@ class CharacterSheetService:
         character_sheet_db = CharacterSheetDB(
             uuid=uuid.uuid4(),
             user_uuid=user.uuid,
-            avatar_uuid=AvatarRepository.create_avatar(
-                db_session, AvatarDB(uuid=uuid.uuid4())
-            ).uuid,
-            oneironaut_uuid=OneironautRepository.create_oneironaut(
-                db_session, OneironautDB(uuid=uuid.uuid4())
-            ).uuid,
-            inventory_uuid=InventoryRepository.create_inventory(
-                db_session, InventoryDB(uuid=uuid.uuid4())
-            ).uuid,
             game_session_uuid=game_session.uuid,
         )
         character_sheet_recorded = CharacterSheetRepository.create_character_sheet(

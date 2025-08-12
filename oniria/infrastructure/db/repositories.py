@@ -9,9 +9,6 @@ from oniria.infrastructure.db.sql_models import (
     UserStatusDB,
     GameSessionDB,
     CharacterSheetDB,
-    AvatarDB,
-    OneironautDB,
-    InventoryDB,
     PermissionPlanDB,
     PermissionDB,
 )
@@ -179,52 +176,3 @@ class CharacterSheetRepository:
         )
         result = db_session.execute(stmt)
         return result.scalars().first()
-
-
-class AvatarRepository:
-    @staticmethod
-    def get_avatar_by_uuid(db_session: Session, uuid: str) -> Optional[AvatarDB]:
-        stmt = select(AvatarDB).filter_by(uuid=uuid)
-        result = db_session.execute(stmt)
-        return result.scalars().first()
-
-    @staticmethod
-    def create_avatar(db_session: Session, avatar: AvatarDB) -> AvatarDB:
-        db_session.add(avatar)
-        db_session.commit()
-        db_session.refresh(avatar)
-        return avatar
-
-
-class OneironautRepository:
-    @staticmethod
-    def get_oneironaut_by_uuid(
-        db_session: Session, uuid: str
-    ) -> Optional[OneironautDB]:
-        stmt = select(OneironautDB).filter_by(uuid=uuid)
-        result = db_session.execute(stmt)
-        return result.scalars().first()
-
-    @staticmethod
-    def create_oneironaut(
-        db_session: Session, oneironaut: OneironautDB
-    ) -> OneironautDB:
-        db_session.add(oneironaut)
-        db_session.commit()
-        db_session.refresh(oneironaut)
-        return oneironaut
-
-
-class InventoryRepository:
-    @staticmethod
-    def get_inventory_by_uuid(db_session: Session, uuid: str) -> Optional[InventoryDB]:
-        stmt = select(InventoryDB).filter_by(uuid=uuid)
-        result = db_session.execute(stmt)
-        return result.scalars().first()
-
-    @staticmethod
-    def create_inventory(db_session: Session, inventory: InventoryDB) -> InventoryDB:
-        db_session.add(inventory)
-        db_session.commit()
-        db_session.refresh(inventory)
-        return inventory

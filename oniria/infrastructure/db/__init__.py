@@ -16,8 +16,5 @@ from .sql_models import (
     ExperienceAcquiredDB,
     ImprovementAcquiredDB,
     CharacterSheetDB,
-    AvatarDB,
-    OneironautDB,
-    InventoryDB,
     MasterWorkshopDB,
 )
