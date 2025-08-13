@@ -14,6 +14,7 @@ class RenownDB(Base):
     __tablename__ = "renown"
 
     key: Mapped[str] = mapped_column(String(50), primary_key=True, nullable=False)
+    level: Mapped[int] = mapped_column(Integer, nullable=False)
     lucidity_points: Mapped[int] = mapped_column(Integer, nullable=False)
     max_magic_level: Mapped[int] = mapped_column(Integer, nullable=False)
     karma_points: Mapped[int] = mapped_column(Integer, nullable=False)

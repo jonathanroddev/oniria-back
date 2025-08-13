@@ -17,6 +17,7 @@ class Improvement:
 @dataclass
 class Renown:
     key: str
+    level: int
     lucidity_points: int
     max_magic_level: int
     karma_points: int

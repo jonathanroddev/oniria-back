@@ -13,8 +13,10 @@ class RenownRepository:
     @staticmethod
     def get_all_renowns(db_session: Session) -> Sequence[RenownDB]:
         stmt = select(RenownDB)
-        result = db_session.execute(stmt.options(joinedload(ImprovementDB.renown_key)))
-        return result.scalars().all()
+        result = db_session.execute(
+            stmt.order_by(RenownDB.level).options(joinedload(RenownDB.improvements))
+        )
+        return result.unique().scalars().all()
 
 
 class ExperienceRepository:

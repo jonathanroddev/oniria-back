@@ -72,6 +72,7 @@ CREATE TABLE translations (
 
 CREATE TABLE renown (
     "key" VARCHAR(50) PRIMARY KEY NOT NULL,
+    "level" INTEGER NOT NULL,
     "lucidity_points" INTEGER NOT NULL,
     "max_magic_level" INTEGER NOT NULL,
     "karma_points" INTEGER NOT NULL,

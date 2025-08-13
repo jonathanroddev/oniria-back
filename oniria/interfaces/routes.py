@@ -1,4 +1,4 @@
-from typing import List, Generator
+from typing import List
 from fastapi import APIRouter, Depends
 
 from oniria.domain import User

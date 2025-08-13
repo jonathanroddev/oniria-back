@@ -14,6 +14,7 @@ class ImprovementDTO(BaseModel):
 
 class RenownDTO(BaseModel):
     key: constr(max_length=50)
+    level: int
     lucidity_points: Dict
     max_magic_level: int
     karma_points: Dict
@@ -27,5 +28,5 @@ class RenownDTO(BaseModel):
 
 
 class BootstrapDTO(BaseModel):
-    renown: RenownDTO
+    renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
