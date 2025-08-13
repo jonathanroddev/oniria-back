@@ -14,7 +14,6 @@ INSERT INTO permissions (resource, operation, uuid) VALUES ('bestiary', 'write',
 INSERT INTO plans (name) VALUES ('free');
 INSERT INTO plans (name) VALUES ('premium');
 
-
 INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'free');
 INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('3707e539-1cf7-40f6-9183-8525ef2757c6', 'free');
 INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('8de5dc29-d5e9-4080-931f-8723245e7b1a', 'free');
@@ -28,21 +27,22 @@ INSERT INTO user_status (name) VALUES ('active');
 INSERT INTO user_status (name) VALUES ('inactive');
 INSERT INTO user_status (name) VALUES ('banned');
 
-INSERT INTO renown (key, level) VALUES ('aspirant');
-INSERT INTO renown (key, level) VALUES ('promise');
-INSERT INTO renown (key, level) VALUES ('celebrity');
-INSERT INTO renown (key, level) VALUES ('legend');
+INSERT INTO renown (key, lucidity_points, max_magic_level, karma_points, totems_base, mantras_base, recipes_base, books_base, max_improvements, max_experiences) VALUES ('aspirant', 10, 4, 1, 4, 1, 1, 1, 0, 6);
+INSERT INTO renown (key, lucidity_points, max_magic_level, karma_points, totems_base, mantras_base, recipes_base, books_base, max_improvements, max_experiences) VALUES ('promise', 12, 6, 2, 4, 1, 1, 1, 3, 12);
+INSERT INTO renown (key, lucidity_points, max_magic_level, karma_points, totems_base, mantras_base, recipes_base, books_base, max_improvements, max_experiences) VALUES ('celebrity', 14, 7, 3, 4, 1, 1, 1, 5, 18);
+INSERT INTO renown (key, lucidity_points, max_magic_level, karma_points, totems_base, mantras_base, recipes_base, books_base, max_improvements, max_experiences) VALUES ('legend', 16, 8, 4, 4, 1, 1, 1, 6, 99);
 
-INSERT INTO experiences (key) VALUES ('resolve-obj-med-long-term');
-INSERT INTO experiences (key) VALUES ('defeat-pow-enemy');
-INSERT INTO experiences (key) VALUES ('resolve-obj-med-long-term');
-INSERT INTO experiences (key) VALUES ('defeat-pow-enemy');
 INSERT INTO experiences (key) VALUES ('resolve-obj-med-long-term');
 INSERT INTO experiences (key) VALUES ('defeat-pow-enemy');
 
 INSERT INTO improvements (key, "max", renown_key) VALUES ('bonus-totem-mantra-recipe-book', 4, 'promise');
 INSERT INTO improvements (key, "max", renown_key) VALUES ('resistant', 1, 'promise');
 INSERT INTO improvements (key, "max", renown_key) VALUES ('adaptable', 1, 'promise');
+
+INSERT INTO translations (element_key, property, lang, display_text) VALUES ('aspirant', 'key', 'es', 'aspirante');
+INSERT INTO translations (element_key, property, lang, display_text) VALUES ('promise', 'key', 'es', 'promesa');
+INSERT INTO translations (element_key, property, lang, display_text) VALUES ('celebrity', 'key', 'es', 'celebridad');
+INSERT INTO translations (element_key, property, lang, display_text) VALUES ('legend', 'key', 'es', 'leyenda');
 
 COMMIT;
 

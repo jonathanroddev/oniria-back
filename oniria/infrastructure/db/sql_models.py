@@ -9,6 +9,7 @@ from sqlalchemy import (
     DateTime,
     func,
     Integer,
+    Text,
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -230,3 +231,12 @@ class MasterWorkshopDB(Base):
     game_session: Mapped["GameSessionDB"] = relationship(
         "GameSessionDB", back_populates="master_workshop"
     )
+
+
+class TranslationDB(Base):
+    __tablename__ = "translations"
+
+    element_key: Mapped[str] = mapped_column(String(100), primary_key=True)
+    property: Mapped[str] = mapped_column(String(50), primary_key=True)
+    lang: Mapped[str] = mapped_column(String(5), primary_key=True)  # ISO 639-1
+    display_text: Mapped[str] = mapped_column(Text, nullable=False)

@@ -2,8 +2,7 @@ from typing import List, Sequence, Optional
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload, joinedload
 
-from oniria.infrastructure.db import MasterWorkshopDB
-from oniria.infrastructure.db.base_sql_models import (
+from oniria.infrastructure.db.sql_models import (
     PlanDB,
     UserDB,
     UserStatusDB,
@@ -11,6 +10,7 @@ from oniria.infrastructure.db.base_sql_models import (
     CharacterSheetDB,
     PermissionPlanDB,
     PermissionDB,
+    MasterWorkshopDB,
 )
 
 

@@ -14,6 +14,12 @@ from oniria.interfaces.schemas import (
     UserDTO,
 )
 
+from oniria.interfaces.cs_schemas import (
+    RenownDTO,
+    ExperienceDTO,
+    ImprovementDTO,
+)
+
 __all__ = [
     "SignUp",
     "ResourceDTO",
@@ -28,4 +34,7 @@ __all__ = [
     "MasterWorkshopDTO",
     "MasterWorkshopRequest",
     "UserDTO",
+    "RenownDTO",
+    "ExperienceDTO",
+    "ImprovementDTO",
 ]

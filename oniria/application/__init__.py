@@ -13,6 +13,11 @@ from oniria.application.sevices import (
     MasterWorkshopService,
     CharacterSheetService,
 )
+from oniria.application.cs_mappers import (
+    ExperienceMapper,
+    ImprovementMapper,
+    RenownMapper,
+)
 
 __all__ = [
     "PlanMapper",
@@ -26,4 +31,7 @@ __all__ = [
     "MasterWorkshopService",
     "CharacterSheetService",
     "CharacterSheetMapper",
+    "ExperienceMapper",
+    "ImprovementMapper",
+    "RenownMapper",
 ]

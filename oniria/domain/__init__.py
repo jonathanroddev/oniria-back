@@ -9,6 +9,11 @@ from oniria.domain.models import (
     MasterWorkshop,
     User,
 )
+from oniria.domain.cs_models import (
+    Renown,
+    Experience,
+    Improvement,
+)
 from oniria.domain.exceptions import (
     NotFoundException,
     ConflictException,
@@ -30,4 +35,7 @@ __all__ = [
     "GameSession",
     "MasterWorkshop",
     "User",
+    "Renown",
+    "Experience",
+    "Improvement",
 ]

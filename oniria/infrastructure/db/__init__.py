@@ -1,5 +1,5 @@
 from oniria.infrastructure.db.database import Base, engine, SessionLocal, get_session
-from .base_sql_models import (
+from .sql_models import (
     UserDB,
     PermissionDB,
     ResourceDB,

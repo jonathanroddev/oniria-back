@@ -62,12 +62,29 @@ CREATE TABLE permissions_plans (
     PRIMARY KEY (permission_uuid, plan)
 );
 
+CREATE TABLE translations (
+    element_key VARCHAR(100) NOT NULL,
+    property VARCHAR(50) NOT NULL,
+    lang VARCHAR(5) NOT NULL,
+    display_text TEXT NOT NULL,
+    PRIMARY KEY (element_key, property, lang)
+);
+
 CREATE TABLE renown (
-    "key" VARCHAR(50) PRIMARY KEY NOT NULL
+    "key" VARCHAR(50) PRIMARY KEY NOT NULL,
+    "lucidity_points" INTEGER NOT NULL,
+    "max_magic_level" INTEGER NOT NULL,
+    "karma_points" INTEGER NOT NULL,
+    "totems_base" INTEGER NOT NULL,
+    "mantras_base" INTEGER NOT NULL,
+    "recipes_base" INTEGER NOT NULL,
+    "books_base" INTEGER NOT NULL,
+    "max_improvements" INTEGER NOT NULL,
+    "max_experiences" INTEGER NOT NULL,
 );
 
 CREATE TABLE experiences (
-    "key" VARCHAR(50) PRIMARY KEY NOT NULL
+    "key" VARCHAR(100) PRIMARY KEY NOT NULL
 );
 
 CREATE TABLE improvements (
