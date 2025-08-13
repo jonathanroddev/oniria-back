@@ -11,6 +11,7 @@ from oniria.infrastructure.db.sql_models import (
     PermissionPlanDB,
     PermissionDB,
     MasterWorkshopDB,
+    TranslationDB,
 )
 
 
@@ -176,3 +177,17 @@ class CharacterSheetRepository:
         )
         result = db_session.execute(stmt)
         return result.scalars().first()
+
+
+class TranslationRepository:
+    @staticmethod
+    def get_all_translations_by_language(
+        db_session: Session, lang: str
+    ) -> Sequence[TranslationDB]:
+        stmt = (
+            select(TranslationDB)
+            .filter_by(lang=lang)
+            .order_by(TranslationDB.table_name, TranslationDB.element_key)
+        )
+        result = db_session.execute(stmt)
+        return result.scalars().all()

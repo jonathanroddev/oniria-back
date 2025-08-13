@@ -10,6 +10,7 @@ from .sql_models import (
     GameSessionDB,
     CharacterSheetDB,
     MasterWorkshopDB,
+    TranslationDB,
 )
 from .cs_sql_models import (
     RenownDB,

@@ -63,6 +63,7 @@ CREATE TABLE permissions_plans (
 );
 
 CREATE TABLE translations (
+    table_name VARCHAR(50) NOT NULL,
     element_key VARCHAR(100) NOT NULL,
     property VARCHAR(50) NOT NULL,
     lang VARCHAR(5) NOT NULL,

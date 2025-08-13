@@ -236,6 +236,7 @@ class MasterWorkshopDB(Base):
 class TranslationDB(Base):
     __tablename__ = "translations"
 
+    table_name: Mapped[str] = mapped_column(String(50), primary_key=True)
     element_key: Mapped[str] = mapped_column(String(100), primary_key=True)
     property: Mapped[str] = mapped_column(String(50), primary_key=True)
     lang: Mapped[str] = mapped_column(String(5), primary_key=True)  # ISO 639-1

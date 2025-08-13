@@ -14,6 +14,7 @@ class ImprovementDTO(BaseModel):
 
 class RenownDTO(BaseModel):
     key: constr(max_length=50)
+    display_key: str
     level: int
     lucidity_points: Dict
     max_magic_level: int

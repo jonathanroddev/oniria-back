@@ -1,3 +1,5 @@
+from typing import List
+
 from oniria.interfaces import (
     ExperienceDTO,
     ImprovementDTO,
@@ -7,6 +9,7 @@ from oniria.infrastructure.db import (
     ExperienceDB,
     ImprovementDB,
     RenownDB,
+    TranslationDB,
 )
 
 
@@ -28,9 +31,15 @@ class ImprovementMapper:
 
 class RenownMapper:
     @staticmethod
-    def from_entity_to_dto(renown: RenownDB) -> RenownDTO:
+    def from_entity_to_dto(renown: RenownDB, translations: dict) -> RenownDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == renown.key
+        )
         return RenownDTO(
             key=renown.key,
+            display_key=display_key,
             level=renown.level,
             lucidity_points={"base": renown.lucidity_points},
             max_magic_level=renown.max_magic_level,
