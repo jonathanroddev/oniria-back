@@ -49,11 +49,16 @@ class BootstrapService:
             )
         bootstrap: BootstrapDTO = BootstrapDTO(
             renown=[
-                RenownMapper.from_entity_to_dto(renown, translations_map["renown"])
+                RenownMapper.from_entity_to_dto(
+                    renown,
+                    [translations_map["renown"], translations_map["improvements"]],
+                )
                 for renown in renown_entities
             ],
             experiences=[
-                ExperienceMapper.from_entity_to_dto(experience)
+                ExperienceMapper.from_entity_to_dto(
+                    experience, translations_map["experiences"]
+                )
                 for experience in experiences_entities
             ],
         )

@@ -42,8 +42,6 @@ class ImprovementDB(Base):
     key: Mapped[str] = mapped_column(String(100), primary_key=True)
     max: Mapped[int] = mapped_column(Integer, nullable=False)
     renown_key: Mapped[str] = mapped_column(
-        String(50), ForeignKey("renown.key"), nullable=False
+        String(50), ForeignKey("renown.key"), nullable=False, primary_key=True
     )
-    renown: Mapped[List["RenownDB"]] = relationship(
-        "RenownDB", back_populates="improvements"
-    )
+    renown: Mapped["RenownDB"] = relationship("RenownDB", back_populates="improvements")

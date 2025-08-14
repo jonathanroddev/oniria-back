@@ -66,9 +66,9 @@ CREATE TABLE translations (
     table_name VARCHAR(50) NOT NULL,
     element_key VARCHAR(100) NOT NULL,
     property VARCHAR(50) NOT NULL,
-    lang VARCHAR(5) NOT NULL,
+    lang VARCHAR(5) NOT NULL,  -- ISO 639-1
     display_text TEXT NOT NULL,
-    PRIMARY KEY (element_key, property, lang)
+    PRIMARY KEY (table_name, element_key, property, lang)
 );
 
 CREATE TABLE renown (
@@ -90,7 +90,8 @@ CREATE TABLE experiences (
 );
 
 CREATE TABLE improvements (
-    "key" VARCHAR(100) PRIMARY KEY NOT NULL,
-    "max" INTEGER NOT NULL,
-    "renown_key" VARCHAR(50) NOT NULL REFERENCES renown(key)
+    key VARCHAR(100) NOT NULL,
+    "max" INT NOT NULL,
+    renown_key VARCHAR(50) NOT NULL,
+    PRIMARY KEY (key, renown_key)
 );

@@ -4,10 +4,13 @@ from pydantic import BaseModel, constr, EmailStr
 
 class ExperienceDTO(BaseModel):
     key: constr(max_length=100)
+    display_key: str
 
 
 class ImprovementDTO(BaseModel):
     key: constr(max_length=100)
+    display_key: str
+    display_description: str
     max: int
     renown_key: constr(max_length=50)
 

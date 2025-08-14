@@ -10,6 +10,7 @@ from sqlalchemy import (
     func,
     Integer,
     Text,
+    Index,
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -236,8 +237,26 @@ class MasterWorkshopDB(Base):
 class TranslationDB(Base):
     __tablename__ = "translations"
 
-    table_name: Mapped[str] = mapped_column(String(50), primary_key=True)
-    element_key: Mapped[str] = mapped_column(String(100), primary_key=True)
-    property: Mapped[str] = mapped_column(String(50), primary_key=True)
-    lang: Mapped[str] = mapped_column(String(5), primary_key=True)  # ISO 639-1
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+
+    table_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    element_key: Mapped[str] = mapped_column(String(100), nullable=False)
+    property: Mapped[str] = mapped_column(String(50), nullable=False)
+    lang: Mapped[str] = mapped_column(String(5), nullable=False)  # ISO 639-1
     display_text: Mapped[str] = mapped_column(Text, nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint(
+            "element_key",
+            "property",
+            "lang",
+            name="uq_translation_element_property_lang",
+        ),
+        Index(
+            "ix_translations_table_element_property_lang",
+            "table_name",
+            "element_key",
+            "property",
+            "lang",
+        ),
+    )

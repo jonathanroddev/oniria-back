@@ -1,48 +1,126 @@
 BEGIN;
 
-INSERT INTO operations (name) VALUES ('read');
-INSERT INTO operations (name) VALUES ('write');
+INSERT INTO operations (name) VALUES
+('read'),
+('write');
 
-INSERT INTO resources (name) VALUES ('characters_sheets');
-INSERT INTO resources (name) VALUES ('bestiary');
+INSERT INTO resources (name) VALUES
+('characters_sheets'),
+('bestiary');
 
-INSERT INTO permissions (resource, operation, uuid) VALUES ('characters_sheets', 'read', 'abbe069d-1f40-4bd0-9f9b-6283f125f3bf');
-INSERT INTO permissions (resource, operation, uuid) VALUES ('characters_sheets', 'write', '3707e539-1cf7-40f6-9183-8525ef2757c6');
-INSERT INTO permissions (resource, operation, uuid) VALUES ('bestiary', 'read', '8de5dc29-d5e9-4080-931f-8723245e7b1a');
-INSERT INTO permissions (resource, operation, uuid) VALUES ('bestiary', 'write', 'd0fc60ff-8e62-4c95-871d-513577ef5e0b');
+INSERT INTO permissions (resource, operation, uuid) VALUES
+('characters_sheets', 'read', 'abbe069d-1f40-4bd0-9f9b-6283f125f3bf'),
+('characters_sheets', 'write', '3707e539-1cf7-40f6-9183-8525ef2757c6'),
+('bestiary', 'read', '8de5dc29-d5e9-4080-931f-8723245e7b1a'),
+('bestiary', 'write', 'd0fc60ff-8e62-4c95-871d-513577ef5e0b');
 
-INSERT INTO plans (name) VALUES ('free');
-INSERT INTO plans (name) VALUES ('premium');
+INSERT INTO plans (name) VALUES
+('free'),
+('premium');
 
-INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'free');
-INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('3707e539-1cf7-40f6-9183-8525ef2757c6', 'free');
-INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('8de5dc29-d5e9-4080-931f-8723245e7b1a', 'free');
+INSERT INTO permissions_plans (permission_uuid, plan) VALUES
+('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'free'),
+('3707e539-1cf7-40f6-9183-8525ef2757c6', 'free'),
+('8de5dc29-d5e9-4080-931f-8723245e7b1a', 'free'),
+('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'premium'),
+('3707e539-1cf7-40f6-9183-8525ef2757c6', 'premium'),
+('8de5dc29-d5e9-4080-931f-8723245e7b1a', 'premium'),
+('d0fc60ff-8e62-4c95-871d-513577ef5e0b', 'premium');
 
-INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('abbe069d-1f40-4bd0-9f9b-6283f125f3bf', 'premium');
-INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('3707e539-1cf7-40f6-9183-8525ef2757c6', 'premium');
-INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('8de5dc29-d5e9-4080-931f-8723245e7b1a', 'premium');
-INSERT INTO permissions_plans (permission_uuid, plan) VALUES ('d0fc60ff-8e62-4c95-871d-513577ef5e0b', 'premium');
+INSERT INTO user_status (name) VALUES
+('active'),
+('inactive'),
+('banned');
 
-INSERT INTO user_status (name) VALUES ('active');
-INSERT INTO user_status (name) VALUES ('inactive');
-INSERT INTO user_status (name) VALUES ('banned');
+INSERT INTO renown (key, level, lucidity_points, max_magic_level, karma_points, totems_base, mantras_base, recipes_base, books_base, max_improvements, max_experiences) VALUES
+('aspirant', 1, 10, 4, 1, 4, 1, 1, 1, 0, 6),
+('promise', 2, 12, 6, 2, 4, 1, 1, 1, 3, 12),
+('celebrity', 3, 14, 7, 3, 4, 1, 1, 1, 5, 18),
+('legend', 4, 16, 8, 4, 4, 1, 1, 1, 6, 99);
 
-INSERT INTO renown (key, level, lucidity_points, max_magic_level, karma_points, totems_base, mantras_base, recipes_base, books_base, max_improvements, max_experiences) VALUES ('aspirant', 1, 10, 4, 1, 4, 1, 1, 1, 0, 6);
-INSERT INTO renown (key, level, lucidity_points, max_magic_level, karma_points, totems_base, mantras_base, recipes_base, books_base, max_improvements, max_experiences) VALUES ('promise', 2, 12, 6, 2, 4, 1, 1, 1, 3, 12);
-INSERT INTO renown (key, level, lucidity_points, max_magic_level, karma_points, totems_base, mantras_base, recipes_base, books_base, max_improvements, max_experiences) VALUES ('celebrity', 3, 14, 7, 3, 4, 1, 1, 1, 5, 18);
-INSERT INTO renown (key, level, lucidity_points, max_magic_level, karma_points, totems_base, mantras_base, recipes_base, books_base, max_improvements, max_experiences) VALUES ('legend', 4, 16, 8, 4, 4, 1, 1, 1, 6, 99);
+INSERT INTO experiences (key) VALUES
+('resolve-a-long-term-goal'),
+('defeat-a-powerful-enemy'),
+('invest-10-loot-units'),
+('make-a-big-sacrifice'),
+('discover-a-secret'),
+('overcome-the-odds'),
+('lead-or-defeat-a-faction');
 
-INSERT INTO experiences (key) VALUES ('resolve-obj-med-long-term');
-INSERT INTO experiences (key) VALUES ('defeat-pow-enemy');
+INSERT INTO improvements (key, "max", renown_key) VALUES
+('gain-one-of-your-choice', 4, 'promise'),
+('resistant', 1, 'promise'),
+('adaptable', 1, 'promise'),
+('efficiency', 1, 'promise'),
+('cunning', 1, 'promise'),
 
-INSERT INTO improvements (key, "max", renown_key) VALUES ('bonus-totem-mantra-recipe-book', 4, 'promise');
-INSERT INTO improvements (key, "max", renown_key) VALUES ('resistant', 1, 'promise');
-INSERT INTO improvements (key, "max", renown_key) VALUES ('adaptable', 1, 'promise');
+('gain-one-of-your-choice', 4, 'celebrity'),
+('runes', 1, 'celebrity'),
+('advanced-techniques', 1, 'celebrity'),
+('mule', 1, 'celebrity'),
+('sacrifice', 1, 'celebrity'),
+('informant', 1, 'celebrity'),
+('promising', 1, 'celebrity'),
 
-INSERT INTO translations (table_name, element_key, property, lang, display_text) VALUES ('renown', 'aspirant', 'key', 'es', 'aspirante');
-INSERT INTO translations (table_name, element_key, property, lang, display_text) VALUES ('renown', 'promise', 'key', 'es', 'promesa');
-INSERT INTO translations (table_name, element_key, property, lang, display_text) VALUES ('renown', 'celebrity', 'key', 'es', 'celebridad');
-INSERT INTO translations (table_name, element_key, property, lang, display_text) VALUES ('renown', 'legend', 'key', 'es', 'leyenda');
+('gain-one-of-your-choice', 4, 'legend'),
+('oniglyphs', 1, 'legend'),
+('veteran', 1, 'legend'),
+('seasoned', 1, 'legend'),
+('vigor', 1, 'legend'),
+('immunity', 1, 'legend'),
+('swift', 1, 'legend'),
+('fame', 1, 'legend');
+
+INSERT INTO translations (table_name, element_key, property, lang, display_text) VALUES
+('renown', 'aspirant', 'key', 'es', 'aspirante'),
+('renown', 'promise', 'key', 'es', 'promesa'),
+('renown', 'celebrity', 'key', 'es', 'celebridad'),
+('renown', 'legend', 'key', 'es', 'leyenda'),
+
+('experiences', 'resolve-a-long-term-goal', 'key', 'es', 'Resuelve un objetivo a largo plazo.'),
+('experiences', 'defeat-a-powerful-enemy', 'key', 'es', 'Derrota a un enemigo muy poderoso.'),
+('experiences', 'invest-10-loot-units', 'key', 'es', 'Invierte 10 unidades de botín.'),
+('experiences', 'make-a-big-sacrifice', 'key', 'es', 'Haz un gran sacrificio por alguien.'),
+('experiences', 'discover-a-secret', 'key', 'es', 'Descubre un secreto que lo cambie todo.'),
+('experiences', 'overcome-the-odds', 'key', 'es', 'Supera un desafío contra todo pronóstico.'),
+('experiences', 'lead-or-defeat-a-faction', 'key', 'es', 'Lidera / derrota una facción.'),
+
+('improvements', 'resistant', 'key', 'es', 'Resistente'),
+('improvements', 'adaptable', 'key', 'es', 'Adaptable'),
+('improvements', 'efficiency', 'key', 'es', 'Eficacia'),
+('improvements', 'cunning', 'key', 'es', 'Astucia'),
+('improvements', 'gain-one-of-your-choice', 'key', 'es', 'Gana +1 del que quieras'),
+('improvements', 'runes', 'key', 'es', 'Runas'),
+('improvements', 'advanced-techniques', 'key', 'es', 'Técnicas avanzadas'),
+('improvements', 'mule', 'key', 'es', 'Mula'),
+('improvements', 'sacrifice', 'key', 'es', 'Sacrificio'),
+('improvements', 'informant', 'key', 'es', 'Informante'),
+('improvements', 'promising', 'key', 'es', 'Prometedor'),
+('improvements', 'oniglyphs', 'key', 'es', 'Oniglifos'),
+('improvements', 'veteran', 'key', 'es', 'Veterano'),
+('improvements', 'seasoned', 'key', 'es', 'Rodaje'),
+('improvements', 'vigor', 'key', 'es', 'Vigor'),
+('improvements', 'immunity', 'key', 'es', 'Inmunidad'),
+('improvements', 'swift', 'key', 'es', 'Veloz'),
+('improvements', 'fame', 'key', 'es', 'Fama'),
+('improvements', 'resistant', 'description', 'es', 'Para salir de una de tus fases del sueño se requiere 2 de daño (o dos turnos).'),
+('improvements', 'adaptable', 'description', 'es', 'Tus avatares ganan +1 afinidad de somna (territorio).'),
+('improvements', 'efficiency', 'description', 'es', 'Tus avatares empiezan con 1 fortaleza (no puede contrarrestar su debilidad).'),
+('improvements', 'cunning', 'description', 'es', 'Siempre tienes 1 plan astuto al empezar la noche.'),
+('improvements', 'gain-one-of-your-choice', 'description', 'es', 'Gana +1 del que quieras: tótems, cánticos, fórmulas, tomos oni (no puedes repetir el mismo).'),
+('improvements', 'runes', 'description', 'es', 'Ante un hechizo para el que dominas la esencia y forma apropiada, tira +1d4.'),
+('improvements', 'advanced-techniques', 'description', 'es', 'Al usar una maniobra que dominas, tira +1d4.'),
+('improvements', 'mule', 'description', 'es', 'Tus avatares ganan +2 huecos de bolsillos y abalorios.'),
+('improvements', 'sacrifice', 'description', 'es', '1 vez por aventura puedes desvincular puntos de lucidez para recuperar fases del sueño.'),
+('improvements', 'informant', 'description', 'es', 'Las tiradas para averiguar información en un asentamiento son con +1d4.'),
+('improvements', 'promising', 'description', 'es', 'Aprende una capacidad especial que no eligieras del nivel “promesa”.'),
+('improvements', 'oniglyphs', 'description', 'es', 'Mejora el efecto de “runas” a +1d6.'),
+('improvements', 'veteran', 'description', 'es', 'Mejora el efecto de “técnicas avanzadas” a +1d6.'),
+('improvements', 'seasoned', 'description', 'es', 'Siempre tienes +1 acción de fase de calma.'),
+('improvements', 'vigor', 'description', 'es', 'Tienes 5 puntos de estamina cada turno.'),
+('improvements', 'immunity', 'description', 'es', 'Durante 1 escena ignora toda penalización sufrida para el primer desafío de cada turno.'),
+('improvements', 'swift', 'description', 'es', 'Te mueves el doble de rápido.'),
+('improvements', 'fame', 'description', 'es', 'Gana cualquier mejora de los niveles “promesa” o “celebridad”. Puedes repetir mejoras y se añadirá un nuevo beneficio especial único (pactado con Morfeo).');
 
 COMMIT;
 
