@@ -21,6 +21,7 @@ from oniria.interfaces.cs_schemas import (
     BootstrapDTO,
     PhilosophyDTO,
     TemperamentDTO,
+    DreamPhaseDTO,
 )
 
 __all__ = [
@@ -43,4 +44,5 @@ __all__ = [
     "BootstrapDTO",
     "PhilosophyDTO",
     "TemperamentDTO",
+    "DreamPhaseDTO",
 ]

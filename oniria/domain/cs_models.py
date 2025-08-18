@@ -38,3 +38,7 @@ class Philosophy:
 @dataclass
 class Temperament:
     key: str
+
+@dataclass
+class DreamPhase:
+    key: str

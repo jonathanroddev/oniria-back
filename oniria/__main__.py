@@ -1,4 +1,4 @@
-import os
+import argparse
 import uvicorn
 import json
 from fastapi import FastAPI
@@ -86,6 +86,16 @@ def start():
 
 
 def dev():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--reload-tables",
+        action="store_true",
+        help="Delete existing tables before creating new ones.",
+    )
+    args = parser.parse_args()
+    if args.reload_tables:
+        Base.metadata.drop_all(bind=engine)
+        print("Tables dropped successfully.")
     create_tables()
     uvicorn.run("oniria.__main__:app", host="0.0.0.0", port=8000, reload=True)
 

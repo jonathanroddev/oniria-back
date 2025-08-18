@@ -6,6 +6,7 @@ from oniria.interfaces import (
     RenownDTO,
     PhilosophyDTO,
     TemperamentDTO,
+    DreamPhaseDTO,
 )
 from oniria.infrastructure.db import (
     ExperienceDB,
@@ -13,6 +14,7 @@ from oniria.infrastructure.db import (
     RenownDB,
     PhilosophyDB,
     TemperamentDB,
+    DreamPhaseDB,
 )
 
 
@@ -105,3 +107,24 @@ class TemperamentMapper:
             if key["original"] == temperament.key
         )
         return TemperamentDTO(key=temperament.key, display_key=display_key)
+
+class DreamPhaseMapper:
+    @staticmethod
+    def from_entity_to_dto(
+        dream_phase: DreamPhaseDB, translations: dict
+    ) -> DreamPhaseDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == dream_phase.key
+        )
+        display_description = next(
+            key["translation"]
+            for key in translations["description"]
+            if key["original"] == dream_phase.key
+        )
+        return DreamPhaseDTO(
+            key=dream_phase.key,
+            display_key=display_key,
+            display_description=display_description,
+        )

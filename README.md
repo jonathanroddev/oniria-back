@@ -74,6 +74,12 @@ poetry run dev
 or
 
 ```bash
+poetry run dev --reload-tables
+```
+
+or
+
+```bash
 RELOAD=true poetry run start
 ```
 
@@ -102,6 +108,7 @@ You can run:
 ```bash
 poetry run start    # Honor env vars like HOST, PORT, RELOAD
 poetry run dev      # Run with reload=True
+poetry run dev --reload-tables  # Reload tables on changes
 poetry run prod     # Run in production mode
 ```
 

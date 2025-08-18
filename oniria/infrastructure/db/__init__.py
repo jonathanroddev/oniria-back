@@ -18,4 +18,5 @@ from .cs_sql_models import (
     ImprovementDB,
     PhilosophyDB,
     TemperamentDB,
+    DreamPhaseDB,
 )

@@ -8,6 +8,7 @@ from oniria.infrastructure.db.cs_sql_models import (
     ImprovementDB,
     PhilosophyDB,
     TemperamentDB,
+    DreamPhaseDB,
 )
 
 
@@ -41,5 +42,12 @@ class TemperamentRepository:
     @staticmethod
     def get_all_temperaments(db_session: Session) -> Sequence[TemperamentDB]:
         stmt = select(TemperamentDB)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
+
+class DreamPhaseRepository:
+    @staticmethod
+    def get_all_dream_phases(db_session: Session) -> Sequence[DreamPhaseDB]:
+        stmt = select(DreamPhaseDB)
         result = db_session.execute(stmt)
         return result.scalars().all()

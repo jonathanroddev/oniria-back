@@ -103,3 +103,7 @@ CREATE TABLE philosophies (
 CREATE TABLE temperaments (
     "key" VARCHAR(50) PRIMARY KEY NOT NULL
 );
+
+CREATE TABLE dream_phases (
+    "key" VARCHAR(50) PRIMARY KEY NOT NULL
+);

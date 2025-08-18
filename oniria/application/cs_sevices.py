@@ -8,6 +8,7 @@ from oniria.application.cs_mappers import (
     RenownMapper,
     PhilosophyMapper,
     TemperamentMapper,
+    DreamPhaseMapper,
 )
 from oniria.domain import NotFoundException
 from oniria.interfaces import (
@@ -16,6 +17,7 @@ from oniria.interfaces import (
     BootstrapDTO,
     PhilosophyDTO,
     TemperamentDTO,
+    DreamPhaseDTO,
 )
 from oniria.application import ExperienceMapper, RenownMapper
 from oniria.infrastructure.db.cs_repositories import (
@@ -23,6 +25,7 @@ from oniria.infrastructure.db.cs_repositories import (
     RenownRepository,
     PhilosophyRepository,
     TemperamentRepository,
+    DreamPhaseRepository,
 )
 from oniria.infrastructure.db.repositories import TranslationRepository
 from oniria.infrastructure.db.cs_sql_models import (
@@ -30,6 +33,7 @@ from oniria.infrastructure.db.cs_sql_models import (
     RenownDB,
     PhilosophyDB,
     TemperamentDB,
+    DreamPhaseDB,
 )
 from oniria.infrastructure.db.sql_models import TranslationDB
 
@@ -48,6 +52,9 @@ class BootstrapService:
         )
         temperaments_entities: Sequence[TemperamentDB] = (
             TemperamentRepository.get_all_temperaments(db_session)
+        )
+        dream_phases_entities: Sequence[DreamPhaseDB] = (
+            DreamPhaseRepository.get_all_dream_phases(db_session)
         )
         translations: Sequence[TranslationDB] = (
             TranslationRepository.get_all_translations_by_language(
@@ -86,6 +93,12 @@ class BootstrapService:
                     temperament, translations_map["temperaments"]
                 )
                 for temperament in temperaments_entities
+            ],
+            dream_phases=[
+                DreamPhaseMapper.from_entity_to_dto(
+                    dream_phase, translations_map["dream_phases"]
+                )
+                for dream_phase in dream_phases_entities
             ],
         )
         return bootstrap

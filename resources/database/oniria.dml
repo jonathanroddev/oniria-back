@@ -115,6 +115,13 @@ INSERT INTO temperaments (key) VALUES
 ('troublemaker'),
 ('complacent');
 
+INSERT INTO dream_phases (key) VALUES
+('wakefulness'),
+('drowsiness'),
+('light-sleep'),
+('deep-sleep'),
+('rem-sleep');
+
 INSERT INTO translations (table_name, element_key, property, lang, display_text) VALUES
 ('renown', 'aspirant', 'key', 'es', 'aspirante'),
 ('renown', 'promise', 'key', 'es', 'promesa'),
@@ -206,7 +213,19 @@ INSERT INTO translations (table_name, element_key, property, lang, display_text)
 ('temperaments', 'reckless', 'key', 'es', 'Imprudente.'),
 ('temperaments', 'ill-mannered', 'key', 'es', 'Sin modales.'),
 ('temperaments', 'troublemaker', 'key', 'es', 'Buscapleitos.'),
-('temperaments', 'complacent', 'key', 'es', 'Complaciente.');
+('temperaments', 'complacent', 'key', 'es', 'Complaciente.'),
+
+('dream_phases', 'wakefulness', 'key', 'es', 'Vigilia'),
+('dream_phases', 'drowsiness', 'key', 'es', 'Somnolencia'),
+('dream_phases', 'light-sleep', 'key', 'es', 'S. Ligero'),
+('dream_phases', 'deep-sleep', 'key', 'es', 'S. Profundo'),
+('dream_phases', 'rem-sleep', 'key', 'es', 'S. REM'),
+
+('dream_phases', 'wakefulness', 'description', 'es', 'Despierto.'),
+('dream_phases', 'drowsiness', 'description', 'es', 'Translúcido, silencioso, débil.'),
+('dream_phases', 'light-sleep', 'description', 'es', 'Perceptivo, frágil.'),
+('dream_phases', 'deep-sleep', 'description', 'es', 'Afinidad mental.'),
+('dream_phases', 'rem-sleep', 'description', 'es', 'Afinidad física.');
 
 COMMIT;
 

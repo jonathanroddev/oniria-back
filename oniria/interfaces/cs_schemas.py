@@ -40,9 +40,15 @@ class TemperamentDTO(BaseModel):
     key: constr(max_length=50)
     display_key: str
 
+class DreamPhaseDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    display_description: str
+
 
 class BootstrapDTO(BaseModel):
     renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
     philosophies: List[PhilosophyDTO]
     temperaments: List[TemperamentDTO]
+    dream_phases: List[DreamPhaseDTO]
