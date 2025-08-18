@@ -4,11 +4,15 @@ from oniria.interfaces import (
     ExperienceDTO,
     ImprovementDTO,
     RenownDTO,
+    PhilosophyDTO,
+    TemperamentDTO,
 )
 from oniria.infrastructure.db import (
     ExperienceDB,
     ImprovementDB,
     RenownDB,
+    PhilosophyDB,
+    TemperamentDB,
 )
 
 
@@ -75,3 +79,29 @@ class RenownMapper:
                 for improvement in renown.improvements
             ],
         )
+
+
+class PhilosophyMapper:
+    @staticmethod
+    def from_entity_to_dto(
+        philosophy: PhilosophyDB, translations: dict
+    ) -> PhilosophyDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == philosophy.key
+        )
+        return PhilosophyDTO(key=philosophy.key, display_key=display_key)
+
+
+class TemperamentMapper:
+    @staticmethod
+    def from_entity_to_dto(
+        temperament: TemperamentDB, translations: dict
+    ) -> TemperamentDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == temperament.key
+        )
+        return TemperamentDTO(key=temperament.key, display_key=display_key)

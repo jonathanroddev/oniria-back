@@ -28,3 +28,13 @@ class Renown:
     max_improvements: int
     max_experiences: int
     improvements: List[Improvement]
+
+
+@dataclass
+class Philosophy:
+    key: str
+
+
+@dataclass
+class Temperament:
+    key: str

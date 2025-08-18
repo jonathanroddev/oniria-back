@@ -45,3 +45,14 @@ class ImprovementDB(Base):
         String(50), ForeignKey("renown.key"), nullable=False, primary_key=True
     )
     renown: Mapped["RenownDB"] = relationship("RenownDB", back_populates="improvements")
+
+
+class PhilosophyDB(Base):
+    __tablename__ = "philosophies"
+    key: Mapped[str] = mapped_column(String(100), primary_key=True)
+
+
+class TemperamentDB(Base):
+    __tablename__ = "temperaments"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)

@@ -13,6 +13,8 @@ from oniria.domain.cs_models import (
     Renown,
     Experience,
     Improvement,
+    Philosophy,
+    Temperament,
 )
 from oniria.domain.exceptions import (
     NotFoundException,
@@ -38,4 +40,6 @@ __all__ = [
     "Renown",
     "Experience",
     "Improvement",
+    "Philosophy",
+    "Temperament",
 ]

@@ -31,6 +31,18 @@ class RenownDTO(BaseModel):
     improvements: List[ImprovementDTO] = []
 
 
+class PhilosophyDTO(BaseModel):
+    key: constr(max_length=100)
+    display_key: str
+
+
+class TemperamentDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+
+
 class BootstrapDTO(BaseModel):
     renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
+    philosophies: List[PhilosophyDTO]
+    temperaments: List[TemperamentDTO]

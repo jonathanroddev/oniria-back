@@ -159,14 +159,12 @@ class GameSessionMapper:
 
 
 class CharacterSheetMapper:
+    # TODO: Complete all the character sheet fields mapping. Needs a jsonb type field
     @staticmethod
     def to_dto_from_entity(character_sheet: CharacterSheetDB) -> CharacterSheetDTO:
         return CharacterSheetDTO(
             uuid=str(character_sheet.uuid),
             user_uuid=str(character_sheet.user_uuid),
-            avatar=AvatarMapper.to_dto_from_entity(character_sheet.avatar),
-            oneironaut=OneironautMapper.to_dto_from_entity(character_sheet.oneironaut),
-            inventory=InventoryMapper.to_dto_from_entity(character_sheet.inventory),
             game_session=GameSessionMapper.to_dto_from_entity(
                 character_sheet.game_session
             ),
@@ -177,11 +175,6 @@ class CharacterSheetMapper:
         return CharacterSheet(
             uuid=str(character_sheet.uuid),
             user_uuid=str(character_sheet.user_uuid),
-            avatar=AvatarMapper.to_domain_from_entity(character_sheet.avatar),
-            oneironaut=OneironautMapper.to_domain_from_entity(
-                character_sheet.oneironaut
-            ),
-            inventory=InventoryMapper.to_domain_from_entity(character_sheet.inventory),
             game_session=GameSessionMapper.to_domain_from_entity(
                 character_sheet.game_session
             ),
@@ -192,9 +185,6 @@ class CharacterSheetMapper:
         return CharacterSheetDTO(
             uuid=domain.uuid,
             user_uuid=domain.user_uuid,
-            avatar=AvatarMapper.to_dto_from_domain(domain.avatar),
-            oneironaut=OneironautMapper.to_dto_from_domain(domain.oneironaut),
-            inventory=InventoryMapper.to_dto_from_domain(domain.inventory),
             game_session=GameSessionMapper.to_dto_from_domain(domain.game_session),
         )
 

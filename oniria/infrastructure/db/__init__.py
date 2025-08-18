@@ -16,4 +16,6 @@ from .cs_sql_models import (
     RenownDB,
     ExperienceDB,
     ImprovementDB,
+    PhilosophyDB,
+    TemperamentDB,
 )

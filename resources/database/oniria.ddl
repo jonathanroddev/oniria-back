@@ -95,3 +95,11 @@ CREATE TABLE improvements (
     renown_key VARCHAR(50) NOT NULL,
     PRIMARY KEY (key, renown_key)
 );
+
+CREATE TABLE philosophies (
+    "key" VARCHAR(100) PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE temperaments (
+    "key" VARCHAR(50) PRIMARY KEY NOT NULL
+);
