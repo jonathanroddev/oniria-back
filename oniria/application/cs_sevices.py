@@ -9,6 +9,8 @@ from oniria.application.cs_mappers import (
     PhilosophyMapper,
     TemperamentMapper,
     DreamPhaseMapper,
+    WeaknessMapper,
+    SomnaAffinityMapper,
 )
 from oniria.domain import NotFoundException
 from oniria.interfaces import (
@@ -18,6 +20,8 @@ from oniria.interfaces import (
     PhilosophyDTO,
     TemperamentDTO,
     DreamPhaseDTO,
+    WeaknessDTO,
+    SomnaAffinityDTO,
 )
 from oniria.application import ExperienceMapper, RenownMapper
 from oniria.infrastructure.db.cs_repositories import (
@@ -26,6 +30,8 @@ from oniria.infrastructure.db.cs_repositories import (
     PhilosophyRepository,
     TemperamentRepository,
     DreamPhaseRepository,
+    WeaknessRepository,
+    SomnaAffinityRepository,
 )
 from oniria.infrastructure.db.repositories import TranslationRepository
 from oniria.infrastructure.db.cs_sql_models import (
@@ -34,6 +40,8 @@ from oniria.infrastructure.db.cs_sql_models import (
     PhilosophyDB,
     TemperamentDB,
     DreamPhaseDB,
+    WeaknessDB,
+    SomnaAffinityDB,
 )
 from oniria.infrastructure.db.sql_models import TranslationDB
 
@@ -55,6 +63,12 @@ class BootstrapService:
         )
         dream_phases_entities: Sequence[DreamPhaseDB] = (
             DreamPhaseRepository.get_all_dream_phases(db_session)
+        )
+        weaknesses_entities: Sequence[WeaknessDB] = (
+            WeaknessRepository.get_all_weaknesses(db_session)
+        )
+        somna_affinities_entities: Sequence[SomnaAffinityDB] = (
+            SomnaAffinityRepository.get_all_somna_affinities(db_session)
         )
         translations: Sequence[TranslationDB] = (
             TranslationRepository.get_all_translations_by_language(
@@ -99,6 +113,18 @@ class BootstrapService:
                     dream_phase, translations_map["dream_phases"]
                 )
                 for dream_phase in dream_phases_entities
+            ],
+            weaknesses=[
+                WeaknessMapper.from_entity_to_dto(
+                    weakness, translations_map["weaknesses"]
+                )
+                for weakness in weaknesses_entities
+            ],
+            somna_affinities=[
+                SomnaAffinityMapper.from_entity_to_dto(
+                    somna_affinity, translations_map["somna_affinities"]
+                )
+                for somna_affinity in somna_affinities_entities
             ],
         )
         return bootstrap

@@ -57,8 +57,20 @@ class TemperamentDB(Base):
 
     key: Mapped[str] = mapped_column(String(50), primary_key=True)
 
+
 class DreamPhaseDB(Base):
     __tablename__ = "dream_phases"
 
     key: Mapped[str] = mapped_column(String(50), primary_key=True)
 
+
+class WeaknessDB(Base):
+    __tablename__ = "weaknesses"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+
+
+class SomnaAffinityDB(Base):
+    __tablename__ = "somna_affinities"
+
+    key: Mapped[str] = mapped_column(String(100), primary_key=True)

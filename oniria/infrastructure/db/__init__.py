@@ -19,4 +19,6 @@ from .cs_sql_models import (
     PhilosophyDB,
     TemperamentDB,
     DreamPhaseDB,
+    WeaknessDB,
+    SomnaAffinityDB,
 )

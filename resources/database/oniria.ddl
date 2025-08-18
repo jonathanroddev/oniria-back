@@ -107,3 +107,11 @@ CREATE TABLE temperaments (
 CREATE TABLE dream_phases (
     "key" VARCHAR(50) PRIMARY KEY NOT NULL
 );
+
+CREATE TABLE weaknesses (
+    "key" VARCHAR(50) PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE somna_affinities (
+    "key" VARCHAR(100) PRIMARY KEY NOT NULL
+);

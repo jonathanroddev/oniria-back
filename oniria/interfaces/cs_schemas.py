@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict
-from pydantic import BaseModel, constr, EmailStr
+from pydantic import BaseModel, constr
 
 
 class ExperienceDTO(BaseModel):
@@ -40,10 +40,21 @@ class TemperamentDTO(BaseModel):
     key: constr(max_length=50)
     display_key: str
 
+
 class DreamPhaseDTO(BaseModel):
     key: constr(max_length=50)
     display_key: str
     display_description: str
+
+
+class WeaknessDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+
+
+class SomnaAffinityDTO(BaseModel):
+    key: constr(max_length=100)
+    display_key: str
 
 
 class BootstrapDTO(BaseModel):
@@ -52,3 +63,5 @@ class BootstrapDTO(BaseModel):
     philosophies: List[PhilosophyDTO]
     temperaments: List[TemperamentDTO]
     dream_phases: List[DreamPhaseDTO]
+    weaknesses: List[WeaknessDTO]
+    somna_affinities: List[SomnaAffinityDTO]

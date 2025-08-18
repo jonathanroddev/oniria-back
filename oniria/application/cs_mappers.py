@@ -7,6 +7,8 @@ from oniria.interfaces import (
     PhilosophyDTO,
     TemperamentDTO,
     DreamPhaseDTO,
+    WeaknessDTO,
+    SomnaAffinityDTO,
 )
 from oniria.infrastructure.db import (
     ExperienceDB,
@@ -15,6 +17,8 @@ from oniria.infrastructure.db import (
     PhilosophyDB,
     TemperamentDB,
     DreamPhaseDB,
+    WeaknessDB,
+    SomnaAffinityDB,
 )
 
 
@@ -108,6 +112,7 @@ class TemperamentMapper:
         )
         return TemperamentDTO(key=temperament.key, display_key=display_key)
 
+
 class DreamPhaseMapper:
     @staticmethod
     def from_entity_to_dto(
@@ -128,3 +133,27 @@ class DreamPhaseMapper:
             display_key=display_key,
             display_description=display_description,
         )
+
+
+class WeaknessMapper:
+    @staticmethod
+    def from_entity_to_dto(weakness: WeaknessDB, translations: dict) -> WeaknessDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == weakness.key
+        )
+        return WeaknessDTO(key=weakness.key, display_key=display_key)
+
+
+class SomnaAffinityMapper:
+    @staticmethod
+    def from_entity_to_dto(
+        somna_affinity: SomnaAffinityDB, translations: dict
+    ) -> SomnaAffinityDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == somna_affinity.key
+        )
+        return SomnaAffinityDTO(key=somna_affinity.key, display_key=display_key)

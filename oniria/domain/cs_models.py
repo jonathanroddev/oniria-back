@@ -39,6 +39,17 @@ class Philosophy:
 class Temperament:
     key: str
 
+
 @dataclass
 class DreamPhase:
+    key: str
+
+
+@dataclass
+class Weakness:
+    key: str
+
+
+@dataclass
+class SomnaAffinity:
     key: str
