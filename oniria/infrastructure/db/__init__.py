@@ -21,4 +21,10 @@ from .cs_sql_models import (
     DreamPhaseDB,
     WeaknessDB,
     SomnaAffinityDB,
+    SkillDB,
+    MartialDB,
+    ManeuverTypeDB,
+    ManeuverDB,
+    EssenceDB,
+    SpellDB,
 )

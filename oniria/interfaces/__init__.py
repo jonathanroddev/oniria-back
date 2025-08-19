@@ -24,6 +24,13 @@ from oniria.interfaces.cs_schemas import (
     DreamPhaseDTO,
     WeaknessDTO,
     SomnaAffinityDTO,
+    SkillDTO,
+    MartialDTO,
+    ManeuverDTO,
+    ManeuversByComplexityDTO,
+    SpellDTO,
+    EssenceDTO,
+    MastersDTO,
 )
 
 __all__ = [
@@ -49,4 +56,11 @@ __all__ = [
     "DreamPhaseDTO",
     "WeaknessDTO",
     "SomnaAffinityDTO",
+    "SkillDTO",
+    "MartialDTO",
+    "ManeuverDTO",
+    "ManeuversByComplexityDTO",
+    "SpellDTO",
+    "EssenceDTO",
+    "MastersDTO",
 ]

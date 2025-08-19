@@ -11,6 +11,12 @@ from oniria.infrastructure.db.cs_sql_models import (
     DreamPhaseDB,
     WeaknessDB,
     SomnaAffinityDB,
+    SkillDB,
+    MartialDB,
+    ManeuverTypeDB,
+    ManeuverDB,
+    EssenceDB,
+    SpellDB,
 )
 
 
@@ -70,3 +76,47 @@ class SomnaAffinityRepository:
         stmt = select(SomnaAffinityDB)
         result = db_session.execute(stmt)
         return result.scalars().all()
+
+
+class SkillRepository:
+    @staticmethod
+    def get_all_skills(db_session: Session) -> Sequence[SkillDB]:
+        stmt = select(SkillDB)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
+
+
+class MartialRepository:
+    @staticmethod
+    def get_all_martials(db_session: Session) -> Sequence[MartialDB]:
+        stmt = select(MartialDB)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
+
+
+class ManeuverRepository:
+    @staticmethod
+    def get_all_maneuvers(db_session: Session) -> Sequence[ManeuverDB]:
+        stmt = select(ManeuverDB)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
+
+
+class SpellRepository:
+    @staticmethod
+    def get_all_spells(db_session: Session) -> Sequence[SpellDB]:
+        stmt = select(SpellDB).options(joinedload(SpellDB.essence))
+        result = db_session.execute(stmt)
+        return result.unique().scalars().all()
+
+
+class EssenceRepository:
+    @staticmethod
+    def get_all_essences(db_session: Session) -> Sequence[EssenceDB]:
+        stmt = (
+            select(EssenceDB)
+            .options(joinedload(EssenceDB.spells))
+            .order_by(EssenceDB.key)
+        )
+        result = db_session.execute(stmt)
+        return result.unique().scalars().all()

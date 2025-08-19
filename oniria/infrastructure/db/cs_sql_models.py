@@ -1,10 +1,7 @@
+import enum
 from typing import List
 
-from sqlalchemy import (
-    ForeignKey,
-    String,
-    Integer,
-)
+from sqlalchemy import ForeignKey, String, Integer, Boolean, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from oniria.infrastructure.db import Base
@@ -74,3 +71,46 @@ class SomnaAffinityDB(Base):
     __tablename__ = "somna_affinities"
 
     key: Mapped[str] = mapped_column(String(100), primary_key=True)
+
+
+class SkillDB(Base):
+    __tablename__ = "skills"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+
+
+class MartialDB(Base):
+    __tablename__ = "martials"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+
+
+class ManeuverTypeDB(enum.Enum):
+    common = "common"
+    advanced = "advanced"
+
+
+class ManeuverDB(Base):
+    __tablename__ = "maneuvers"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    type: Mapped[ManeuverTypeDB] = mapped_column(Enum(ManeuverTypeDB), nullable=False)
+    requires_magic: Mapped[bool] = mapped_column(Boolean, default=False)
+
+
+class EssenceDB(Base):
+    __tablename__ = "essences"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True, nullable=False)
+
+    spells: Mapped[list["SpellDB"]] = relationship(back_populates="essence")
+
+
+class SpellDB(Base):
+    __tablename__ = "spells"
+
+    key: Mapped[str] = mapped_column(String(100), primary_key=True, nullable=False)
+    essence_key: Mapped[str] = mapped_column(ForeignKey("essences.key"), nullable=False)
+    tier: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    essence: Mapped["EssenceDB"] = relationship(back_populates="spells")

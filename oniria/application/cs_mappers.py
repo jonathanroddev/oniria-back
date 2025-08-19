@@ -1,4 +1,6 @@
-from typing import List
+from typing import List, Dict
+
+from sqlalchemy import Sequence
 
 from oniria.interfaces import (
     ExperienceDTO,
@@ -9,6 +11,13 @@ from oniria.interfaces import (
     DreamPhaseDTO,
     WeaknessDTO,
     SomnaAffinityDTO,
+    SkillDTO,
+    MartialDTO,
+    ManeuverDTO,
+    ManeuversByComplexityDTO,
+    SpellDTO,
+    EssenceDTO,
+    MastersDTO,
 )
 from oniria.infrastructure.db import (
     ExperienceDB,
@@ -19,6 +28,12 @@ from oniria.infrastructure.db import (
     DreamPhaseDB,
     WeaknessDB,
     SomnaAffinityDB,
+    SkillDB,
+    MartialDB,
+    ManeuverTypeDB,
+    ManeuverDB,
+    EssenceDB,
+    SpellDB,
 )
 
 
@@ -61,7 +76,7 @@ class ImprovementMapper:
 
 class RenownMapper:
     @staticmethod
-    def from_entity_to_dto(renown: RenownDB, translations: List[dict]) -> RenownDTO:
+    def from_entity_to_dto(renown: RenownDB, translations: List[Dict]) -> RenownDTO:
         display_key = next(
             key["translation"]
             for key in translations[0]["key"]
@@ -157,3 +172,94 @@ class SomnaAffinityMapper:
             if key["original"] == somna_affinity.key
         )
         return SomnaAffinityDTO(key=somna_affinity.key, display_key=display_key)
+
+
+class SkillMapper:
+    @staticmethod
+    def from_entity_to_dto(skill: SkillDB, translations: dict) -> SkillDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == skill.key
+        )
+        return SkillDTO(key=skill.key, display_key=display_key)
+
+
+class MartialMapper:
+    @staticmethod
+    def from_entity_to_dto(martial: MartialDB, translations: dict) -> MartialDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == martial.key
+        )
+        return MartialDTO(key=martial.key, display_key=display_key)
+
+
+class ManeuverMapper:
+    @staticmethod
+    def from_entity_to_dto(maneuver: ManeuverDB, translations: dict) -> ManeuverDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == maneuver.key
+        )
+        return ManeuverDTO(
+            key=maneuver.key,
+            display_key=display_key,
+            requires_magic=maneuver.requires_magic,
+        )
+
+
+class ManeuversByComplexityMapper:
+    @staticmethod
+    def from_entities_to_dto(
+        maneuvers: Sequence[ManeuverDB], translations: dict
+    ) -> ManeuversByComplexityDTO:
+        commons = [
+            ManeuverMapper.from_entity_to_dto(maneuver, translations)
+            for maneuver in maneuvers
+            if maneuver.type == ManeuverTypeDB.common
+        ]
+        advanced = [
+            ManeuverMapper.from_entity_to_dto(maneuver, translations)
+            for maneuver in maneuvers
+            if maneuver.type == ManeuverTypeDB.advanced
+        ]
+        return ManeuversByComplexityDTO(commons=commons, advanced=advanced)
+
+
+class SpellMapper:
+    @staticmethod
+    def from_entity_to_dto(spell: SpellDB, translations: dict) -> SpellDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == spell.key
+        )
+        display_description = next(
+            key["translation"]
+            for key in translations["description"]
+            if key["original"] == spell.key
+        )
+        return SpellDTO(
+            key=spell.key,
+            tier=spell.tier,
+            display_key=display_key,
+            display_description=display_description,
+        )
+
+
+class EssenceMapper:
+    @staticmethod
+    def from_entity_to_dto(essence: EssenceDB, translations: List[Dict]) -> EssenceDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations[0]["key"]
+            if key["original"] == essence.key
+        )
+        spells = [
+            SpellMapper.from_entity_to_dto(spell, translations[1])
+            for spell in essence.spells
+        ]
+        return EssenceDTO(key=essence.key, display_key=display_key, spells=spells)

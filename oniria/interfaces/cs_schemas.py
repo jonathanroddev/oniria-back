@@ -57,6 +57,47 @@ class SomnaAffinityDTO(BaseModel):
     display_key: str
 
 
+class SkillDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+
+
+class MartialDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+
+
+class ManeuverDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    requires_magic: bool
+
+
+class ManeuversByComplexityDTO(BaseModel):
+    commons: List[ManeuverDTO]
+    advanced: List[ManeuverDTO]
+
+
+class SpellDTO(BaseModel):
+    key: constr(max_length=50)
+    tier: int
+    display_key: str
+    display_description: str
+
+
+class EssenceDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    spells: List[SpellDTO]
+
+
+class MastersDTO(BaseModel):
+    skills: List[SkillDTO]
+    martial: List[MartialDTO]
+    maneuvers: ManeuversByComplexityDTO
+    magics: List[EssenceDTO]
+
+
 class BootstrapDTO(BaseModel):
     renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
@@ -65,3 +106,4 @@ class BootstrapDTO(BaseModel):
     dream_phases: List[DreamPhaseDTO]
     weaknesses: List[WeaknessDTO]
     somna_affinities: List[SomnaAffinityDTO]
+    masters: MastersDTO

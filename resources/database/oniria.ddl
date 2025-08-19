@@ -115,3 +115,30 @@ CREATE TABLE weaknesses (
 CREATE TABLE somna_affinities (
     "key" VARCHAR(100) PRIMARY KEY NOT NULL
 );
+
+CREATE TABLE skills (
+    "key" VARCHAR(50) PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE martials (
+    "key" VARCHAR(50) PRIMARY KEY NOT NULL
+);
+
+CREATE TYPE maneuver_type AS ENUM ('common', 'advanced');
+
+CREATE TABLE maneuvers (
+    "key" VARCHAR(50) PRIMARY KEY NOT NULL,
+    "type" maneuver_type NOT NULL,
+    "requires_magic" BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE essences (
+    key VARCHAR(50) PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE spells (
+    key VARCHAR(50) PRIMARY KEY NOT NULL,
+    essence_key VARCHAR(50) NOT NULL REFERENCES essences(key),
+    tier INT NOT NULL
+);
+

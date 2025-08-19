@@ -18,6 +18,10 @@ from oniria.domain.cs_models import (
     DreamPhase,
     Weakness,
     SomnaAffinity,
+    Skill,
+    Martial,
+    Maneuver,
+    Spell,
 )
 from oniria.domain.exceptions import (
     NotFoundException,
@@ -48,4 +52,8 @@ __all__ = [
     "DreamPhase",
     "Weakness",
     "SomnaAffinity",
+    "Skill",
+    "Martial",
+    "Maneuver",
+    "Spell",
 ]

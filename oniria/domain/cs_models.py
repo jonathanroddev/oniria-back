@@ -53,3 +53,26 @@ class Weakness:
 @dataclass
 class SomnaAffinity:
     key: str
+
+
+@dataclass
+class Skill:
+    key: str
+
+
+@dataclass
+class Martial:
+    key: str
+
+
+@dataclass
+class Maneuver:
+    key: str
+    type: str
+
+
+@dataclass
+class Spell:
+    key: str
+    essence: str
+    tier: int

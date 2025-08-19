@@ -11,6 +11,10 @@ from oniria.application.cs_mappers import (
     DreamPhaseMapper,
     WeaknessMapper,
     SomnaAffinityMapper,
+    SkillMapper,
+    MartialMapper,
+    ManeuversByComplexityMapper,
+    EssenceMapper,
 )
 from oniria.domain import NotFoundException
 from oniria.interfaces import (
@@ -22,6 +26,11 @@ from oniria.interfaces import (
     DreamPhaseDTO,
     WeaknessDTO,
     SomnaAffinityDTO,
+    SkillDTO,
+    MartialDTO,
+    ManeuversByComplexityDTO,
+    EssenceDTO,
+    MastersDTO,
 )
 from oniria.application import ExperienceMapper, RenownMapper
 from oniria.infrastructure.db.cs_repositories import (
@@ -32,6 +41,10 @@ from oniria.infrastructure.db.cs_repositories import (
     DreamPhaseRepository,
     WeaknessRepository,
     SomnaAffinityRepository,
+    SkillRepository,
+    MartialRepository,
+    ManeuverRepository,
+    EssenceRepository,
 )
 from oniria.infrastructure.db.repositories import TranslationRepository
 from oniria.infrastructure.db.cs_sql_models import (
@@ -42,6 +55,10 @@ from oniria.infrastructure.db.cs_sql_models import (
     DreamPhaseDB,
     WeaknessDB,
     SomnaAffinityDB,
+    SkillDB,
+    MartialDB,
+    ManeuverDB,
+    EssenceDB,
 )
 from oniria.infrastructure.db.sql_models import TranslationDB
 
@@ -70,6 +87,16 @@ class BootstrapService:
         somna_affinities_entities: Sequence[SomnaAffinityDB] = (
             SomnaAffinityRepository.get_all_somna_affinities(db_session)
         )
+        skill_entities: Sequence[SkillDB] = SkillRepository.get_all_skills(db_session)
+        martial_entities: Sequence[MartialDB] = MartialRepository.get_all_martials(
+            db_session
+        )
+        maneuvers_entities: Sequence[ManeuverDB] = ManeuverRepository.get_all_maneuvers(
+            db_session
+        )
+        essence_entities: Sequence[EssenceDB] = EssenceRepository.get_all_essences(
+            db_session
+        )
         translations: Sequence[TranslationDB] = (
             TranslationRepository.get_all_translations_by_language(
                 db_session, lang.lower()
@@ -82,6 +109,25 @@ class BootstrapService:
             ).append(
                 {"original": entity.element_key, "translation": entity.display_text}
             )
+        masters: MastersDTO = MastersDTO(
+            skills=[
+                SkillMapper.from_entity_to_dto(skill, translations_map["skills"])
+                for skill in skill_entities
+            ],
+            martial=[
+                MartialMapper.from_entity_to_dto(martial, translations_map["martials"])
+                for martial in martial_entities
+            ],
+            maneuvers=ManeuversByComplexityMapper.from_entities_to_dto(
+                maneuvers_entities, translations_map["maneuvers"]
+            ),
+            magics=[
+                EssenceMapper.from_entity_to_dto(
+                    essence, [translations_map["essences"], translations_map["spells"]]
+                )
+                for essence in essence_entities
+            ],
+        )
         bootstrap: BootstrapDTO = BootstrapDTO(
             renown=[
                 RenownMapper.from_entity_to_dto(
@@ -126,5 +172,6 @@ class BootstrapService:
                 )
                 for somna_affinity in somna_affinities_entities
             ],
+            masters=masters,
         )
         return bootstrap
