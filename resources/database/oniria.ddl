@@ -142,3 +142,9 @@ CREATE TABLE spells (
     tier INT NOT NULL
 );
 
+CREATE TYPE recipe_type AS ENUM ('brew', 'poison');
+
+CREATE TABLE recipes (
+    key VARCHAR(50) PRIMARY KEY NOT NULL,
+    type recipe_type NOT NULL
+);

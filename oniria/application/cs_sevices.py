@@ -15,6 +15,7 @@ from oniria.application.cs_mappers import (
     MartialMapper,
     ManeuversByComplexityMapper,
     EssenceMapper,
+    RecipeByTypeMapper,
 )
 from oniria.domain import NotFoundException
 from oniria.interfaces import (
@@ -31,6 +32,7 @@ from oniria.interfaces import (
     ManeuversByComplexityDTO,
     EssenceDTO,
     MastersDTO,
+    RecipeByTypeDTO,
 )
 from oniria.application import ExperienceMapper, RenownMapper
 from oniria.infrastructure.db.cs_repositories import (
@@ -45,6 +47,7 @@ from oniria.infrastructure.db.cs_repositories import (
     MartialRepository,
     ManeuverRepository,
     EssenceRepository,
+    RecipeRepository,
 )
 from oniria.infrastructure.db.repositories import TranslationRepository
 from oniria.infrastructure.db.cs_sql_models import (
@@ -59,6 +62,7 @@ from oniria.infrastructure.db.cs_sql_models import (
     MartialDB,
     ManeuverDB,
     EssenceDB,
+    RecipeDB,
 )
 from oniria.infrastructure.db.sql_models import TranslationDB
 
@@ -97,6 +101,7 @@ class BootstrapService:
         essence_entities: Sequence[EssenceDB] = EssenceRepository.get_all_essences(
             db_session
         )
+        recipes: Sequence[RecipeDB] = RecipeRepository.get_all_recipes(db_session)
         translations: Sequence[TranslationDB] = (
             TranslationRepository.get_all_translations_by_language(
                 db_session, lang.lower()
@@ -173,5 +178,8 @@ class BootstrapService:
                 for somna_affinity in somna_affinities_entities
             ],
             masters=masters,
+            recipes=RecipeByTypeMapper.from_entities_to_dto(
+                recipes, translations_map["recipes"]
+            ),
         )
         return bootstrap

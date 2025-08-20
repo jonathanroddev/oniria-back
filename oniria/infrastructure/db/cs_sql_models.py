@@ -114,3 +114,15 @@ class SpellDB(Base):
     tier: Mapped[int] = mapped_column(Integer, nullable=False)
 
     essence: Mapped["EssenceDB"] = relationship(back_populates="spells")
+
+
+class RecipeTypeDB(enum.Enum):
+    brew = "brew"
+    poison = "poison"
+
+
+class RecipeDB(Base):
+    __tablename__ = "recipes"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    type: Mapped[RecipeTypeDB] = mapped_column(Enum(RecipeTypeDB), nullable=False)

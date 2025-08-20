@@ -76,3 +76,9 @@ class Spell:
     key: str
     essence: str
     tier: int
+
+
+@dataclass
+class Recipe:
+    key: str
+    type: str

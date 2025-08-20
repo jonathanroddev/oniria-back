@@ -27,4 +27,6 @@ from .cs_sql_models import (
     ManeuverDB,
     EssenceDB,
     SpellDB,
+    RecipeTypeDB,
+    RecipeDB,
 )

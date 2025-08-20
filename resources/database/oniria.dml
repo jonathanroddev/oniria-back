@@ -331,6 +331,21 @@ INSERT INTO spells (key, essence_key, tier) VALUES
 ('arcane-anchor', 'aether', 7),
 ('spacetime-distortion', 'aether', 8);
 
+INSERT INTO recipes (key, type) VALUES
+('lettuce_of_lethe', 'brew'),
+('poppy_juice', 'brew'),
+('melissa_liquor', 'brew'),
+('blue_lotus_wisdom', 'brew'),
+('ashwagandha_extract', 'brew'),
+('noblaurel_liquor', 'brew'),
+
+('poppy_claw', 'poison'),
+('hop_whisper', 'poison'),
+('centipede_kiss', 'poison'),
+('hydra_tongue', 'poison'),
+('atropos_juice', 'poison'),
+('mescaline_powder', 'poison');
+
 INSERT INTO translations (table_name, element_key, property, lang, display_text) VALUES
 ('renown', 'aspirant', 'key', 'es', 'aspirante'),
 ('renown', 'promise', 'key', 'es', 'promesa'),
@@ -726,7 +741,35 @@ INSERT INTO translations (table_name, element_key, property, lang, display_text)
 ('spells', 'imbue-essence', 'description', 'es', 'Facilita crear objetos mágicos con efectos predefinidos que perduran en el tiempo.'),
 ('spells', 'matter-control', 'description', 'es', 'Permite crear varios efectos mágicos, incluyendo: círculos de teletransporte, teletransportarte a zonas cercanas, encoger o agrandar criaturas, o crear duplicados de objetos no mágicos a partir de suministros.'),
 ('spells', 'arcane-anchor', 'description', 'es', 'Viaja hasta un lugar rebosante de energía mágica (volcán, vergel, tormenta, etc) y coloca tu ancla arcana. Cuando la actives y superes el desafío, pierdes tus maestrías en éter y ganas maestrías equivalentes en la esencia del lugar. Al final de la escena, el cambio se invierte. Solo puedes tener un ancla activa, pero puedes cambiarla.'),
-('spells', 'spacetime-distortion', 'description', 'es', '...');
+('spells', 'spacetime-distortion', 'description', 'es', '...'),
+
+('recipes', 'lettuce_of_lethe', 'key', 'es', 'Tila de Leteo'),
+('recipes', 'poppy_juice', 'key', 'es', 'Jugo de Amapola'),
+('recipes', 'melissa_liquor', 'key', 'es', 'Licor de Melisa'),
+('recipes', 'blue_lotus_wisdom', 'key', 'es', 'Sabia de Loto Azul'),
+('recipes', 'ashwagandha_extract', 'key', 'es', 'Extracto de Ashwagandha'),
+('recipes', 'noblaurel_liquor', 'key', 'es', 'Licor de Noblaurel'),
+
+('recipes', 'lettuce_of_lethe', 'description', 'es', 'Sana 1 herida ahora. Sana 1 herida más al inicio de tus próximos 3 turnos.'),
+('recipes', 'poppy_juice', 'description', 'es', 'Durante 1 escena ignora tu penalización por heridas.'),
+('recipes', 'melissa_liquor', 'description', 'es', 'Gana +1PE ahora y +1PE/turno el resto de la escena.'),
+('recipes', 'blue_lotus_wisdom', 'description', 'es', 'Durante 3 rondas gana +1 PP a tus desafíos físicos.'),
+('recipes', 'ashwagandha_extract', 'description', 'es', 'Por 3 rondas gana +1 PP a tus desafíos mentales.'),
+('recipes', 'noblaurel_liquor', 'description', 'es', 'Por 3 rondas ignora los efectos de fallos y pifias mágicos.'),
+
+('recipes', 'poppy_claw', 'key', 'es', 'Garra de adormidera'),
+('recipes', 'hop_whisper', 'key', 'es', 'Susurro de lúpulo'),
+('recipes', 'centipede_kiss', 'key', 'es', 'Beso de escolopendra'),
+('recipes', 'hydra_tongue', 'key', 'es', 'Lengua de hidra'),
+('recipes', 'atropos_juice', 'key', 'es', 'Jugo de átropos'),
+('recipes', 'mescaline_powder', 'key', 'es', 'Polvo de mezcalina'),
+
+('recipes', 'poppy_claw', 'description', 'es', 'Provoca 1 herida y la debilidad “envenenado” hasta final de la fase o recibir sanación. Al principio de cada escena, desafío umbral 15, si fallo +1 herida.'),
+('recipes', 'hop_whisper', 'description', 'es', 'Provoca un estado de “embriaguez”. Seguirá así hasta recibir daño o hasta el final de la escena.'),
+('recipes', 'centipede_kiss', 'description', 'es', 'No puedes usar la acción de movimiento durante 3 turnos.'),
+('recipes', 'hydra_tongue', 'description', 'es', 'Provoca desventaja en desafíos que requieran hablar (incluido usar la magia) durante 3 rondas.'),
+('recipes', 'atropos_juice', 'description', 'es', 'Provoca desventaja en ataques melé y a distancia por 2 turnos.'),
+('recipes', 'mescaline_powder', 'description', 'es', 'Durante 1 turno convence a la criatura afectada de que… (elige) 1. La 1ª criatura con la que interactúe es un monstruo que le provoca terror. 2. La 1ª criatura con la que interactúe es un amigo o familiar a quien le contaría sus secretos. 3. La 1ª criatura con la que interactúe es alguien a quien quiere matar. 4. La 1ª criatura con la que interactúe le resulta enormemente atractiva. 5. La 1ª criatura que vea es una figura de autoridad y obedecerá lo mejor posible UNA orden que no implique lesionarse o riesgo de muerte. 6. A efectos prácticos queda cegado y ensordecido mientras va de viaje astral.');
 
 COMMIT;
 

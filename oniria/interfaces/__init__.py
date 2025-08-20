@@ -31,6 +31,8 @@ from oniria.interfaces.cs_schemas import (
     SpellDTO,
     EssenceDTO,
     MastersDTO,
+    RecipeDTO,
+    RecipeByTypeDTO,
 )
 
 __all__ = [
@@ -63,4 +65,6 @@ __all__ = [
     "SpellDTO",
     "EssenceDTO",
     "MastersDTO",
+    "RecipeDTO",
+    "RecipeByTypeDTO",
 ]

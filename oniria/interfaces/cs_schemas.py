@@ -98,6 +98,17 @@ class MastersDTO(BaseModel):
     magics: List[EssenceDTO]
 
 
+class RecipeDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    display_description: str
+
+
+class RecipeByTypeDTO(BaseModel):
+    brews: List[RecipeDTO]
+    poisons: List[RecipeDTO]
+
+
 class BootstrapDTO(BaseModel):
     renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
@@ -107,3 +118,4 @@ class BootstrapDTO(BaseModel):
     weaknesses: List[WeaknessDTO]
     somna_affinities: List[SomnaAffinityDTO]
     masters: MastersDTO
+    recipes: RecipeByTypeDTO

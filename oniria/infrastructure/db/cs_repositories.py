@@ -17,6 +17,8 @@ from oniria.infrastructure.db.cs_sql_models import (
     ManeuverDB,
     EssenceDB,
     SpellDB,
+    RecipeTypeDB,
+    RecipeDB,
 )
 
 
@@ -113,10 +115,17 @@ class SpellRepository:
 class EssenceRepository:
     @staticmethod
     def get_all_essences(db_session: Session) -> Sequence[EssenceDB]:
-        stmt = (
-            select(EssenceDB)
-            .options(joinedload(EssenceDB.spells))
-            .order_by(EssenceDB.key)
-        )
+        stmt = select(EssenceDB).options(joinedload(EssenceDB.spells))
+        result = db_session.execute(stmt)
+        essences = result.unique().scalars().all()
+        for essence in essences:
+            essence.spells.sort(key=lambda s: s.tier)
+        return essences
+
+
+class RecipeRepository:
+    @staticmethod
+    def get_all_recipes(db_session: Session) -> Sequence[RecipeDB]:
+        stmt = select(RecipeDB)
         result = db_session.execute(stmt)
         return result.unique().scalars().all()

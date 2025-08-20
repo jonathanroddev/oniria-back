@@ -18,6 +18,8 @@ from oniria.interfaces import (
     SpellDTO,
     EssenceDTO,
     MastersDTO,
+    RecipeDTO,
+    RecipeByTypeDTO,
 )
 from oniria.infrastructure.db import (
     ExperienceDB,
@@ -34,6 +36,8 @@ from oniria.infrastructure.db import (
     ManeuverDB,
     EssenceDB,
     SpellDB,
+    RecipeTypeDB,
+    RecipeDB,
 )
 
 
@@ -263,3 +267,41 @@ class EssenceMapper:
             for spell in essence.spells
         ]
         return EssenceDTO(key=essence.key, display_key=display_key, spells=spells)
+
+
+class RecipeMapper:
+    @staticmethod
+    def from_entity_to_dto(recipe: RecipeDB, translations: Dict) -> RecipeDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == recipe.key
+        )
+        display_description = next(
+            key["translation"]
+            for key in translations["description"]
+            if key["original"] == recipe.key
+        )
+        return RecipeDTO(
+            key=recipe.key,
+            display_key=display_key,
+            display_description=display_description,
+        )
+
+
+class RecipeByTypeMapper:
+    @staticmethod
+    def from_entities_to_dto(
+        recipes: Sequence[RecipeDB], translations: Dict
+    ) -> RecipeByTypeDTO:
+        brews = [
+            RecipeMapper.from_entity_to_dto(recipe, translations)
+            for recipe in recipes
+            if recipe.type == RecipeTypeDB.brew
+        ]
+        poisons = [
+            RecipeMapper.from_entity_to_dto(recipe, translations)
+            for recipe in recipes
+            if recipe.type == RecipeTypeDB.poison
+        ]
+        return RecipeByTypeDTO(brews=brews, poisons=poisons)

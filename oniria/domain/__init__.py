@@ -22,6 +22,7 @@ from oniria.domain.cs_models import (
     Martial,
     Maneuver,
     Spell,
+    Recipe,
 )
 from oniria.domain.exceptions import (
     NotFoundException,
@@ -56,4 +57,5 @@ __all__ = [
     "Martial",
     "Maneuver",
     "Spell",
+    "Recipe",
 ]
