@@ -19,6 +19,10 @@ from oniria.infrastructure.db.cs_sql_models import (
     SpellDB,
     RecipeTypeDB,
     RecipeDB,
+    ArmorTypeDB,
+    ArmorPropertyLinkDB,
+    ArmorPropertyDB,
+    ArmorDB,
 )
 
 
@@ -127,5 +131,17 @@ class RecipeRepository:
     @staticmethod
     def get_all_recipes(db_session: Session) -> Sequence[RecipeDB]:
         stmt = select(RecipeDB)
+        result = db_session.execute(stmt)
+        return result.unique().scalars().all()
+
+
+class ArmorRepository:
+    @staticmethod
+    def get_all_armors(db_session: Session) -> Sequence[ArmorDB]:
+        stmt = select(ArmorDB).options(
+            selectinload(ArmorDB.armors_properties_links).joinedload(
+                ArmorPropertyLinkDB.property
+            )
+        )
         result = db_session.execute(stmt)
         return result.unique().scalars().all()

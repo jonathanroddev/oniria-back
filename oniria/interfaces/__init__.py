@@ -33,6 +33,9 @@ from oniria.interfaces.cs_schemas import (
     MastersDTO,
     RecipeDTO,
     RecipeByTypeDTO,
+    ArmorPropertyDTO,
+    ArmorDTO,
+    ArmorByTypeDTO,
 )
 
 __all__ = [
@@ -67,4 +70,7 @@ __all__ = [
     "MastersDTO",
     "RecipeDTO",
     "RecipeByTypeDTO",
+    "ArmorPropertyDTO",
+    "ArmorDTO",
+    "ArmorByTypeDTO",
 ]

@@ -82,3 +82,12 @@ class Spell:
 class Recipe:
     key: str
     type: str
+
+
+@dataclass
+class Armor:
+    key: str
+    type: str
+    rarity: int
+    value: int
+    defense: int

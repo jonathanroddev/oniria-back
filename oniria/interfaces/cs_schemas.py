@@ -109,6 +109,27 @@ class RecipeByTypeDTO(BaseModel):
     poisons: List[RecipeDTO]
 
 
+class ArmorPropertyDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    display_description: str
+
+
+class ArmorDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    rarity: int
+    value: int
+    defense: int
+    properties: List[ArmorPropertyDTO]
+
+
+class ArmorByTypeDTO(BaseModel):
+    light: List[ArmorDTO]
+    medium: List[ArmorDTO]
+    heavy: List[ArmorDTO]
+
+
 class BootstrapDTO(BaseModel):
     renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
@@ -119,3 +140,4 @@ class BootstrapDTO(BaseModel):
     somna_affinities: List[SomnaAffinityDTO]
     masters: MastersDTO
     recipes: RecipeByTypeDTO
+    armors: ArmorByTypeDTO

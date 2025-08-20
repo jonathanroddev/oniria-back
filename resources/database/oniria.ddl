@@ -148,3 +148,23 @@ CREATE TABLE recipes (
     key VARCHAR(50) PRIMARY KEY NOT NULL,
     type recipe_type NOT NULL
 );
+
+CREATE TYPE armor_type AS ENUM ('light', 'medium', 'heavy');
+
+CREATE TABLE armors (
+    key VARCHAR(50) PRIMARY KEY,
+    type armor_type NOT NULL,
+    rarity INTEGER NOT NULL,
+    value INTEGER NOT NULL,
+    defense INTEGER NOT NULL
+);
+
+CREATE TABLE armors_properties (
+    key VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE armors_properties_links (
+    armor_key VARCHAR(50) NOT NULL,
+    property_key VARCHAR(50) NOT NULL,
+    PRIMARY KEY (armor_key, property_key)
+);

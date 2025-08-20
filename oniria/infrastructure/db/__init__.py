@@ -29,4 +29,8 @@ from .cs_sql_models import (
     SpellDB,
     RecipeTypeDB,
     RecipeDB,
+    ArmorTypeDB,
+    ArmorPropertyLinkDB,
+    ArmorPropertyDB,
+    ArmorDB,
 )

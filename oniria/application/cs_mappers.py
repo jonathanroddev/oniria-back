@@ -20,6 +20,9 @@ from oniria.interfaces import (
     MastersDTO,
     RecipeDTO,
     RecipeByTypeDTO,
+    ArmorPropertyDTO,
+    ArmorDTO,
+    ArmorByTypeDTO,
 )
 from oniria.infrastructure.db import (
     ExperienceDB,
@@ -38,6 +41,9 @@ from oniria.infrastructure.db import (
     SpellDB,
     RecipeTypeDB,
     RecipeDB,
+    ArmorTypeDB,
+    ArmorPropertyDB,
+    ArmorDB,
 )
 
 
@@ -305,3 +311,70 @@ class RecipeByTypeMapper:
             if recipe.type == RecipeTypeDB.poison
         ]
         return RecipeByTypeDTO(brews=brews, poisons=poisons)
+
+
+class ArmorPropertyMapper:
+    @staticmethod
+    def from_entity_to_dto(
+        armor_property: ArmorPropertyDB, translations: dict
+    ) -> ArmorPropertyDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == armor_property.key
+        )
+        display_description = next(
+            key["translation"]
+            for key in translations["description"]
+            if key["original"] == armor_property.key
+        )
+        return ArmorPropertyDTO(
+            key=armor_property.key,
+            display_key=display_key,
+            display_description=display_description,
+        )
+
+
+class ArmorMapper:
+    @staticmethod
+    def from_entity_to_dto(armor: ArmorDB, translations: List[Dict]) -> ArmorDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations[0]["key"]
+            if key["original"] == armor.key
+        )
+        properties = [
+            ArmorPropertyMapper.from_entity_to_dto(prop, translations[1])
+            for prop in armor.properties
+        ]
+        return ArmorDTO(
+            key=armor.key,
+            display_key=display_key,
+            rarity=armor.rarity,
+            value=armor.value,
+            defense=armor.defense,
+            properties=properties,
+        )
+
+
+class ArmorByTypeMapper:
+    @staticmethod
+    def from_entities_to_dto(
+        armors: Sequence[ArmorDB], translations: List[Dict]
+    ) -> ArmorByTypeDTO:
+        light = [
+            ArmorMapper.from_entity_to_dto(armor, translations)
+            for armor in armors
+            if armor.type == ArmorTypeDB.light
+        ]
+        medium = [
+            ArmorMapper.from_entity_to_dto(armor, translations)
+            for armor in armors
+            if armor.type == ArmorTypeDB.medium
+        ]
+        heavy = [
+            ArmorMapper.from_entity_to_dto(armor, translations)
+            for armor in armors
+            if armor.type == ArmorTypeDB.heavy
+        ]
+        return ArmorByTypeDTO(light=light, medium=medium, heavy=heavy)

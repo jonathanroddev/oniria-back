@@ -126,3 +126,62 @@ class RecipeDB(Base):
 
     key: Mapped[str] = mapped_column(String(50), primary_key=True)
     type: Mapped[RecipeTypeDB] = mapped_column(Enum(RecipeTypeDB), nullable=False)
+
+
+class ArmorTypeDB(enum.Enum):
+    light = "light"
+    medium = "medium"
+    heavy = "heavy"
+
+
+class ArmorPropertyDB(Base):
+    __tablename__ = "armors_properties"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    armors_properties_links: Mapped[List["ArmorPropertyLinkDB"]] = relationship(
+        "ArmorPropertyLinkDB", back_populates="property"
+    )
+    armors: Mapped[List["ArmorDB"]] = relationship(
+        "ArmorDB",
+        secondary="armors_properties_links",
+        back_populates="properties",
+        viewonly=True,
+    )
+
+
+class ArmorPropertyLinkDB(Base):
+    __tablename__ = "armors_properties_links"
+
+    armor_key: Mapped[str] = mapped_column(
+        String(50), ForeignKey("armors.key"), primary_key=True
+    )
+    property_key: Mapped[str] = mapped_column(
+        String(50), ForeignKey("armors_properties.key"), primary_key=True
+    )
+
+    armor: Mapped["ArmorDB"] = relationship(
+        "ArmorDB", back_populates="armors_properties_links"
+    )
+    property: Mapped["ArmorPropertyDB"] = relationship(
+        "ArmorPropertyDB", back_populates="armors_properties_links"
+    )
+
+
+class ArmorDB(Base):
+    __tablename__ = "armors"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    type: Mapped[ArmorTypeDB] = mapped_column(Enum(ArmorTypeDB), nullable=False)
+    rarity: Mapped[int] = mapped_column(Integer, nullable=False)
+    value: Mapped[int] = mapped_column(Integer, nullable=False)
+    defense: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    armors_properties_links: Mapped[List["ArmorPropertyLinkDB"]] = relationship(
+        "ArmorPropertyLinkDB", back_populates="armor"
+    )
+    properties: Mapped[List["ArmorPropertyDB"]] = relationship(
+        "ArmorPropertyDB",
+        secondary="armors_properties_links",
+        back_populates="armors",
+        viewonly=True,
+    )

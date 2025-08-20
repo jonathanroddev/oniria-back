@@ -332,19 +332,50 @@ INSERT INTO spells (key, essence_key, tier) VALUES
 ('spacetime-distortion', 'aether', 8);
 
 INSERT INTO recipes (key, type) VALUES
-('lettuce_of_lethe', 'brew'),
-('poppy_juice', 'brew'),
-('melissa_liquor', 'brew'),
-('blue_lotus_wisdom', 'brew'),
-('ashwagandha_extract', 'brew'),
-('noblaurel_liquor', 'brew'),
+('lettuce-of-lethe', 'brew'),
+('poppy-juice', 'brew'),
+('melissa-liquor', 'brew'),
+('blue-lotus-wisdom', 'brew'),
+('ashwagandha-extract', 'brew'),
+('noblaurel-liquor', 'brew'),
 
-('poppy_claw', 'poison'),
-('hop_whisper', 'poison'),
-('centipede_kiss', 'poison'),
-('hydra_tongue', 'poison'),
-('atropos_juice', 'poison'),
-('mescaline_powder', 'poison');
+('poppy-claw', 'poison'),
+('hop-whisper', 'poison'),
+('centipede-kiss', 'poison'),
+('hydra-tongue', 'poison'),
+('atropos-juice', 'poison'),
+('mescaline-powder', 'poison');
+
+INSERT INTO armors (key, type, rarity, value, defense) VALUES
+('round-shield', 'light', 1, 1, 1),
+('gambeson', 'light', 2, 2, 1),
+('shield', 'medium', 3, 4, 2),
+('chain-mail', 'medium', 4, 8, 2),
+('heavy-shield', 'heavy', 5, 16, 3),
+('plate-armor', 'heavy', 6, 32, 3);
+
+INSERT INTO armors_properties (key) VALUES
+('last-resort'),
+('noisy'),
+('eye-catching'),
+('ballast');
+
+INSERT INTO armors_properties_links (armor_key, property_key) VALUES
+('round-shield', 'last-resort'),
+('gambeson', 'last-resort'),
+('shield', 'last-resort'),
+('shield', 'eye-catching'),
+('chain-mail', 'last-resort'),
+('chain-mail', 'noisy'),
+('chain-mail', 'eye-catching'),
+('chain-mail', 'ballast'),
+('heavy-shield', 'last-resort'),
+('heavy-shield', 'eye-catching'),
+('heavy-shield', 'ballast'),
+('plate-armor', 'last-resort'),
+('plate-armor', 'noisy'),
+('plate-armor', 'eye-catching'),
+('plate-armor', 'ballast');
 
 INSERT INTO translations (table_name, element_key, property, lang, display_text) VALUES
 ('renown', 'aspirant', 'key', 'es', 'aspirante'),
@@ -743,33 +774,50 @@ INSERT INTO translations (table_name, element_key, property, lang, display_text)
 ('spells', 'arcane-anchor', 'description', 'es', 'Viaja hasta un lugar rebosante de energía mágica (volcán, vergel, tormenta, etc) y coloca tu ancla arcana. Cuando la actives y superes el desafío, pierdes tus maestrías en éter y ganas maestrías equivalentes en la esencia del lugar. Al final de la escena, el cambio se invierte. Solo puedes tener un ancla activa, pero puedes cambiarla.'),
 ('spells', 'spacetime-distortion', 'description', 'es', '...'),
 
-('recipes', 'lettuce_of_lethe', 'key', 'es', 'Tila de Leteo'),
-('recipes', 'poppy_juice', 'key', 'es', 'Jugo de Amapola'),
-('recipes', 'melissa_liquor', 'key', 'es', 'Licor de Melisa'),
-('recipes', 'blue_lotus_wisdom', 'key', 'es', 'Sabia de Loto Azul'),
-('recipes', 'ashwagandha_extract', 'key', 'es', 'Extracto de Ashwagandha'),
-('recipes', 'noblaurel_liquor', 'key', 'es', 'Licor de Noblaurel'),
+('recipes', 'lettuce-of-lethe', 'key', 'es', 'Tila de Leteo'),
+('recipes', 'poppy-juice', 'key', 'es', 'Jugo de Amapola'),
+('recipes', 'melissa-liquor', 'key', 'es', 'Licor de Melisa'),
+('recipes', 'blue-lotus-wisdom', 'key', 'es', 'Sabia de Loto Azul'),
+('recipes', 'ashwagandha-extract', 'key', 'es', 'Extracto de Ashwagandha'),
+('recipes', 'noblaurel-liquor', 'key', 'es', 'Licor de Noblaurel'),
 
-('recipes', 'lettuce_of_lethe', 'description', 'es', 'Sana 1 herida ahora. Sana 1 herida más al inicio de tus próximos 3 turnos.'),
-('recipes', 'poppy_juice', 'description', 'es', 'Durante 1 escena ignora tu penalización por heridas.'),
-('recipes', 'melissa_liquor', 'description', 'es', 'Gana +1PE ahora y +1PE/turno el resto de la escena.'),
-('recipes', 'blue_lotus_wisdom', 'description', 'es', 'Durante 3 rondas gana +1 PP a tus desafíos físicos.'),
-('recipes', 'ashwagandha_extract', 'description', 'es', 'Por 3 rondas gana +1 PP a tus desafíos mentales.'),
-('recipes', 'noblaurel_liquor', 'description', 'es', 'Por 3 rondas ignora los efectos de fallos y pifias mágicos.'),
+('recipes', 'lettuce-of-lethe', 'description', 'es', 'Sana 1 herida ahora. Sana 1 herida más al inicio de tus próximos 3 turnos.'),
+('recipes', 'poppy-juice', 'description', 'es', 'Durante 1 escena ignora tu penalización por heridas.'),
+('recipes', 'melissa-liquor', 'description', 'es', 'Gana +1PE ahora y +1PE/turno el resto de la escena.'),
+('recipes', 'blue-lotus-wisdom', 'description', 'es', 'Durante 3 rondas gana +1 PP a tus desafíos físicos.'),
+('recipes', 'ashwagandha-extract', 'description', 'es', 'Por 3 rondas gana +1 PP a tus desafíos mentales.'),
+('recipes', 'noblaurel-liquor', 'description', 'es', 'Por 3 rondas ignora los efectos de fallos y pifias mágicos.'),
 
-('recipes', 'poppy_claw', 'key', 'es', 'Garra de adormidera'),
-('recipes', 'hop_whisper', 'key', 'es', 'Susurro de lúpulo'),
-('recipes', 'centipede_kiss', 'key', 'es', 'Beso de escolopendra'),
-('recipes', 'hydra_tongue', 'key', 'es', 'Lengua de hidra'),
-('recipes', 'atropos_juice', 'key', 'es', 'Jugo de átropos'),
-('recipes', 'mescaline_powder', 'key', 'es', 'Polvo de mezcalina'),
+('recipes', 'poppy-claw', 'key', 'es', 'Garra de adormidera'),
+('recipes', 'hop-whisper', 'key', 'es', 'Susurro de lúpulo'),
+('recipes', 'centipede-kiss', 'key', 'es', 'Beso de escolopendra'),
+('recipes', 'hydra-tongue', 'key', 'es', 'Lengua de hidra'),
+('recipes', 'atropos-juice', 'key', 'es', 'Jugo de átropos'),
+('recipes', 'mescaline-powder', 'key', 'es', 'Polvo de mezcalina'),
 
-('recipes', 'poppy_claw', 'description', 'es', 'Provoca 1 herida y la debilidad “envenenado” hasta final de la fase o recibir sanación. Al principio de cada escena, desafío umbral 15, si fallo +1 herida.'),
-('recipes', 'hop_whisper', 'description', 'es', 'Provoca un estado de “embriaguez”. Seguirá así hasta recibir daño o hasta el final de la escena.'),
-('recipes', 'centipede_kiss', 'description', 'es', 'No puedes usar la acción de movimiento durante 3 turnos.'),
-('recipes', 'hydra_tongue', 'description', 'es', 'Provoca desventaja en desafíos que requieran hablar (incluido usar la magia) durante 3 rondas.'),
-('recipes', 'atropos_juice', 'description', 'es', 'Provoca desventaja en ataques melé y a distancia por 2 turnos.'),
-('recipes', 'mescaline_powder', 'description', 'es', 'Durante 1 turno convence a la criatura afectada de que… (elige) 1. La 1ª criatura con la que interactúe es un monstruo que le provoca terror. 2. La 1ª criatura con la que interactúe es un amigo o familiar a quien le contaría sus secretos. 3. La 1ª criatura con la que interactúe es alguien a quien quiere matar. 4. La 1ª criatura con la que interactúe le resulta enormemente atractiva. 5. La 1ª criatura que vea es una figura de autoridad y obedecerá lo mejor posible UNA orden que no implique lesionarse o riesgo de muerte. 6. A efectos prácticos queda cegado y ensordecido mientras va de viaje astral.');
+('recipes', 'poppy-claw', 'description', 'es', 'Provoca 1 herida y la debilidad “envenenado” hasta final de la fase o recibir sanación. Al principio de cada escena, desafío umbral 15, si fallo +1 herida.'),
+('recipes', 'hop-whisper', 'description', 'es', 'Provoca un estado de “embriaguez”. Seguirá así hasta recibir daño o hasta el final de la escena.'),
+('recipes', 'centipede-kiss', 'description', 'es', 'No puedes usar la acción de movimiento durante 3 turnos.'),
+('recipes', 'hydra-tongue', 'description', 'es', 'Provoca desventaja en desafíos que requieran hablar (incluido usar la magia) durante 3 rondas.'),
+('recipes', 'atropos-juice', 'description', 'es', 'Provoca desventaja en ataques melé y a distancia por 2 turnos.'),
+('recipes', 'mescaline-powder', 'description', 'es', 'Durante 1 turno convence a la criatura afectada de que… (elige) 1. La 1ª criatura con la que interactúe es un monstruo que le provoca terror. 2. La 1ª criatura con la que interactúe es un amigo o familiar a quien le contaría sus secretos. 3. La 1ª criatura con la que interactúe es alguien a quien quiere matar. 4. La 1ª criatura con la que interactúe le resulta enormemente atractiva. 5. La 1ª criatura que vea es una figura de autoridad y obedecerá lo mejor posible UNA orden que no implique lesionarse o riesgo de muerte. 6. A efectos prácticos queda cegado y ensordecido mientras va de viaje astral.'),
+
+('armors', 'round-shield', 'key', 'es', 'Rodela'),
+('armors', 'gambeson', 'key', 'es', 'Gambesón'),
+('armors', 'shield', 'key', 'es', 'Escudo'),
+('armors', 'chain-mail', 'key', 'es', 'Cota decadena'),
+('armors', 'heavy-shield', 'key', 'es', 'Escudo pesado'),
+('armors', 'plate-armor', 'key', 'es', 'Cota de placas'),
+
+('armors_properties', 'last-resort', 'key', 'es', 'Último recurso'),
+('armors_properties', 'noisy', 'key', 'es', 'Ruidoso'),
+('armors_properties', 'eye-catching', 'key', 'es', 'Llamativo'),
+('armors_properties', 'ballast', 'key', 'es', 'Lastre'),
+
+('armors_properties', 'last-resort', 'description', 'es', 'Tras fallar un desafío defensivo puedes reducir el valor de defensa de este objeto en tantas unidades como heridas a evitar. Si su defensa llega a 0 el objeto se destruye.'),
+('armors_properties', 'noisy', 'description', 'es', 'Detectarte es fácil si lo usas.'),
+('armors_properties', 'eye-catching', 'description', 'es', 'No pasas desapercibido portando este objeto.'),
+('armors_properties', 'ballast', 'description', 'es', 'Causa desventaja en desafíos físicos exigentes (ej. escalar, nadar, salto lon).');
 
 COMMIT;
 
