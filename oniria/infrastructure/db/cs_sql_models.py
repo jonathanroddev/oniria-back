@@ -1,5 +1,5 @@
 import enum
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy import ForeignKey, String, Integer, Boolean, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -184,4 +184,115 @@ class ArmorDB(Base):
         secondary="armors_properties_links",
         back_populates="armors",
         viewonly=True,
+    )
+
+
+class WeaponCriticalLinkDB(Base):
+    __tablename__ = "weapons_criticals_links"
+
+    weapon_key: Mapped[str] = mapped_column(
+        String(50), ForeignKey("weapons.key"), primary_key=True
+    )
+    critical_key: Mapped[str] = mapped_column(
+        String(50), ForeignKey("weapons_criticals.key"), primary_key=True
+    )
+
+    weapon: Mapped["WeaponDB"] = relationship(
+        "WeaponDB", back_populates="weapons_criticals_links"
+    )
+    critical: Mapped["WeaponCriticalDB"] = relationship(
+        "WeaponCriticalDB", back_populates="weapons_criticals_links"
+    )
+
+
+class WeaponTypeDB(enum.Enum):
+    melee_1_hand = "melee_1_hand"
+    melee_2_hands = "melee_2_hands"
+    ranged = "ranged"
+    arcane = "arcane"
+
+
+class WeaponDB(Base):
+    __tablename__ = "weapons"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    type: Mapped[WeaponTypeDB] = mapped_column(Enum(WeaponTypeDB), nullable=False)
+    rarity: Mapped[int] = mapped_column(Integer, nullable=False)
+    range: Mapped[int] = mapped_column(Integer, nullable=False)
+    value: Mapped[int] = mapped_column(Integer, nullable=False)
+    attack: Mapped[int] = mapped_column(Integer, nullable=False)
+    defense: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    weapons_criticals_links: Mapped[List[WeaponCriticalLinkDB]] = relationship(
+        "WeaponCriticalLinkDB", back_populates="weapon"
+    )
+    criticals: Mapped[List["WeaponCriticalDB"]] = relationship(
+        "WeaponCriticalDB",
+        secondary="weapons_criticals_links",
+        back_populates="weapons",
+        viewonly=True,
+    )
+
+    weapons_properties_links: Mapped[List["WeaponPropertyLinkDB"]] = relationship(
+        "WeaponPropertyLinkDB", back_populates="weapon"
+    )
+    properties: Mapped[List["WeaponPropertyDB"]] = relationship(
+        "WeaponPropertyDB",
+        secondary="weapons_properties_links",
+        back_populates="weapons",
+        viewonly=True,
+    )
+
+
+class WeaponCriticalDB(Base):
+    __tablename__ = "weapons_criticals"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+
+    weapons_criticals_links: Mapped[List[WeaponCriticalLinkDB]] = relationship(
+        "WeaponCriticalLinkDB", back_populates="critical"
+    )
+    weapons: Mapped[List[WeaponDB]] = relationship(
+        "WeaponDB",
+        secondary="weapons_criticals_links",
+        back_populates="criticals",
+        viewonly=True,
+    )
+
+
+class WeaponPropertyDB(Base):
+    __tablename__ = "weapons_properties"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+
+    has_modifier: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    weapons_properties_links: Mapped[List["WeaponPropertyLinkDB"]] = relationship(
+        "WeaponPropertyLinkDB", back_populates="property"
+    )
+    weapons: Mapped[List[WeaponDB]] = relationship(
+        "WeaponDB",
+        secondary="weapons_properties_links",
+        back_populates="properties",
+        viewonly=True,
+    )
+
+
+class WeaponPropertyLinkDB(Base):
+    __tablename__ = "weapons_properties_links"
+
+    weapon_key: Mapped[str] = mapped_column(
+        String(50), ForeignKey("weapons.key"), primary_key=True
+    )
+    property_key: Mapped[str] = mapped_column(
+        String(50), ForeignKey("weapons_properties.key"), primary_key=True
+    )
+
+    modifier: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+
+    weapon: Mapped["WeaponDB"] = relationship(
+        "WeaponDB", back_populates="weapons_properties_links"
+    )
+    property: Mapped["WeaponPropertyDB"] = relationship(
+        "WeaponPropertyDB", back_populates="weapons_properties_links"
     )

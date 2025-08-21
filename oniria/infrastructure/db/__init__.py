@@ -33,4 +33,10 @@ from .cs_sql_models import (
     ArmorPropertyLinkDB,
     ArmorPropertyDB,
     ArmorDB,
+    WeaponTypeDB,
+    WeaponDB,
+    WeaponCriticalDB,
+    WeaponCriticalLinkDB,
+    WeaponPropertyDB,
+    WeaponPropertyLinkDB,
 )

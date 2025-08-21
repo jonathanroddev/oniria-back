@@ -130,6 +130,37 @@ class ArmorByTypeDTO(BaseModel):
     heavy: List[ArmorDTO]
 
 
+class WeaponCriticalDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+
+
+class WeaponPropertyDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    display_description: str
+    modifier: Optional[int]
+
+
+class WeaponDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    rarity: int
+    range: int
+    value: int
+    attack: int
+    defense: int
+    criticals: List[WeaponCriticalDTO]
+    properties: List[WeaponPropertyDTO]
+
+
+class WeaponByTypeDTO(BaseModel):
+    one_handed: List[WeaponDTO]
+    two_handed: List[WeaponDTO]
+    ranged: List[WeaponDTO]
+    arcane: List[WeaponDTO]
+
+
 class BootstrapDTO(BaseModel):
     renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
@@ -141,3 +172,4 @@ class BootstrapDTO(BaseModel):
     masters: MastersDTO
     recipes: RecipeByTypeDTO
     armors: ArmorByTypeDTO
+    weapons: WeaponByTypeDTO

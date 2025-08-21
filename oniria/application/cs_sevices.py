@@ -17,6 +17,7 @@ from oniria.application.cs_mappers import (
     EssenceMapper,
     RecipeByTypeMapper,
     ArmorByTypeMapper,
+    WeaponByTypeMapper,
 )
 from oniria.domain import NotFoundException
 from oniria.interfaces import (
@@ -36,6 +37,7 @@ from oniria.interfaces import (
     RecipeByTypeDTO,
     ArmorDTO,
     ArmorByTypeDTO,
+    WeaponByTypeDTO,
 )
 from oniria.application import ExperienceMapper, RenownMapper
 from oniria.infrastructure.db.cs_repositories import (
@@ -52,6 +54,7 @@ from oniria.infrastructure.db.cs_repositories import (
     EssenceRepository,
     RecipeRepository,
     ArmorRepository,
+    WeaponRepository,
 )
 from oniria.infrastructure.db.repositories import TranslationRepository
 from oniria.infrastructure.db.cs_sql_models import (
@@ -68,6 +71,7 @@ from oniria.infrastructure.db.cs_sql_models import (
     EssenceDB,
     RecipeDB,
     ArmorDB,
+    WeaponDB,
 )
 from oniria.infrastructure.db.sql_models import TranslationDB
 
@@ -108,6 +112,7 @@ class BootstrapService:
         )
         recipes: Sequence[RecipeDB] = RecipeRepository.get_all_recipes(db_session)
         armors: Sequence[ArmorDB] = ArmorRepository.get_all_armors(db_session)
+        weapons: Sequence[WeaponDB] = WeaponRepository.get_all_weapons(db_session)
         translations: Sequence[TranslationDB] = (
             TranslationRepository.get_all_translations_by_language(
                 db_session, lang.lower()
@@ -190,6 +195,14 @@ class BootstrapService:
             armors=ArmorByTypeMapper.from_entities_to_dto(
                 armors,
                 [translations_map["armors"], translations_map["armors_properties"]],
+            ),
+            weapons=WeaponByTypeMapper.from_entities_to_dto(
+                weapons,
+                [
+                    translations_map["weapons"],
+                    translations_map["weapons_criticals"],
+                    translations_map["weapons_properties"],
+                ],
             ),
         )
         return bootstrap

@@ -23,6 +23,10 @@ from oniria.interfaces import (
     ArmorPropertyDTO,
     ArmorDTO,
     ArmorByTypeDTO,
+    WeaponCriticalDTO,
+    WeaponPropertyDTO,
+    WeaponDTO,
+    WeaponByTypeDTO,
 )
 from oniria.infrastructure.db import (
     ExperienceDB,
@@ -44,6 +48,12 @@ from oniria.infrastructure.db import (
     ArmorTypeDB,
     ArmorPropertyDB,
     ArmorDB,
+    WeaponCriticalLinkDB,
+    WeaponTypeDB,
+    WeaponDB,
+    WeaponCriticalDB,
+    WeaponPropertyDB,
+    WeaponPropertyLinkDB,
 )
 
 
@@ -378,3 +388,106 @@ class ArmorByTypeMapper:
             if armor.type == ArmorTypeDB.heavy
         ]
         return ArmorByTypeDTO(light=light, medium=medium, heavy=heavy)
+
+
+class WeaponCriticalMapper:
+    @staticmethod
+    def from_entity_to_dto(
+        weapon_critical: WeaponCriticalDB, translations: dict
+    ) -> WeaponCriticalDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == weapon_critical.key
+        )
+        return WeaponCriticalDTO(key=weapon_critical.key, display_key=display_key)
+
+
+class WeaponPropertyMapper:
+    @staticmethod
+    def from_entity_to_dto(
+        weapon_property_link: WeaponPropertyLinkDB, translations: dict
+    ) -> WeaponPropertyDTO:
+        weapon_property = weapon_property_link.property
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == weapon_property.key
+        )
+        display_description = next(
+            key["translation"]
+            for key in translations["description"]
+            if key["original"] == weapon_property.key
+        )
+        return WeaponPropertyDTO(
+            key=weapon_property.key,
+            display_key=display_key,
+            display_description=display_description,
+            modifier=(
+                weapon_property_link.modifier
+                if weapon_property_link.property.has_modifier
+                else None
+            ),
+        )
+
+
+class WeaponMapper:
+    @staticmethod
+    def from_entity_to_dto(weapon: WeaponDB, translations: List[Dict]) -> WeaponDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations[0]["key"]
+            if key["original"] == weapon.key
+        )
+        criticals = [
+            WeaponCriticalMapper.from_entity_to_dto(crit, translations[1])
+            for crit in weapon.criticals
+        ]
+        properties = [
+            WeaponPropertyMapper.from_entity_to_dto(link, translations[2])
+            for link in weapon.weapons_properties_links
+        ]
+        return WeaponDTO(
+            key=weapon.key,
+            display_key=display_key,
+            rarity=weapon.rarity,
+            range=weapon.range,
+            value=weapon.value,
+            attack=weapon.attack,
+            defense=weapon.defense,
+            properties=properties,
+            criticals=criticals,
+        )
+
+
+class WeaponByTypeMapper:
+    @staticmethod
+    def from_entities_to_dto(
+        weapons: Sequence[WeaponDB], translations: List[Dict]
+    ) -> WeaponByTypeDTO:
+        one_handed = [
+            WeaponMapper.from_entity_to_dto(weapon, translations)
+            for weapon in weapons
+            if weapon.type == WeaponTypeDB.melee_1_hand
+        ]
+        two_handed = [
+            WeaponMapper.from_entity_to_dto(weapon, translations)
+            for weapon in weapons
+            if weapon.type == WeaponTypeDB.melee_2_hands
+        ]
+        ranged = [
+            WeaponMapper.from_entity_to_dto(weapon, translations)
+            for weapon in weapons
+            if weapon.type == WeaponTypeDB.ranged
+        ]
+        arcane = [
+            WeaponMapper.from_entity_to_dto(weapon, translations)
+            for weapon in weapons
+            if weapon.type == WeaponTypeDB.arcane
+        ]
+        return WeaponByTypeDTO(
+            one_handed=one_handed,
+            two_handed=two_handed,
+            ranged=ranged,
+            arcane=arcane,
+        )

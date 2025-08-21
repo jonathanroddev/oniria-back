@@ -23,6 +23,9 @@ from oniria.infrastructure.db.cs_sql_models import (
     ArmorPropertyLinkDB,
     ArmorPropertyDB,
     ArmorDB,
+    WeaponDB,
+    WeaponPropertyLinkDB,
+    WeaponCriticalLinkDB,
 )
 
 
@@ -142,6 +145,21 @@ class ArmorRepository:
             selectinload(ArmorDB.armors_properties_links).joinedload(
                 ArmorPropertyLinkDB.property
             )
+        )
+        result = db_session.execute(stmt)
+        return result.unique().scalars().all()
+
+
+class WeaponRepository:
+    @staticmethod
+    def get_all_weapons(db_session: Session) -> Sequence[WeaponDB]:
+        stmt = select(WeaponDB).options(
+            selectinload(WeaponDB.weapons_properties_links).joinedload(
+                WeaponPropertyLinkDB.property
+            ),
+            selectinload(WeaponDB.weapons_criticals_links).joinedload(
+                WeaponCriticalLinkDB.critical
+            ),
         )
         result = db_session.execute(stmt)
         return result.unique().scalars().all()

@@ -91,3 +91,14 @@ class Armor:
     rarity: int
     value: int
     defense: int
+
+
+@dataclass
+class Weapon:
+    key: str
+    type: str
+    rarity: int
+    range: int
+    value: int
+    attack: int
+    defense: int

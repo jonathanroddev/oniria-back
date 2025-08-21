@@ -168,3 +168,41 @@ CREATE TABLE armors_properties_links (
     property_key VARCHAR(50) NOT NULL,
     PRIMARY KEY (armor_key, property_key)
 );
+CREATE TYPE weapon_type AS ENUM ('melee_1_hand', 'melee_2_hands', 'ranged', 'arcane');
+
+CREATE TABLE weapons (
+    key VARCHAR(50) PRIMARY KEY,
+    type weapon_type NOT NULL,
+    rarity INT NOT NULL,
+    range INT NOT NULL,
+    value INT NOT NULL,
+    attack INT NOT NULL,
+    defense INT NOT NULL
+);
+
+CREATE TABLE weapons_criticals (
+    key VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE weapons_criticals_links (
+    weapon_key VARCHAR(50) NOT NULL,
+    critical_key VARCHAR(50) NOT NULL,
+    PRIMARY KEY (weapon_key, critical_key),
+    FOREIGN KEY (weapon_key) REFERENCES weapons(key),
+    FOREIGN KEY (critical_key) REFERENCES weapons_criticals(key)
+);
+
+CREATE TABLE weapons_properties (
+    key VARCHAR(50) PRIMARY KEY,
+    has_modifier BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE weapons_properties_links (
+    weapon_key VARCHAR(50) NOT NULL,
+    property_key VARCHAR(50) NOT NULL,
+    modifier INT,
+    PRIMARY KEY (weapon_key, property_key),
+    FOREIGN KEY (weapon_key) REFERENCES weapons(key),
+    FOREIGN KEY (property_key) REFERENCES weapons_properties(key)
+);
+

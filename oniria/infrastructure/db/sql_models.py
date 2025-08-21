@@ -247,6 +247,7 @@ class TranslationDB(Base):
 
     __table_args__ = (
         UniqueConstraint(
+            "table_name",
             "element_key",
             "property",
             "lang",
