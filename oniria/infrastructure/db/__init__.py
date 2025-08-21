@@ -39,4 +39,5 @@ from .cs_sql_models import (
     WeaponCriticalLinkDB,
     WeaponPropertyDB,
     WeaponPropertyLinkDB,
+    ItemDB,
 )

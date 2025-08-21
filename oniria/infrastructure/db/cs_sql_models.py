@@ -296,3 +296,13 @@ class WeaponPropertyLinkDB(Base):
     property: Mapped["WeaponPropertyDB"] = relationship(
         "WeaponPropertyDB", back_populates="weapons_properties_links"
     )
+
+
+class ItemDB(Base):
+    __tablename__ = "items"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    rarity: Mapped[int] = mapped_column(Integer, nullable=False)
+    range: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    value: Mapped[int] = mapped_column(Integer, nullable=False)
+    property_key: Mapped[str] = mapped_column(String(50))

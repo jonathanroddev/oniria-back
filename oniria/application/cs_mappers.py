@@ -27,6 +27,7 @@ from oniria.interfaces import (
     WeaponPropertyDTO,
     WeaponDTO,
     WeaponByTypeDTO,
+    ItemDTO,
 )
 from oniria.infrastructure.db import (
     ExperienceDB,
@@ -54,6 +55,7 @@ from oniria.infrastructure.db import (
     WeaponCriticalDB,
     WeaponPropertyDB,
     WeaponPropertyLinkDB,
+    ItemDB,
 )
 
 
@@ -490,4 +492,27 @@ class WeaponByTypeMapper:
             two_handed=two_handed,
             ranged=ranged,
             arcane=arcane,
+        )
+
+
+class ItemMapper:
+    @staticmethod
+    def from_entity_to_dto(item: ItemDB, translations: dict) -> ItemDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == item.key
+        )
+        display_description = next(
+            key["translation"]
+            for key in translations["description"]
+            if key["original"] == item.property_key
+        )
+        return ItemDTO(
+            key=item.key,
+            display_key=display_key,
+            display_description=display_description,
+            rarity=item.rarity,
+            range=item.range,
+            value=item.value,
         )

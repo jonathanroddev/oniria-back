@@ -26,6 +26,7 @@ from oniria.infrastructure.db.cs_sql_models import (
     WeaponDB,
     WeaponPropertyLinkDB,
     WeaponCriticalLinkDB,
+    ItemDB,
 )
 
 
@@ -163,3 +164,11 @@ class WeaponRepository:
         )
         result = db_session.execute(stmt)
         return result.unique().scalars().all()
+
+
+class ItemRepository:
+    @staticmethod
+    def get_all_items(db_session: Session) -> Sequence[ItemDB]:
+        stmt = select(ItemDB)
+        result = db_session.execute(stmt)
+        return result.scalars().all()

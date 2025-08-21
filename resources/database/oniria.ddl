@@ -206,3 +206,10 @@ CREATE TABLE weapons_properties_links (
     FOREIGN KEY (property_key) REFERENCES weapons_properties(key)
 );
 
+CREATE TABLE items (
+    key VARCHAR(50) PRIMARY KEY,
+    rarity INT NOT NULL,
+    range INT,
+    value INT NOT NULL,
+    property_key VARCHAR(50)
+);

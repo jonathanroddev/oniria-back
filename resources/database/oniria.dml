@@ -520,6 +520,27 @@ INSERT INTO weapons_properties_links (weapon_key, property_key, modifier) VALUES
 ('rod', 'channel', 18),
 ('rod', 'versatile', 1);
 
+INSERT INTO items (key, rarity, range, value, property_key) VALUES
+('supplies', 1, NULL, 1, 'supplies_prop'),
+('whetstone', 2, NULL, 1, 'whetstone_prop'),
+('caltrops', 2, 2, 3, 'caltrops_prop'),
+('net', 2, 2, 2, 'net_prop'),
+('gadgets', 3, NULL, 3, 'gadgets_prop'),
+('bolas', 3, 2, 3, 'bolas_prop'),
+('region_map', 3, NULL, 3, 'region_map_prop'),
+('smoke_bomb', 4, 1, 7, 'smoke_bomb_prop'),
+('mantrap', 4, 0, 9, 'mantrap_prop'),
+('potions', 4, 0, 5, 'potions_prop'),
+('poisons', 4, 0, 5, 'poisons_prop'),
+('blinding_bomb', 5, 1, 6, 'blinding_bomb_prop'),
+('lure', 5, 1, 6, 'lure_prop'),
+('magic_gem', 3, NULL, 15, 'magic_gem_prop'),
+('very_normal_bag', 3, NULL, 20, 'very_normal_bag_prop'),
+('magic_scrolls_I_II', 3, NULL, 10, 'magic_scrolls_I_II_prop'),
+('magic_scroll_III', 3, NULL, 25, 'magic_scroll_III_prop'),
+('magic_scroll_IV', 4, NULL, 50, 'magic_scroll_IV_prop'),
+('magic_scroll_V', 5, NULL, 100, 'magic_scroll_V_prop'),
+('magic_scroll_VI', 6, NULL, 250, 'magic_scroll_VI_prop');
 
 INSERT INTO translations (table_name, element_key, property, lang, display_text) VALUES
 ('renown', 'aspirant', 'key', 'es', 'aspirante'),
@@ -1038,7 +1059,50 @@ INSERT INTO translations (table_name, element_key, property, lang, display_text)
 ('weapons', 'bullets-gunpowder', 'key', 'es', 'Balas y pólvora'),
 ('weapons', 'talisman', 'key', 'es', 'Talismán'),
 ('weapons', 'wand', 'key', 'es', 'Varita'),
-('weapons', 'rod', 'key', 'es', 'Báculo');
+('weapons', 'rod', 'key', 'es', 'Báculo'),
+
+('items', 'supplies', 'key', 'es', 'Suministros'),
+('items', 'whetstone', 'key', 'es', 'Piedra afilar'),
+('items', 'caltrops', 'key', 'es', 'Abrojos'),
+('items', 'net', 'key', 'es', 'Red'),
+('items', 'gadgets', 'key', 'es', 'Cachivaches'),
+('items', 'bolas', 'key', 'es', 'Boleadoras'),
+('items', 'region_map', 'key', 'es', 'Mapa de la región'),
+('items', 'smoke_bomb', 'key', 'es', 'Bomba de humo'),
+('items', 'mantrap', 'key', 'es', 'Atrapahombres'),
+('items', 'potions', 'key', 'es', 'Brebajes'),
+('items', 'poisons', 'key', 'es', 'Ponzonas'),
+('items', 'blinding_bomb', 'key', 'es', 'Bomba cegadora'),
+('items', 'lure', 'key', 'es', 'Señuelo'),
+('items', 'magic_gem', 'key', 'es', 'Gema mágica'),
+('items', 'very_normal_bag', 'key', 'es', 'Bolsa muy normal'),
+('items', 'magic_scrolls_I_II', 'key', 'es', 'Pergaminos mágicos I-II'),
+('items', 'magic_scroll_III', 'key', 'es', 'Pergamino mágico III'),
+('items', 'magic_scroll_IV', 'key', 'es', 'Pergamino mágico IV'),
+('items', 'magic_scroll_V', 'key', 'es', 'Pergamino mágico V'),
+('items', 'magic_scroll_VI', 'key', 'es', 'Pergamino mágico VI'),
+
+('items', 'supplies_prop', 'description', 'es', 'Cantidad +4. 1 unidad otorga: 1 ración, 1 antorcha (dura 6 acciones), 1 bolsa de componentes, 15 metros de cuerda u otros consumibles que sabe tu MC.'),
+('items', 'whetstone_prop', 'description', 'es', '4PE, durante 3 rondas, un arma con filo gana “ignora armadura +1”.'),
+('items', 'caltrops_prop', 'description', 'es', '1PE. Cualquier criatura que pise la zona elige sufrir una debilidad temporal O perder su movimiento. Al huir no afecta a aliados.'),
+('items', 'net_prop', 'description', 'es', '2 PE. Desafío para inmovilizar.'),
+('items', 'gadgets_prop', 'description', 'es', 'Cantidad +2. Ante desafío que se beneficie de herramienta profesional, elige +1PP sin gastar nada O +2PP gastando una unidad.'),
+('items', 'bolas_prop', 'description', 'es', '2PE. Desafío para derribar e inmovilizar 1 enemigo.'),
+('items', 'region_map_prop', 'description', 'es', 'Actualiza tu mapa de la región y las distancias entre lugares. Pueden existir lugares que no figuren en los mapas.'),
+('items', 'smoke_bomb_prop', 'description', 'es', '1 PE. Crea una cortina de humo que dura 1 ronda. Permite a todos los combatientes usar una acción gratuita para esconderse incluso a plena luz, o para huir de la escena.'),
+('items', 'mantrap_prop', 'description', 'es', '3 PE. A 2 manos. Si superas el desafío deja a tu objetivo “a merced”. Si te desplazas, va contigo. Cada turno puede intentar zafarse.'),
+('items', 'potions_prop', 'description', 'es', 'Cantidad +1. Consúmelo como acción gratuita. Al comprarlo elige cuál entre los que te ofrezca tu MC.'),
+('items', 'poisons_prop', 'description', 'es', 'Cantidad +1. Aplícalo para causar su efecto en humanoides. Al comprarlo elige cuál entre los que te ofrezca tu MC.'),
+('items', 'blinding_bomb_prop', 'description', 'es', '1PE. Toda criatura que no lo esperaba sufre la debilidad “cegado” por 3 rondas.'),
+('items', 'lure_prop', 'description', 'es', '1PE. Desafío para crear distracción. Si fracasas, eres detectad@.'),
+('items', 'magic_gem_prop', 'description', 'es', 'Aleación de iridae que puede engarzarse en armas o armaduras. Añade resistencia a o daño de una esencia mágica excepto éter.'),
+('items', 'very_normal_bag_prop', 'description', 'es', 'Gana +4 huecos de bolsillo. Por la apertura no cabe nada mayor a un melón grande.'),
+('items', 'magic_scrolls_I_II_prop', 'description', 'es', 'Al comprarlo se elige una esencia (1d10). Consumirlo crea un hechizo de forma 1 o 2.'),
+('items', 'magic_scroll_III_prop', 'description', 'es', 'Al comprarlo se elige una esencia (1d10). Consumirlo crea un hechizo de forma 3.'),
+('items', 'magic_scroll_IV_prop', 'description', 'es', 'Al comprarlo se elige una esencia (1d10). Consumirlo crea un hechizo de forma 4.'),
+('items', 'magic_scroll_V_prop', 'description', 'es', 'Al comprarlo se elige una esencia (1d10). Consumirlo crea un hechizo de forma 5.'),
+('items', 'magic_scroll_VI_prop', 'description', 'es', 'Al comprarlo se elige una esencia (1d10). Consumirlo crea un hechizo de forma 6.');
+
 
 COMMIT;
 

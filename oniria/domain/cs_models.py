@@ -102,3 +102,11 @@ class Weapon:
     value: int
     attack: int
     defense: int
+
+
+@dataclass
+class Item:
+    key: str
+    rarity: int
+    range: int
+    value: int

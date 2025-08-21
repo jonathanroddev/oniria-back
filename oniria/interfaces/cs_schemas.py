@@ -161,6 +161,15 @@ class WeaponByTypeDTO(BaseModel):
     arcane: List[WeaponDTO]
 
 
+class ItemDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    display_description: str
+    rarity: int
+    range: Optional[int]
+    value: int
+
+
 class BootstrapDTO(BaseModel):
     renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
@@ -173,3 +182,4 @@ class BootstrapDTO(BaseModel):
     recipes: RecipeByTypeDTO
     armors: ArmorByTypeDTO
     weapons: WeaponByTypeDTO
+    items: List[ItemDTO]
