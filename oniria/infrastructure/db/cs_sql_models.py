@@ -305,4 +305,30 @@ class ItemDB(Base):
     rarity: Mapped[int] = mapped_column(Integer, nullable=False)
     range: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     value: Mapped[int] = mapped_column(Integer, nullable=False)
-    property_key: Mapped[str] = mapped_column(String(50))
+
+
+class TotemTypeDB(enum.Enum):
+    common = "common"
+    advanced = "advanced"
+
+
+class TotemDB(Base):
+    __tablename__ = "totems"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    type: Mapped[TotemTypeDB] = mapped_column(Enum(TotemTypeDB), nullable=False)
+    needs_awake: Mapped[bool] = mapped_column(Boolean, default=False)
+    needs_sleep: Mapped[bool] = mapped_column(Boolean, default=False)
+    lucidity_points: Mapped[str] = mapped_column(String(5), nullable=False)
+
+
+class MantraDB(Base):
+    __tablename__ = "mantras"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+
+
+class BookDB(Base):
+    __tablename__ = "books"
+
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)

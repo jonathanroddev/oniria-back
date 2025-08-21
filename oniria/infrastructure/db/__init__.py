@@ -40,4 +40,8 @@ from .cs_sql_models import (
     WeaponPropertyDB,
     WeaponPropertyLinkDB,
     ItemDB,
+    TotemTypeDB,
+    TotemDB,
+    MantraDB,
+    BookDB,
 )

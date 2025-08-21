@@ -168,6 +168,7 @@ CREATE TABLE armors_properties_links (
     property_key VARCHAR(50) NOT NULL,
     PRIMARY KEY (armor_key, property_key)
 );
+
 CREATE TYPE weapon_type AS ENUM ('melee_1_hand', 'melee_2_hands', 'ranged', 'arcane');
 
 CREATE TABLE weapons (
@@ -210,6 +211,23 @@ CREATE TABLE items (
     key VARCHAR(50) PRIMARY KEY,
     rarity INT NOT NULL,
     range INT,
-    value INT NOT NULL,
-    property_key VARCHAR(50)
+    value INT NOT NULL
+);
+
+CREATE TYPE totem_type AS ENUM ('common', 'advanced');
+
+CREATE TABLE totems (
+    key VARCHAR(50) PRIMARY KEY,
+    type totem_type NOT NULL,
+    needs_awake BOOLEAN DEFAULT FALSE,
+    needs_sleep BOOLEAN DEFAULT FALSE,
+    lucidity_points VARCHAR(5) NOT NULL
+);
+
+CREATE TABLE mantras (
+    key VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE books (
+    key VARCHAR(50) PRIMARY KEY
 );

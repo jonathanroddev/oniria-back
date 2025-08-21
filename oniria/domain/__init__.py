@@ -26,6 +26,9 @@ from oniria.domain.cs_models import (
     Armor,
     Weapon,
     Item,
+    Totem,
+    Mantra,
+    Book,
 )
 from oniria.domain.exceptions import (
     NotFoundException,
@@ -64,4 +67,7 @@ __all__ = [
     "Armor",
     "Weapon",
     "Item",
+    "Totem",
+    "Mantra",
+    "Book",
 ]

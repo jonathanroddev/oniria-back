@@ -110,3 +110,22 @@ class Item:
     rarity: int
     range: int
     value: int
+
+
+@dataclass
+class Totem:
+    key: str
+    type: str
+    needs_awake: bool
+    needs_sleep: bool
+    lucidity_points: str
+
+
+@dataclass
+class Mantra:
+    key: str
+
+
+@dataclass
+class Book:
+    key: str

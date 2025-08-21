@@ -28,6 +28,10 @@ from oniria.interfaces import (
     WeaponDTO,
     WeaponByTypeDTO,
     ItemDTO,
+    TotemDTO,
+    TotemByTypeDTO,
+    MantraDTO,
+    BookDTO,
 )
 from oniria.infrastructure.db import (
     ExperienceDB,
@@ -56,6 +60,10 @@ from oniria.infrastructure.db import (
     WeaponPropertyDB,
     WeaponPropertyLinkDB,
     ItemDB,
+    TotemTypeDB,
+    TotemDB,
+    MantraDB,
+    BookDB,
 )
 
 
@@ -506,7 +514,7 @@ class ItemMapper:
         display_description = next(
             key["translation"]
             for key in translations["description"]
-            if key["original"] == item.property_key
+            if key["original"] == item.key
         )
         return ItemDTO(
             key=item.key,
@@ -516,3 +524,75 @@ class ItemMapper:
             range=item.range,
             value=item.value,
         )
+
+
+class TotemMapper:
+    @staticmethod
+    def from_entity_to_dto(totem: TotemDB, translations: dict) -> TotemDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == totem.key
+        )
+        display_description = next(
+            key["translation"]
+            for key in translations["description"]
+            if key["original"] == totem.key
+        )
+        return TotemDTO(
+            key=totem.key,
+            display_key=display_key,
+            display_description=display_description,
+            needs_awake=totem.needs_awake,
+            needs_sleep=totem.needs_sleep,
+            lucidity_points=totem.lucidity_points,
+        )
+
+
+class TotemByTypeMapper:
+    @staticmethod
+    def from_entities_to_dto(
+        totems: Sequence[TotemDB], translations: dict
+    ) -> TotemByTypeDTO:
+        common = [
+            TotemMapper.from_entity_to_dto(totem, translations)
+            for totem in totems
+            if totem.type == TotemTypeDB.common
+        ]
+        advanced = [
+            TotemMapper.from_entity_to_dto(totem, translations)
+            for totem in totems
+            if totem.type == TotemTypeDB.advanced
+        ]
+        return TotemByTypeDTO(common=common, advanced=advanced)
+
+
+class MantraMapper:
+    @staticmethod
+    def from_entity_to_dto(mantra: MantraDB, translations: dict) -> MantraDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == mantra.key
+        )
+        display_description = next(
+            key["translation"]
+            for key in translations["description"]
+            if key["original"] == mantra.key
+        )
+        return MantraDTO(
+            key=mantra.key,
+            display_key=display_key,
+            display_description=display_description,
+        )
+
+
+class BookMapper:
+    @staticmethod
+    def from_entity_to_dto(book: BookDB, translations: dict) -> BookDTO:
+        display_key = next(
+            key["translation"]
+            for key in translations["key"]
+            if key["original"] == book.key
+        )
+        return BookDTO(key=book.key, display_key=display_key)

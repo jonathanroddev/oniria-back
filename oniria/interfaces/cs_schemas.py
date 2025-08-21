@@ -170,6 +170,31 @@ class ItemDTO(BaseModel):
     value: int
 
 
+class TotemDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    display_description: str
+    needs_awake: bool
+    needs_sleep: bool
+    lucidity_points: str
+
+
+class TotemByTypeDTO(BaseModel):
+    common: List[TotemDTO]
+    advanced: List[TotemDTO]
+
+
+class MantraDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+    display_description: str
+
+
+class BookDTO(BaseModel):
+    key: constr(max_length=50)
+    display_key: str
+
+
 class BootstrapDTO(BaseModel):
     renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
@@ -183,3 +208,6 @@ class BootstrapDTO(BaseModel):
     armors: ArmorByTypeDTO
     weapons: WeaponByTypeDTO
     items: List[ItemDTO]
+    totems: TotemByTypeDTO
+    mantras: List[MantraDTO]
+    books: List[BookDTO]

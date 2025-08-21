@@ -27,6 +27,10 @@ from oniria.infrastructure.db.cs_sql_models import (
     WeaponPropertyLinkDB,
     WeaponCriticalLinkDB,
     ItemDB,
+    TotemTypeDB,
+    TotemDB,
+    MantraDB,
+    BookDB,
 )
 
 
@@ -170,5 +174,29 @@ class ItemRepository:
     @staticmethod
     def get_all_items(db_session: Session) -> Sequence[ItemDB]:
         stmt = select(ItemDB)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
+
+
+class TotemRepository:
+    @staticmethod
+    def get_all_totems(db_session: Session) -> Sequence[TotemDB]:
+        stmt = select(TotemDB)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
+
+
+class MantraRepository:
+    @staticmethod
+    def get_all_mantras(db_session: Session) -> Sequence[MantraDB]:
+        stmt = select(MantraDB)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
+
+
+class BookRepository:
+    @staticmethod
+    def get_all_books(db_session: Session) -> Sequence[BookDB]:
+        stmt = select(BookDB)
         result = db_session.execute(stmt)
         return result.scalars().all()

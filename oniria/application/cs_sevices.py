@@ -1,6 +1,7 @@
 from gettext import translation
 from typing import List, Sequence, Optional
 
+from google.auth.metrics import token_request_id_token_mds
 from sqlalchemy.orm import Session
 
 from oniria.application.cs_mappers import (
@@ -19,6 +20,9 @@ from oniria.application.cs_mappers import (
     ArmorByTypeMapper,
     WeaponByTypeMapper,
     ItemMapper,
+    TotemByTypeMapper,
+    MantraMapper,
+    BookMapper,
 )
 from oniria.domain import NotFoundException
 from oniria.interfaces import (
@@ -40,6 +44,9 @@ from oniria.interfaces import (
     ArmorByTypeDTO,
     WeaponByTypeDTO,
     ItemDTO,
+    TotemByTypeDTO,
+    MantraDTO,
+    BookDTO,
 )
 from oniria.application import ExperienceMapper, RenownMapper
 from oniria.infrastructure.db.cs_repositories import (
@@ -58,6 +65,9 @@ from oniria.infrastructure.db.cs_repositories import (
     ArmorRepository,
     WeaponRepository,
     ItemRepository,
+    TotemRepository,
+    MantraRepository,
+    BookRepository,
 )
 from oniria.infrastructure.db.repositories import TranslationRepository
 from oniria.infrastructure.db.cs_sql_models import (
@@ -76,6 +86,9 @@ from oniria.infrastructure.db.cs_sql_models import (
     ArmorDB,
     WeaponDB,
     ItemDB,
+    TotemDB,
+    MantraDB,
+    BookDB,
 )
 from oniria.infrastructure.db.sql_models import TranslationDB
 
@@ -118,6 +131,9 @@ class BootstrapService:
         armors: Sequence[ArmorDB] = ArmorRepository.get_all_armors(db_session)
         weapons: Sequence[WeaponDB] = WeaponRepository.get_all_weapons(db_session)
         items: Sequence[ItemDB] = ItemRepository.get_all_items(db_session)
+        totems: Sequence[TotemDB] = TotemRepository.get_all_totems(db_session)
+        mantras: Sequence[MantraDB] = MantraRepository.get_all_mantras(db_session)
+        books: Sequence[BookDB] = BookRepository.get_all_books(db_session)
         translations: Sequence[TranslationDB] = (
             TranslationRepository.get_all_translations_by_language(
                 db_session, lang.lower()
@@ -212,6 +228,17 @@ class BootstrapService:
             items=[
                 ItemMapper.from_entity_to_dto(item, translations_map["items"])
                 for item in items
+            ],
+            totems=TotemByTypeMapper.from_entities_to_dto(
+                totems, translations_map["totems"]
+            ),
+            mantras=[
+                MantraMapper.from_entity_to_dto(mantra, translations_map["mantras"])
+                for mantra in mantras
+            ],
+            books=[
+                BookMapper.from_entity_to_dto(book, translations_map["books"])
+                for book in books
             ],
         )
         return bootstrap

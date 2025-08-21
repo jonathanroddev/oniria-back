@@ -41,6 +41,10 @@ from oniria.interfaces.cs_schemas import (
     WeaponDTO,
     WeaponByTypeDTO,
     ItemDTO,
+    TotemDTO,
+    TotemByTypeDTO,
+    MantraDTO,
+    BookDTO,
 )
 
 __all__ = [
@@ -83,4 +87,8 @@ __all__ = [
     "WeaponDTO",
     "WeaponByTypeDTO",
     "ItemDTO",
+    "TotemDTO",
+    "TotemByTypeDTO",
+    "MantraDTO",
+    "BookDTO",
 ]
