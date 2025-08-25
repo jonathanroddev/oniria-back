@@ -37,7 +37,8 @@ CREATE TABLE games_sessions (
 CREATE TABLE characters_sheets (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "user_uuid" UUID NOT NULL REFERENCES users(uuid),
-    "game_session_uuid" UUID NULL REFERENCES games_sessions(uuid)
+    "game_session_uuid" UUID NULL REFERENCES games_sessions(uuid),
+    "properties" JSONB,
 
 CREATE TABLE masters_workshops (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),

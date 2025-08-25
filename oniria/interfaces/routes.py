@@ -14,6 +14,7 @@ from oniria.interfaces import (
     MasterWorkshopDTO,
     CharacterSheetDTO,
     CharacterSheetRequest,
+    CharacterSheetUpdatePropertiesRequest,
 )
 from oniria.application import (
     UserService,
@@ -115,6 +116,25 @@ def create_character_sheet(
     return CharacterSheetMapper.to_dto_from_domain(
         CharacterSheetService.create_character_sheet(
             user, db_session, character_sheet_request
+        )
+    )
+
+
+@router.put(
+    "/characters-sheets/{character_sheet_uuid}/properties",
+    response_model=CharacterSheetDTO,
+    tags=["campaigns"],
+)
+def update_character_sheet_properties(
+    character_sheet_uuid: str,
+    character_sheet_request: CharacterSheetUpdatePropertiesRequest,
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+):
+    check_permissions(user, "characters_sheets", "write")
+    return CharacterSheetMapper.to_dto_from_domain(
+        CharacterSheetService.update_character_sheet_properties(
+            user, db_session, character_sheet_uuid, character_sheet_request
         )
     )
 

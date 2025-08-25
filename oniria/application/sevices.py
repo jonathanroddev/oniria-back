@@ -20,6 +20,7 @@ from oniria.interfaces import (
     MasterWorkshopRequest,
     CharacterSheetDTO,
     CharacterSheetRequest,
+    CharacterSheetUpdatePropertiesRequest,
 )
 from oniria.application import PlanMapper, UserMapper
 from oniria.infrastructure.db.repositories import (
@@ -281,11 +282,41 @@ class CharacterSheetService:
             uuid=uuid.uuid4(),
             user_uuid=user.uuid,
             game_session_uuid=game_session.uuid,
+            properties=character_sheet_request.properties,
         )
         character_sheet_recorded = CharacterSheetRepository.create_character_sheet(
             db_session, character_sheet_db
         )
         return CharacterSheetMapper.to_domain_from_entity(character_sheet_recorded)
+
+    @staticmethod
+    def update_character_sheet_properties(
+        user: User,
+        db_session: Session,
+        character_sheet_uuid: str,
+        character_sheet_request: CharacterSheetUpdatePropertiesRequest,
+    ) -> CharacterSheet:
+        character_sheet_db: CharacterSheetDB = (
+            CharacterSheetRepository.get_character_sheet_by_uuid(
+                db_session, character_sheet_uuid
+            )
+        )
+        if not character_sheet_db:
+            raise NotFoundException("Character sheet not found")
+        game_session: GameSessionDB = GameSessionRepository.get_game_session_by_uuid(
+            db_session, str(character_sheet_db.game_session.uuid)
+        )
+        if (str(user.uuid) not in str(character_sheet_db.user_uuid)) and (
+            str(user.uuid) not in str(game_session.owner)
+        ):
+            raise ForbiddenException(
+                "User is not allowed to modify this character sheet"
+            )
+        character_sheet_db.properties = character_sheet_request.properties
+        CharacterSheetRepository.update_properties(
+            db_session, character_sheet_db.uuid, character_sheet_request.properties
+        )
+        return CharacterSheetMapper.to_domain_from_entity(character_sheet_db)
 
     @staticmethod
     def get_characters_sheets_by_game_session_uuid(

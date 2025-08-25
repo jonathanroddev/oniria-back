@@ -1,5 +1,5 @@
-from typing import List, Sequence, Optional
-from sqlalchemy import select
+from typing import List, Sequence, Optional, Dict
+from sqlalchemy import select, UUID, update
 from sqlalchemy.orm import Session, selectinload, joinedload
 
 from oniria.infrastructure.db.sql_models import (
@@ -153,6 +153,14 @@ class CharacterSheetRepository:
         return character_sheet
 
     @staticmethod
+    def get_character_sheet_by_uuid(
+        db_session: Session, character_sheet_uuid: str
+    ) -> Optional[CharacterSheetDB]:
+        stmt = select(CharacterSheetDB).filter_by(uuid=character_sheet_uuid)
+        result = db_session.execute(stmt)
+        return result.scalars().first()
+
+    @staticmethod
     def get_character_sheet_by_user_uuid(
         db_session: Session, user_uuid: str
     ) -> Optional[CharacterSheetDB]:
@@ -177,6 +185,17 @@ class CharacterSheetRepository:
         )
         result = db_session.execute(stmt)
         return result.scalars().first()
+
+    @staticmethod
+    def update_properties(db_session: Session, uuid: UUID, properties: Dict):
+        stmt = (
+            update(CharacterSheetDB)
+            .where(CharacterSheetDB.uuid == uuid)
+            .values(properties=properties)
+            .execution_options(synchronize_session="fetch")
+        )
+        db_session.execute(stmt)
+        db_session.commit()
 
 
 class TranslationRepository:

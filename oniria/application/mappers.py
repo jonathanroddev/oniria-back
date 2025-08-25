@@ -159,7 +159,6 @@ class GameSessionMapper:
 
 
 class CharacterSheetMapper:
-    # TODO: Complete all the character sheet fields mapping. Needs a jsonb type field
     @staticmethod
     def to_dto_from_entity(character_sheet: CharacterSheetDB) -> CharacterSheetDTO:
         return CharacterSheetDTO(
@@ -168,6 +167,7 @@ class CharacterSheetMapper:
             game_session=GameSessionMapper.to_dto_from_entity(
                 character_sheet.game_session
             ),
+            properties=character_sheet.properties,
         )
 
     @staticmethod
@@ -178,14 +178,18 @@ class CharacterSheetMapper:
             game_session=GameSessionMapper.to_domain_from_entity(
                 character_sheet.game_session
             ),
+            properties=character_sheet.properties,
         )
 
     @staticmethod
-    def to_dto_from_domain(domain: CharacterSheet) -> CharacterSheetDTO:
+    def to_dto_from_domain(character_sheet: CharacterSheet) -> CharacterSheetDTO:
         return CharacterSheetDTO(
-            uuid=domain.uuid,
-            user_uuid=domain.user_uuid,
-            game_session=GameSessionMapper.to_dto_from_domain(domain.game_session),
+            uuid=character_sheet.uuid,
+            user_uuid=character_sheet.user_uuid,
+            game_session=GameSessionMapper.to_dto_from_domain(
+                character_sheet.game_session
+            ),
+            properties=character_sheet.properties or None,
         )
 
 

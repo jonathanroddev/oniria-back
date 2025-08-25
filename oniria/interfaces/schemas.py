@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 from pydantic import BaseModel, constr, EmailStr
 
 
@@ -48,10 +48,16 @@ class CharacterSheetDTO(BaseModel):
     uuid: str
     user_uuid: str
     game_session: GameSessionDTO
+    properties: Optional[Dict] = None
 
 
 class CharacterSheetRequest(BaseModel):
     game_session: GameSessionRequest
+    properties: Optional[Dict] = None
+
+
+class CharacterSheetUpdatePropertiesRequest(BaseModel):
+    properties: Dict
 
 
 class MasterWorkshopDTO(BaseModel):

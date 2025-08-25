@@ -12,7 +12,7 @@ from sqlalchemy import (
     Text,
     Index,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from uuid import uuid4
 
@@ -202,6 +202,7 @@ class CharacterSheetDB(Base):
     game_session_uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("games_sessions.uuid"), nullable=True
     )
+    properties: Mapped[dict] = mapped_column(JSONB, nullable=True)
 
     user: Mapped["UserDB"] = relationship("UserDB", back_populates="characters_sheets")
     game_session: Mapped[Optional["GameSessionDB"]] = relationship(

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Dict
 
 
 @dataclass
@@ -43,6 +43,7 @@ class CharacterSheet:
     uuid: str
     user_uuid: str
     game_session: GameSession
+    properties: Dict
 
 
 @dataclass
