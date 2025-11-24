@@ -115,13 +115,22 @@ class GameSessionService:
     def create_game_session(
         user: User,
         db_session: Session,
+        master_workshop_uuid: str,
         game_session_request: GameSessionRequest,
     ) -> GameSession:
+        master_workshop_db: Sequence[MasterWorkshopDB] = (
+            MasterWorkshopRepository.get_master_workshop_by_uuid_and_owner(
+                db_session, master_workshop_uuid, user.uuid
+            )
+        )
+        if not master_workshop_db:
+            raise NotFoundException(
+                f"No master workshop found with UUID: {master_workshop_uuid} or user {user.uuid} is not the owner"
+            )
         if not game_session_request.max_players or game_session_request.max_players < 1:
             game_session_request.max_players = 6
         game_session_db: GameSessionDB = GameSessionDB(
             uuid=uuid.uuid4(),
-            owner=user.uuid,
             name=game_session_request.name,
             password=(
                 GameSessionService.hash_password(game_session_request.password)
@@ -129,6 +138,7 @@ class GameSessionService:
                 else None
             ),  # If not provided, it will be considered as public
             max_players=game_session_request.max_players,
+            master_workshop_uuid=uuid.UUID(master_workshop_uuid),
         )
         game_session_recorded: GameSessionDB = (
             GameSessionRepository.create_game_session(db_session, game_session_db)
@@ -136,18 +146,29 @@ class GameSessionService:
         return GameSessionMapper.to_domain_from_entity(game_session_recorded)
 
     @staticmethod
-    def get_game_sessions_by_owner(
-        user: User, db_session: Session
+    def get_game_sessions_by_master_workshop(
+        user: User, db_session: Session, master_workshop_uuid: str
     ) -> List[GameSession]:
+        master_workshop_db: Sequence[MasterWorkshopDB] = (
+            MasterWorkshopRepository.get_master_workshop_by_uuid_and_owner(
+                db_session, master_workshop_uuid, user.uuid
+            )
+        )
+        if not master_workshop_db:
+            raise NotFoundException(
+                f"No master workshop found with UUID: {master_workshop_uuid} or user {user.uuid} is not the owner"
+            )
         game_sessions_entities: Sequence[GameSessionDB] = (
-            GameSessionRepository.get_game_sessions_by_owner(db_session, user.uuid)
+            GameSessionRepository.get_game_sessions_by_master_workhop(
+                db_session, master_workshop_uuid
+            )
         )
         if game_sessions_entities:
             return [
                 GameSessionMapper.to_domain_from_entity(game_session)
                 for game_session in game_sessions_entities
             ]
-        raise NotFoundException("No game sessions found for this user")
+        raise NotFoundException("No game sessions found")
 
     @staticmethod
     def get_game_session_by_uuid_and_owner(
@@ -217,24 +238,9 @@ class MasterWorkshopService:
         db_session: Session,
         master_workshop_request: MasterWorkshopRequest,
     ) -> MasterWorkshop:
-        game_session: GameSession = (
-            GameSessionService.get_game_session_by_uuid_and_owner(
-                db_session, master_workshop_request.game_session_uuid, user
-            )
-        )
-        master_workshop_exists = (
-            MasterWorkshopRepository.get_master_workshop_by_game_session_uuid(
-                db_session, master_workshop_request.game_session_uuid
-            )
-        )
-        if master_workshop_exists:
-            raise ConflictException(
-                "Master workshop already exists for this game session"
-            )
         master_workshop_db = MasterWorkshopDB(
             uuid=uuid.uuid4(),
-            user_uuid=user.uuid,
-            game_session_uuid=game_session.uuid,
+            owner=user.uuid,
         )
         master_workshop_recorded = MasterWorkshopRepository.create_master_workshop(
             db_session, master_workshop_db

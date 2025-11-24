@@ -125,8 +125,8 @@ class GameSessionMapper:
         return GameSessionDTO(
             uuid=str(game_session.uuid),
             name=game_session.name,
-            owner=str(game_session.owner),
             max_players=game_session.max_players,
+            master_workshop_uuid=str(game_session.master_workshop_uuid),
         )
 
     @staticmethod
@@ -135,8 +135,8 @@ class GameSessionMapper:
             uuid=str(game_session.uuid),
             name=game_session.name,
             password=game_session.password,
-            owner=str(game_session.owner),
             max_players=game_session.max_players,
+            master_workshop_uuid=str(game_session.master_workshop_uuid),
         )
 
     @staticmethod
@@ -144,8 +144,8 @@ class GameSessionMapper:
         return GameSessionDTO(
             uuid=game_session.uuid,
             name=game_session.name,
-            owner=game_session.owner,
             max_players=game_session.max_players,
+            master_workshop_uuid=game_session.master_workshop_uuid,
         )
 
     @staticmethod
@@ -153,7 +153,6 @@ class GameSessionMapper:
         return GameSessionDB(
             name=game_session_dto.name,
             password=game_session_dto.password,
-            owner=game_session_dto.owner,
             max_players=game_session_dto.max_players,
         )
 
@@ -198,28 +197,33 @@ class MasterWorkshopMapper:
     def to_dto_from_entity(master_workshop: MasterWorkshopDB) -> MasterWorkshopDTO:
         return MasterWorkshopDTO(
             uuid=str(master_workshop.uuid),
-            user_uuid=str(master_workshop.user_uuid),
-            game_session=GameSessionMapper.to_dto_from_entity(
-                master_workshop.game_session
-            ),
+            owner=str(master_workshop.user_uuid),
+            game_sessions=[
+                GameSessionMapper.to_dto_from_entity(game_session)
+                for game_session in master_workshop.game_sessions
+            ],
         )
 
     @staticmethod
     def to_domain_from_entity(master_workshop: MasterWorkshopDB) -> MasterWorkshop:
         return MasterWorkshop(
             uuid=str(master_workshop.uuid),
-            user_uuid=str(master_workshop.user_uuid),
-            game_session=GameSessionMapper.to_domain_from_entity(
-                master_workshop.game_session
-            ),
+            owner=str(master_workshop.owner),
+            game_sessions=[
+                GameSessionMapper.to_domain_from_entity(game_session)
+                for game_session in master_workshop.game_sessions
+            ],
         )
 
     @staticmethod
     def to_dto_from_domain(domain: MasterWorkshop) -> MasterWorkshopDTO:
         return MasterWorkshopDTO(
             uuid=domain.uuid,
-            user_uuid=domain.user_uuid,
-            game_session=GameSessionMapper.to_dto_from_domain(domain.game_session),
+            owner=domain.owner,
+            game_sessions=[
+                GameSessionMapper.to_dto_from_domain(game_session)
+                for game_session in domain.game_sessions
+            ],
         )
 
 

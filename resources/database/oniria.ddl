@@ -27,11 +27,11 @@ CREATE TABLE user_status (
 
 CREATE TABLE games_sessions (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "owner" UUID NOT NULL REFERENCES users(uuid),
     "name" VARCHAR(50) NOT NULL,
     "password" VARCHAR(250) NULL,
     "max_players" INTEGER NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    "master_workshop_uuid" UUID NOT NULL REFERENCES masters_workshops(uuid) UNIQUE,
 );
 
 CREATE TABLE characters_sheets (
@@ -42,9 +42,8 @@ CREATE TABLE characters_sheets (
 
 CREATE TABLE masters_workshops (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "owner" UUID NOT NULL REFERENCES users(uuid),
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    "user_uuid" UUID NOT NULL REFERENCES users(uuid),
-    "game_session_uuid" UUID NOT NULL REFERENCES games_sessions(uuid) UNIQUE,
 );
 
 CREATE TABLE users (

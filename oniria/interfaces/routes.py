@@ -55,30 +55,6 @@ def get_self_user(
     return UserMapper.to_dto_from_domain(user)
 
 
-@router.post("/games-sessions", response_model=GameSessionDTO, tags=["campaigns"])
-def create_game_session(
-    game_session: GameSessionRequest,
-    db_session: Session = Depends(get_session),
-    user: User = Depends(get_current_user),
-):
-    return GameSessionMapper.to_dto_from_domain(
-        GameSessionService.create_game_session(user, db_session, game_session)
-    )
-
-
-@router.get("/games-sessions", response_model=List[GameSessionDTO], tags=["campaigns"])
-def get_game_sessions_by_owner(
-    db_session: Session = Depends(get_session),
-    user: User = Depends(get_current_user),
-):
-    return [
-        GameSessionMapper.to_dto_from_domain(game_session)
-        for game_session in GameSessionService.get_game_sessions_by_owner(
-            user, db_session
-        )
-    ]
-
-
 @router.post("/masters-workshops", response_model=MasterWorkshopDTO, tags=["campaigns"])
 def create_master_workshop(
     master_workshop_request: MasterWorkshopRequest,
@@ -90,6 +66,42 @@ def create_master_workshop(
             user, db_session, master_workshop_request
         )
     )
+
+
+@router.post(
+    "/masters-workshops/{master_workshop_uuid}/games-sessions",
+    response_model=GameSessionDTO,
+    tags=["campaigns"],
+)
+def create_game_session(
+    master_workshop_uuid: str,
+    game_session: GameSessionRequest,
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+):
+    return GameSessionMapper.to_dto_from_domain(
+        GameSessionService.create_game_session(
+            user, db_session, master_workshop_uuid, game_session
+        )
+    )
+
+
+@router.get(
+    "/masters-workshops/{master_workshop_uuid}/games-sessions",
+    response_model=List[GameSessionDTO],
+    tags=["campaigns"],
+)
+def get_game_sessions_by_master_workshop(
+    master_workshop_uuid: str,
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+):
+    return [
+        GameSessionMapper.to_dto_from_domain(game_session)
+        for game_session in GameSessionService.get_game_sessions_by_master_workshop(
+            user, db_session, master_workshop_uuid
+        )
+    ]
 
 
 @router.get(

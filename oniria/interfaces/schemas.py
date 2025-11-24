@@ -31,9 +31,9 @@ class UserStatusDTO(BaseModel):
 
 class GameSessionDTO(BaseModel):
     uuid: str
-    owner: str
     name: str
     max_players: int
+    master_workshop_uuid: str
 
 
 class GameSessionRequest(BaseModel):
@@ -62,12 +62,12 @@ class CharacterSheetUpdatePropertiesRequest(BaseModel):
 
 class MasterWorkshopDTO(BaseModel):
     uuid: str
-    user_uuid: str
-    game_session: GameSessionDTO
+    owner: str
+    game_sessions: List[GameSessionDTO]
 
 
 class MasterWorkshopRequest(BaseModel):
-    game_session_uuid: str
+    pass
 
 
 class UserDTO(BaseModel):

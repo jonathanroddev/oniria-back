@@ -89,10 +89,12 @@ class GameSessionRepository:
         return game_session
 
     @staticmethod
-    def get_game_sessions_by_owner(
-        db_session: Session, owner_uuid: str
+    def get_game_sessions_by_master_workhop(
+        db_session: Session, master_workshop_uuid: str
     ) -> Sequence[GameSessionDB]:
-        stmt = select(GameSessionDB).filter_by(owner=owner_uuid)
+        stmt = select(GameSessionDB).filter_by(
+            master_workshop_uuid=master_workshop_uuid
+        )
         result = db_session.execute(stmt)
         return result.scalars().all()
 
@@ -134,10 +136,12 @@ class MasterWorkshopRepository:
         return master_workshop
 
     @staticmethod
-    def get_master_workshop_by_game_session_uuid(
-        db_session: Session, game_session_uuid: str
+    def get_master_workshop_by_uuid_and_owner(
+        db_session: Session, master_workshop_uuid: str, owner: str
     ) -> Optional[MasterWorkshopDB]:
-        stmt = select(MasterWorkshopDB).filter_by(game_session_uuid=game_session_uuid)
+        stmt = select(MasterWorkshopDB).filter_by(
+            uuid=master_workshop_uuid, owner=owner
+        )
         result = db_session.execute(stmt)
         return result.scalars().first()
 

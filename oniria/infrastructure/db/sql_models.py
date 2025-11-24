@@ -173,9 +173,6 @@ class GameSessionDB(Base):
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
-    owner: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
-    )
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(250), nullable=True)
     max_players: Mapped[int] = mapped_column(Integer, nullable=False, default=6)
@@ -185,8 +182,14 @@ class GameSessionDB(Base):
     character_sheets: Mapped[Optional[List["CharacterSheetDB"]]] = relationship(
         "CharacterSheetDB", back_populates="game_session"
     )
+    master_workshop_uuid: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("masters_workshops.uuid"),
+        nullable=False,
+        unique=True,
+    )
     master_workshop: Mapped["MasterWorkshopDB"] = relationship(
-        "MasterWorkshopDB", back_populates="game_session"
+        "MasterWorkshopDB", back_populates="game_sessions"
     )
 
 
@@ -216,21 +219,15 @@ class MasterWorkshopDB(Base):
     uuid: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid4
     )
+    owner: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), onupdate=None
     )
-    user_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("users.uuid"), nullable=False
-    )
-    game_session_uuid: Mapped[UUID] = mapped_column(
-        UUID(as_uuid=True),
-        ForeignKey("games_sessions.uuid"),
-        nullable=False,
-        unique=True,
-    )
 
     user: Mapped["UserDB"] = relationship("UserDB", back_populates="masters_workshops")
-    game_session: Mapped["GameSessionDB"] = relationship(
+    game_sessions: Mapped[List["GameSessionDB"]] = relationship(
         "GameSessionDB", back_populates="master_workshop"
     )
 

@@ -27,10 +27,10 @@ class Plan:
 @dataclass
 class GameSession:
     uuid: str
-    owner: str
     name: str
     password: str
     max_players: int
+    master_workshop_uuid: str
 
 
 @dataclass
@@ -49,8 +49,8 @@ class CharacterSheet:
 @dataclass
 class MasterWorkshop:
     uuid: str
-    user_uuid: str
-    game_session: GameSession
+    owner: str
+    game_sessions: List[GameSession]
 
 
 @dataclass
