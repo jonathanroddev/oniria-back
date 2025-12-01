@@ -28,7 +28,7 @@ from oniria.domain import NotFoundException
 from oniria.interfaces import (
     ExperienceDTO,
     RenownDTO,
-    BootstrapDTO,
+    CSBootstrapDTO,
     PhilosophyDTO,
     TemperamentDTO,
     DreamPhaseDTO,
@@ -93,9 +93,9 @@ from oniria.infrastructure.db.cs_sql_models import (
 from oniria.infrastructure.db.sql_models import TranslationDB
 
 
-class BootstrapService:
+class CSBootstrapService:
     @staticmethod
-    def get_bootstrap_data(db_session: Session, lang: str = "es") -> BootstrapDTO:
+    def get_bootstrap_data(db_session: Session, lang: str = "es") -> CSBootstrapDTO:
         renown_entities: Sequence[RenownDB] = RenownRepository.get_all_renowns(
             db_session
         )
@@ -165,7 +165,7 @@ class BootstrapService:
                 for essence in essence_entities
             ],
         )
-        bootstrap: BootstrapDTO = BootstrapDTO(
+        bootstrap: CSBootstrapDTO = CSBootstrapDTO(
             renown=[
                 RenownMapper.from_entity_to_dto(
                     renown,

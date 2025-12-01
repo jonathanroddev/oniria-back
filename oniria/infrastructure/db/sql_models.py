@@ -225,6 +225,7 @@ class MasterWorkshopDB(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), onupdate=None
     )
+    properties: Mapped[dict] = mapped_column(JSONB, nullable=True)
 
     user: Mapped["UserDB"] = relationship("UserDB", back_populates="masters_workshops")
     game_sessions: Mapped[List["GameSessionDB"]] = relationship(

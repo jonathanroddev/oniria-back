@@ -195,7 +195,7 @@ class BookDTO(BaseModel):
     display_key: str
 
 
-class BootstrapDTO(BaseModel):
+class CSBootstrapDTO(BaseModel):
     renown: List[RenownDTO]
     experiences: List[ExperienceDTO]
     philosophies: List[PhilosophyDTO]

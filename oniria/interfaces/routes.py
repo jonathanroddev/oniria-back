@@ -152,18 +152,21 @@ def update_character_sheet_properties(
 
 
 @router.get(
-    "/characters-sheets/games-sessions/{game_session_uuid}",
+    "/masters-workshops/{master_workshop_uuid}/games-sessions/{game_session_uuid}/characters-sheets",
     response_model=List[CharacterSheetDTO],
     tags=["campaigns"],
 )
-def get_characters_sheets_by_game_session_uuid(
+def get_characters_sheets_by_master_workshop_and_game_session(
+    master_workshop_uuid: str,
     game_session_uuid: str,
     db_session: Session = Depends(get_session),
     user: User = Depends(get_current_user),
 ) -> List[CharacterSheetDTO]:
     check_permissions(user, "characters_sheets", "read")
-    character_sheets = CharacterSheetService.get_characters_sheets_by_game_session_uuid(
-        db_session, game_session_uuid, user
+    character_sheets = (
+        CharacterSheetService.get_characters_sheets_by_master_workshop_and_game_session(
+            db_session, master_workshop_uuid, game_session_uuid, user
+        )
     )
     return [
         CharacterSheetMapper.to_dto_from_domain(sheet) for sheet in character_sheets

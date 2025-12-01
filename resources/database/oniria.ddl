@@ -44,6 +44,7 @@ CREATE TABLE masters_workshops (
     "uuid" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "owner" UUID NOT NULL REFERENCES users(uuid),
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    "properties" JSONB,
 );
 
 CREATE TABLE users (
@@ -71,6 +72,7 @@ CREATE TABLE translations (
     PRIMARY KEY (table_name, element_key, property, lang)
 );
 
+-- Characters Sheets related tables
 CREATE TABLE renown (
     "key" VARCHAR(50) PRIMARY KEY NOT NULL,
     "level" INTEGER NOT NULL,
@@ -230,4 +232,153 @@ CREATE TABLE mantras (
 
 CREATE TABLE books (
     key VARCHAR(50) PRIMARY KEY
+);
+
+-- Masters Workshops related tables
+CREATE TYPE objective_type AS ENUM ('motive', 'action', 'target', 'need', 'status');
+CREATE TABLE objectives (
+    key VARCHAR(50) PRIMARY KEY,
+    type objective_type NOT NULL,
+    dice VARCHAR(10) NOT NULL,
+    roll INT NOT NULL,
+
+    -- To ensure uniqueness of the roll within the type
+    CONSTRAINT uq_objective_type_roll UNIQUE (type, roll)
+);
+
+CREATE TYPE commission_type AS ENUM ('patron', 'condition');
+CREATE TABLE commissions (
+    key VARCHAR(50) PRIMARY KEY,
+    type objective_type NOT NULL,
+    dice VARCHAR(10) NOT NULL,
+    roll INT NOT NULL,
+
+    -- To ensure uniqueness of the roll within the type
+    CONSTRAINT uq_commission_type_roll UNIQUE (type, roll)
+);
+
+CREATE TABLE factions (
+    roll INT PRIMARY KEY,
+    dice VARCHAR(10) NOT NULL,
+    "type" VARCHAR(50) NOT NULL UNIQUE,
+    ideology VARCHAR(50) NOT NULL UNIQUE,
+    resource VARCHAR(50) NOT NULL UNIQUE,
+    "limit" VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TYPE npc_trait_type AS ENUM ('appearance', 'skin', 'facial', 'hair', 'attire', 'voice', 'attitude', 'defect', 'profession', 'problem');
+CREATE TABLE npc_traits (
+    key VARCHAR(50) PRIMARY KEY,
+    type npc_trait_type NOT NULL,
+    dice VARCHAR(10) NOT NULL,
+    roll INT NOT NULL,
+
+    -- To ensure uniqueness of the roll within the type
+    CONSTRAINT uq_npc_trait_type_roll UNIQUE (type, roll)
+);
+
+CREATE TABLE npc_names (
+    roll INT PRIMARY KEY,
+    dice VARCHAR(10) NOT NULL DEFAULT '1d100',
+    name VARCHAR(50) NOT NULL,
+    surname VARCHAR(50) NOT NULL
+);
+
+CREATE TYPE scenario_type AS ENUM ('location', 'concept');
+CREATE TABLE scenarios (
+    roll INT NOT NULL,
+    dice VARCHAR(10) NOT NULL DEFAULT '1d20',
+    type scenario_type NOT NULL,
+    element_key VARCHAR(50) PRIMARY KEY,
+
+    -- To ensure uniqueness of the roll within the type
+    CONSTRAINT uq_scenario_type_roll UNIQUE (type, roll)
+);
+
+CREATE TYPE dungeon_aspect_type AS ENUM ('ascendancy', 'usage', 'content', 'threat', 'value', 'context');
+CREATE TABLE dungeon_aspects (
+    roll INT NOT NULL,
+    dice VARCHAR(10) NOT NULL DEFAULT '1d10',
+    type dungeon_aspect_type NOT NULL,
+    aspect_key VARCHAR(50) PRIMARY KEY,
+
+    -- To ensure uniqueness of the roll within the type
+    CONSTRAINT uq_aspect_type_roll UNIQUE (type, roll)
+);
+
+CREATE TYPE conflict_entity_type AS ENUM ('entity1', 'entity2');
+CREATE TABLE conflict_entities (
+    roll INT NOT NULL,
+    dice VARCHAR(10) NOT NULL DEFAULT '1d20',
+    type conflict_entity_type NOT NULL,
+    key VARCHAR(50) PRIMARY KEY,
+
+    CONSTRAINT uq_roll_entity_type UNIQUE (roll, type)
+);
+
+CREATE TABLE random_events (
+    roll INT PRIMARY KEY,
+    dice VARCHAR(10) NOT NULL DEFAULT '1d20',
+    event_key VARCHAR(50) NOT NULL,
+
+    CONSTRAINT uq_event_roll UNIQUE (event_key)
+);
+
+CREATE TYPE tone_modifier_type AS ENUM ('fear', 'hope');
+CREATE TABLE tone_modifiers (
+    roll INT NOT NULL,
+    dice VARCHAR(10) NOT NULL DEFAULT '1d10',
+    type tone_modifier_type NOT NULL,
+    modifier_key VARCHAR(50) PRIMARY KEY,
+
+    CONSTRAINT uq_modifier_type_roll UNIQUE (type, roll)
+);
+
+CREATE TYPE reward_type AS ENUM ('object_type', 'origin', 'creation', 'effect', 'side_effect');
+CREATE TABLE rewards (
+    key VARCHAR(100) PRIMARY KEY,
+    type reward_type NOT NULL,
+    dice VARCHAR(10) NOT NULL,
+    roll INT NOT NULL,
+
+    CONSTRAINT uq_type_roll UNIQUE (type, roll)
+);
+
+CREATE TABLE enemies (
+    key VARCHAR(50) PRIMARY KEY,
+
+    -- Threshold (Umbral)
+    threshold_min VARCHAR(10) NOT NULL,
+    threshold_max VARCHAR(10) NOT NULL,
+
+    -- Danger (Peligro)
+    danger_min VARCHAR(10) NOT NULL,
+    danger_max VARCHAR(10),
+
+    -- Endurance (Aguante)
+    endurance_min VARCHAR(10) NOT NULL,
+    endurance_max VARCHAR(10) NOT NULL,
+
+    -- Stamina (Estamina)
+    stamina_min VARCHAR(10) NOT NULL,
+    stamina_max VARCHAR(10) NOT NULL,
+
+    -- Weakness (Debilidades)
+    weakness_min VARCHAR(10) NOT NULL,
+    weakness_max VARCHAR(10) NOT NULL,
+
+    -- Strength (Fortalezas) - NUEVO: 0-1
+    strength_min VARCHAR(10) NOT NULL,
+    strength_max VARCHAR(10) NOT NULL,
+
+    -- Special (Special)
+    special_min VARCHAR(10) NOT NULL,
+    special_max VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE enemies_subtypes (
+    key VARCHAR(50) PRIMARY KEY,
+    type_key VARCHAR(50) NOT NULL,
+
+    FOREIGN KEY (type_key) REFERENCES enemies(key)
 );

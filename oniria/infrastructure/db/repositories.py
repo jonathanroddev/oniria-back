@@ -99,12 +99,12 @@ class GameSessionRepository:
         return result.scalars().all()
 
     @staticmethod
-    def get_game_session_by_uuid_and_owner(
-        db_session: Session, uuid: str, owner_uuid: str
+    def get_game_session_by_uuid(
+        db_session: Session, uuid: str
     ) -> Optional[GameSessionDB]:
         stmt = (
             select(GameSessionDB)
-            .filter_by(uuid=uuid, owner=owner_uuid)
+            .filter_by(uuid=uuid)
             .options(selectinload(GameSessionDB.master_workshop))
         )
         result = db_session.execute(stmt)
