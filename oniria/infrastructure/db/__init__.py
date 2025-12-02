@@ -45,3 +45,27 @@ from .cs_sql_models import (
     MantraDB,
     BookDB,
 )
+
+from .mw_sql_models import (
+    ObjectiveType,
+    ObjectiveDB,
+    CommissionType,
+    CommissionDB,
+    FactionDB,
+    NPCTraitType,
+    NPCTraitDB,
+    NPCNameDB,
+    ScenarioType,
+    ScenarioDB,
+    DungeonAspectType,
+    DungeonAspectDB,
+    ConflictEntityType,
+    ConflictEntityDB,
+    RandomEventDB,
+    ToneModifierType,
+    ToneModifierDB,
+    RewardType,
+    RewardDB,
+    EnemyDB,
+    EnemySubTypeDB,
+)

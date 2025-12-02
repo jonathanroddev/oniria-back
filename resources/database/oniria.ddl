@@ -286,10 +286,10 @@ CREATE TABLE npc_names (
 
 CREATE TYPE scenario_type AS ENUM ('location', 'concept');
 CREATE TABLE scenarios (
+    key VARCHAR(50) PRIMARY KEY,
     roll INT NOT NULL,
     dice VARCHAR(10) NOT NULL DEFAULT '1d20',
     type scenario_type NOT NULL,
-    element_key VARCHAR(50) PRIMARY KEY,
 
     -- To ensure uniqueness of the roll within the type
     CONSTRAINT uq_scenario_type_roll UNIQUE (type, roll)
@@ -297,10 +297,10 @@ CREATE TABLE scenarios (
 
 CREATE TYPE dungeon_aspect_type AS ENUM ('ascendancy', 'usage', 'content', 'threat', 'value', 'context');
 CREATE TABLE dungeon_aspects (
+    key VARCHAR(50) PRIMARY KEY,
     roll INT NOT NULL,
     dice VARCHAR(10) NOT NULL DEFAULT '1d10',
     type dungeon_aspect_type NOT NULL,
-    aspect_key VARCHAR(50) PRIMARY KEY,
 
     -- To ensure uniqueness of the roll within the type
     CONSTRAINT uq_aspect_type_roll UNIQUE (type, roll)
@@ -317,19 +317,19 @@ CREATE TABLE conflict_entities (
 );
 
 CREATE TABLE random_events (
+    key VARCHAR(50) NOT NULL,
     roll INT PRIMARY KEY,
     dice VARCHAR(10) NOT NULL DEFAULT '1d20',
-    event_key VARCHAR(50) NOT NULL,
 
-    CONSTRAINT uq_event_roll UNIQUE (event_key)
+    CONSTRAINT uq_event_roll UNIQUE (key)
 );
 
 CREATE TYPE tone_modifier_type AS ENUM ('fear', 'hope');
 CREATE TABLE tone_modifiers (
+    key VARCHAR(50) PRIMARY KEY,
     roll INT NOT NULL,
     dice VARCHAR(10) NOT NULL DEFAULT '1d10',
     type tone_modifier_type NOT NULL,
-    modifier_key VARCHAR(50) PRIMARY KEY,
 
     CONSTRAINT uq_modifier_type_roll UNIQUE (type, roll)
 );
@@ -348,32 +348,32 @@ CREATE TABLE enemies (
     key VARCHAR(50) PRIMARY KEY,
 
     -- Threshold (Umbral)
-    threshold_min VARCHAR(10) NOT NULL,
-    threshold_max VARCHAR(10) NOT NULL,
+    threshold_min INT,
+    threshold_max INT,
 
     -- Danger (Peligro)
-    danger_min VARCHAR(10) NOT NULL,
-    danger_max VARCHAR(10),
+    danger_min INT,
+    danger_max INT,
 
     -- Endurance (Aguante)
-    endurance_min VARCHAR(10) NOT NULL,
-    endurance_max VARCHAR(10) NOT NULL,
+    endurance_min INT,
+    endurance_max INT,
 
     -- Stamina (Estamina)
-    stamina_min VARCHAR(10) NOT NULL,
-    stamina_max VARCHAR(10) NOT NULL,
+    stamina_min INT,
+    stamina_max INT,
 
     -- Weakness (Debilidades)
-    weakness_min VARCHAR(10) NOT NULL,
-    weakness_max VARCHAR(10) NOT NULL,
+    weakness_min INT,
+    weakness_max INT,
 
     -- Strength (Fortalezas) - NUEVO: 0-1
-    strength_min VARCHAR(10) NOT NULL,
-    strength_max VARCHAR(10) NOT NULL,
+    strength_min INT,
+    strength_max INT,
 
     -- Special (Special)
-    special_min VARCHAR(10) NOT NULL,
-    special_max VARCHAR(10) NOT NULL
+    special_min INT,
+    special_max INT
 );
 
 CREATE TABLE enemies_subtypes (

@@ -768,7 +768,7 @@ INSERT INTO commissions (key, type, dice, roll) VALUES
 ('comm-cond-double-secret',     'condition', 'd66', 65),
 ('comm-cond-evade',             'condition', 'd66', 66);
 
-INSERT INTO factions (roll, dice, type, ideology, resource, limit) VALUES
+INSERT INTO factions (roll, dice, type, ideology, resource, "limit") VALUES
 (1, '1d6', 'faction-established', 'ideology-tradition', 'resource-expert-npc', 'limit-social-unrest'),
 (2, '1d6', 'faction-criminal',    'ideology-wealth',    'resource-infiltrated', 'limit-material-scarcity'),
 (3, '1d6', 'faction-invading',    'ideology-conquer',    'resource-money',       'limit-has-mole'),
@@ -788,7 +788,7 @@ INSERT INTO npc_traits (key, type, dice, roll) VALUES
 ('appearance-light', 'appearance', '1d12', 9),
 ('appearance-agile', 'appearance', '1d12', 10),
 ('appearance-flexible', 'appearance', '1d12', 11),
-('appearance-bony', 'appearance', '1d12', 12)
+('appearance-bony', 'appearance', '1d12', 12),
 
 ('skin-scarred', 'skin', '1d12', 1),
 ('skin-brown', 'skin', '1d12', 2),
@@ -801,7 +801,7 @@ INSERT INTO npc_traits (key, type, dice, roll) VALUES
 ('skin-silky', 'skin', '1d12', 9),
 ('skin-dry', 'skin', '1d12', 10),
 ('skin-wrinkled', 'skin', '1d12', 11),
-('skin-yellowish', 'skin', '1d12', 12)
+('skin-yellowish', 'skin', '1d12', 12),
 
 ('facial-impassible', 'facial', '1d12', 1),
 ('facial-haggard', 'facial', '1d12', 2),
@@ -814,7 +814,7 @@ INSERT INTO npc_traits (key, type, dice, roll) VALUES
 ('facial-disfigured', 'facial', '1d12', 9),
 ('facial-attractive', 'facial', '1d12', 10),
 ('facial-toothless', 'facial', '1d12', 11),
-('facial-cold', 'facial', '1d12', 12)
+('facial-cold', 'facial', '1d12', 12),
 
 ('hair-bald', 'hair', '1d12', 1),
 ('hair-braided', 'hair', '1d12', 2),
@@ -827,7 +827,7 @@ INSERT INTO npc_traits (key, type, dice, roll) VALUES
 ('hair-long-ponytail', 'hair', '1d12', 9),
 ('hair-curly', 'hair', '1d12', 10),
 ('hair-frizzy', 'hair', '1d12', 11),
-('hair-dyed', 'hair', '1d12', 12)
+('hair-dyed', 'hair', '1d12', 12),
 
 ('attire-old-fashioned', 'attire', '1d12', 1),
 ('attire-ragged', 'attire', '1d12', 2),
@@ -840,7 +840,7 @@ INSERT INTO npc_traits (key, type, dice, roll) VALUES
 ('attire-worn', 'attire', '1d12', 9),
 ('attire-ostentatious', 'attire', '1d12', 10),
 ('attire-intriguing', 'attire', '1d12', 11),
-('attire-faded', 'attire', '1d12', 12)
+('attire-faded', 'attire', '1d12', 12),
 
 ('voice-mocking', 'voice', '1d12', 1),
 ('voice-boring', 'voice', '1d12', 2),
@@ -853,7 +853,7 @@ INSERT INTO npc_traits (key, type, dice, roll) VALUES
 ('voice-academic', 'voice', '1d12', 9),
 ('voice-sensual', 'voice', '1d12', 10),
 ('voice-slang', 'voice', '1d12', 11),
-('voice-singing', 'voice', '1d12', 12)
+('voice-singing', 'voice', '1d12', 12),
 
 ('attitude-brave', 'attitude', '1d12', 1),
 ('attitude-polite', 'attitude', '1d12', 2),
@@ -866,7 +866,7 @@ INSERT INTO npc_traits (key, type, dice, roll) VALUES
 ('attitude-devout', 'attitude', '1d12', 9),
 ('attitude-cautious', 'attitude', '1d12', 10),
 ('attitude-scared', 'attitude', '1d12', 11),
-('attitude-anxious', 'attitude', '1d12', 12)
+('attitude-anxious', 'attitude', '1d12', 12),
 
 ('defect-selfish', 'defect', '1d12', 1),
 ('defect-aggressive', 'defect', '1d12', 2),
@@ -879,7 +879,7 @@ INSERT INTO npc_traits (key, type, dice, roll) VALUES
 ('defect-careless', 'defect', '1d12', 9),
 ('defect-uneducated', 'defect', '1d12', 10),
 ('defect-bitter', 'defect', '1d12', 11),
-('defect-cruel', 'defect', '1d12', 12)
+('defect-cruel', 'defect', '1d12', 12),
 
 ('profession-mariner', 'profession', '1d12', 1),
 ('profession-beggar', 'profession', '1d12', 2),
@@ -892,7 +892,7 @@ INSERT INTO npc_traits (key, type, dice, roll) VALUES
 ('profession-artist', 'profession', '1d12', 9),
 ('profession-soldier', 'profession', '1d12', 10),
 ('profession-student', 'profession', '1d12', 11),
-('profession-diviner', 'profession', '1d12', 12)
+('profession-diviner', 'profession', '1d12', 12),
 
 ('problem-disoriented', 'problem', '1d12', 1),
 ('problem-extorted', 'problem', '1d12', 2),
@@ -1009,7 +1009,7 @@ INSERT INTO npc_names (roll, dice, name, surname) VALUES
 (99, '1d100', 'Helyra', 'Hojafuego'),
 (100, '1d100', 'Taylin', 'Cabacrin');
 
-INSERT INTO scenarios (roll, dice, type, element_key) VALUES
+INSERT INTO scenarios (roll, dice, type, key) VALUES
 (1, '1d20', 'location', 'location-tower'),
 (2, '1d20', 'location', 'location-castle'),
 (3, '1d20', 'location', 'location-village'),
@@ -1052,7 +1052,7 @@ INSERT INTO scenarios (roll, dice, type, element_key) VALUES
 (19, '1d20', 'concept', 'concept-draconids'),
 (20, '1d20', 'concept', 'concept-combine');
 
-INSERT INTO dungeon_aspects (roll, dice, type, aspect_key) VALUES
+INSERT INTO dungeon_aspects (roll, dice, type, key) VALUES
 (1, '1d10', 'ascendancy', 'ascendancy-mine'),
 (2, '1d10', 'ascendancy', 'ascendancy-ruined-prison'),
 (3, '1d10', 'ascendancy', 'ascendancy-lost-cult-shrine'),
@@ -1162,7 +1162,7 @@ INSERT INTO conflict_entities (roll, dice, type, key) VALUES
 (19, '1d20', 'entity2', 'entity2-roll-x2'),
 (20, '1d20', 'entity2', 'entity2-roll-x3');
 
-INSERT INTO random_events (roll, dice, event_key) VALUES
+INSERT INTO random_events (roll, dice, key) VALUES
 (1, '1d20', 'event-minion-combat'),
 (2, '1d20', 'event-elite-combat'),
 (3, '1d20', 'event-boss-combat'),
@@ -1184,7 +1184,7 @@ INSERT INTO random_events (roll, dice, event_key) VALUES
 (19, '1d20', 'event-npc-secret'),
 (20, '1d20', 'event-combine');
 
-INSERT INTO tone_modifiers (roll, dice, type, modifier_key) VALUES
+INSERT INTO tone_modifiers (roll, dice, type, key) VALUES
 (1, '1d10', 'fear', 'fear-cause-wounds'),
 (2, '1d10', 'fear', 'fear-lose-loot'),
 (3, '1d10', 'fear', 'fear-npc-danger'),
@@ -1258,31 +1258,31 @@ INSERT INTO enemies (
     special_min, special_max
 ) VALUES
 ('minion',
- '5', '10',
- '1', '1',
- '1', '1',
- '2', '3',
- '0', '1',
- '0', '1',
- '0', '2'),
+ 5, 10,
+ 1, 1,
+ 1, 1,
+ 2, 3,
+ 0, 1,
+ 0, 1,
+ 0, 2),
 
 ('elite',
- '12', '15',
- '2', '5',
- '3', '8',
- '4', '4',
- '1', '2',
- '0', '1',
- '3', '5'),
+ 12, 15,
+ 2, 5,
+ 3, 8,
+ 4, 4,
+ 1, 2,
+ 0, 1,
+ 3, 5),
 
 ('boss',
- '15', '20',
- '3', NULL,
- '10', '15',
- '6', '8',
- '2', '3',
- '0', '1',
- '4', '6');
+ 15, 20,
+ 3, NULL,
+ 10, 15,
+ 6, 8,
+ 2, 3,
+ 0, 1,
+ 4, 6);
 
  INSERT INTO enemies_subtypes (key, type_key) VALUES
 ('sub_minion_infantry', 'minion'),
@@ -2066,7 +2066,7 @@ INSERT INTO translations (table_name, element_key, property, lang, display_text)
 ('books', 'famous_onironauts', 'key', 'es', 'Registro de Onironautas famosos o conocidos.'),
 ('books', 'oniria_historical_annals', 'key', 'es', 'Anales con los eventos históricos de Oniria.'),
 ('books', 'faction_treatises', 'key', 'es', 'Tratados sobre facciones activas en Oniria y política entre Facciones.'),
-('books', 'mysterious_artifacts_catalog', 'key', 'es', 'Catálogos sobre los artefactos más misteriosos de Oniria.')
+('books', 'mysterious_artifacts_catalog', 'key', 'es', 'Catálogos sobre los artefactos más misteriosos de Oniria.'),
 
 ('objectives', 'obj_motive_oath',     'key', 'es', 'Juramento/Cobardía'),
 ('objectives', 'obj_motive_love',     'key', 'es', 'Amor/Despecho'),
@@ -2175,7 +2175,7 @@ INSERT INTO translations (table_name, element_key, property, lang, display_text)
 ('commissions', 'comm-cond-trap',              'key', 'es', 'El encargo es una trampa'),
 ('commissions', 'comm-cond-double-rounds',     'key', 'es', 'Doble: XX terminar antes de X rondas'),
 ('commissions', 'comm-cond-double-secret',     'key', 'es', 'Doble: XX y EN SECRETO'),
-('commissions', 'comm-cond-evade',             'key', 'es', 'Evadir a enemigo invencible')
+('commissions', 'comm-cond-evade',             'key', 'es', 'Evadir a enemigo invencible'),
 
 ('factions', 'faction-established', 'key', 'es', 'Poder establecido'),
 ('factions', 'faction-criminal',    'key', 'es', 'Grupo criminal'),
