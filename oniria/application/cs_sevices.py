@@ -134,6 +134,7 @@ class CSBootstrapService:
         totems: Sequence[TotemDB] = TotemRepository.get_all_totems(db_session)
         mantras: Sequence[MantraDB] = MantraRepository.get_all_mantras(db_session)
         books: Sequence[BookDB] = BookRepository.get_all_books(db_session)
+        # TODO: Isolate translations fetching to a separate service
         translations: Sequence[TranslationDB] = (
             TranslationRepository.get_all_translations_by_language(
                 db_session, lang.lower()
@@ -165,7 +166,7 @@ class CSBootstrapService:
                 for essence in essence_entities
             ],
         )
-        bootstrap: CSBootstrapDTO = CSBootstrapDTO(
+        return CSBootstrapDTO(
             renown=[
                 RenownMapper.from_entity_to_dto(
                     renown,
@@ -241,4 +242,3 @@ class CSBootstrapService:
                 for book in books
             ],
         )
-        return bootstrap

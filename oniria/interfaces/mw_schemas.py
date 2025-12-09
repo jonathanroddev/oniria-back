@@ -34,9 +34,13 @@ class CommissionByTypeDTO(BaseModel):
 
 
 class FactionDTO(MWCommonDTO):
+    key: str
     ideology: str
+    display_ideology: str
     resource: str
+    display_resource: str
     limit: str
+    display_limit: str
 
 
 class NPCTraitDTO(MWCommonWithKeyDTO):
@@ -127,20 +131,20 @@ class EnemyDTO(BaseModel):
     key: constr(max_length=50)
     display_key: str
     subtypes: List[EnemySubtypeDTO]
-    threshold_min: int
-    threshold_max: int
-    danger_min: int
-    danger_max: int
-    endurance_min: int
-    endurance_max: int
-    stamina_min: int
-    stamina_max: int
-    weakness_min: int
-    weakness_max: int
-    strength_min: int
-    strength_max: int
-    special_min: int
-    special_max: int
+    threshold_min: Optional[int]
+    threshold_max: Optional[int]
+    danger_min: Optional[int]
+    danger_max: Optional[int]
+    endurance_min: Optional[int]
+    endurance_max: Optional[int]
+    stamina_min: Optional[int]
+    stamina_max: Optional[int]
+    weakness_min: Optional[int]
+    weakness_max: Optional[int]
+    strength_min: Optional[int]
+    strength_max: Optional[int]
+    special_min: Optional[int]
+    special_max: Optional[int]
 
 
 class MWBootstrapDTO(BaseModel):

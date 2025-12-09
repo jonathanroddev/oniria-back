@@ -22,6 +22,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 from oniria.interfaces.routes import router as auth_routes
 from oniria.interfaces.cs_routes import router as cs_routes
+from oniria.interfaces.mw_routes import router as mw_routes
 
 
 def create_tables():
@@ -69,6 +70,7 @@ def get_application() -> FastAPI:
     )
     app.include_router(auth_routes, prefix=prefix)
     app.include_router(cs_routes, prefix=prefix)
+    app.include_router(mw_routes, prefix=prefix)
     return app
 
 

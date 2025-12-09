@@ -151,16 +151,35 @@ class FactionMapper:
     ) -> FactionDTO:
         display_key = next(
             key["translation"]
+            for key in translations["key"]
+            if key["original"] == faction.type
+        )
+        display_ideology = next(
+            key["translation"]
             for key in translations["ideology"]
             if key["original"] == faction.ideology
         )
+        display_resource = next(
+            key["translation"]
+            for key in translations["resource"]
+            if key["original"] == faction.resource
+        )
+        display_limit = next(
+            key["translation"]
+            for key in translations["limit"]
+            if key["original"] == faction.limit
+        )
         return FactionDTO(
+            key=faction.type,
             dice=faction.dice,
             roll=faction.roll,
             display_key=display_key,
             ideology=faction.ideology,
+            display_ideology=display_ideology,
             resource=faction.resource,
+            display_resource=display_resource,
             limit=faction.limit,
+            display_limit=display_limit,
         )
 
 
@@ -535,14 +554,14 @@ class EnemySubtypeMapper:
 
 class EnemyMapper:
     @staticmethod
-    def from_entity_to_dto(enemy: EnemyDB, translations: dict) -> EnemyDTO:
+    def from_entity_to_dto(enemy: EnemyDB, translations: List[dict]) -> EnemyDTO:
         display_key = next(
             key["translation"]
-            for key in translations["key"]
+            for key in translations[0]["key"]
             if key["original"] == enemy.key
         )
         subtypes = [
-            EnemySubtypeMapper.from_entity_to_dto(subtype, translations)
+            EnemySubtypeMapper.from_entity_to_dto(subtype, translations[1])
             for subtype in enemy.subtypes
         ]
         return EnemyDTO(
