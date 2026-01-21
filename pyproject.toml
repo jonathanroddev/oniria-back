@@ -22,7 +22,9 @@ bcrypt = "^4.3.0"
 devtools = "^0.12.2"
 pytest = "^8.3.3"
 pytest-cov = "^6.0.0"
+pytest-mock = "^3.15.1"
 black = "^25.1.0"
+testcontainers = "^4.14.0"
 
 [tool.poetry.scripts]
 start = "oniria.__main__:start"

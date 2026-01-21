@@ -324,9 +324,14 @@ Routers are loaded modularly and mounted in `__main__.py` based on the hexagonal
 
 ---
 
-## 🧪 Testing (Coming Soon)
+## 🧪 Testing
 
-Unit and integration tests will be added with `pytest`.
+Unit and integration tests are added with `pytest`.
+```console
+ poetry run pytest
+ poetry run pytest --cov
+ poetry run pytest --cov --cov-report term-missing
+```
 
 ---
 
