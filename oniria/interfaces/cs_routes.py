@@ -11,7 +11,7 @@ from oniria.interfaces import (
     CSBootstrapDTO,
     CharacterSheetDTO,
     CharacterSheetRequest,
-    CharacterSheetUpdatePropertiesRequest,
+    UpdatePropertiesRequest,
 )
 
 from oniria.infrastructure.db import get_session
@@ -53,19 +53,32 @@ def create_character_sheet(
 )
 def update_character_sheet_properties(
     character_sheet_uuid: str,
-    character_sheet_request: CharacterSheetUpdatePropertiesRequest,
+    update_properties_request: UpdatePropertiesRequest,
     db_session: Session = Depends(get_session),
     user: User = Depends(get_current_user),
 ):
     check_permissions(user, "characters_sheets", "write")
     return CharacterSheetMapper.to_dto_from_domain(
         CharacterSheetService.update_character_sheet_properties(
-            user, db_session, character_sheet_uuid, character_sheet_request
+            user, db_session, character_sheet_uuid, update_properties_request
         )
     )
 
 
-# TODO: Create endpoint to get character sheets of a user
+@router.get(
+    "/characters-sheets", response_model=List[CharacterSheetDTO], tags=["campaigns"]
+)
+def get_character_sheet_by_user(
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> List[CharacterSheetDTO]:
+    check_permissions(user, "characters_sheets", "read")
+    character_sheets = CharacterSheetService.get_character_sheet_by_user(
+        db_session, user
+    )
+    return [
+        CharacterSheetMapper.to_dto_from_domain(sheet) for sheet in character_sheets
+    ]
 
 
 @router.get(

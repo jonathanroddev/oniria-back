@@ -52,6 +52,7 @@ from oniria.interfaces import (
     MWBootstrapDTO,
     MasterWorkshopRequest,
     GameSessionRequest,
+    UpdatePropertiesRequest,
 )
 from oniria.infrastructure.db.mw_repositories import (
     ObjectiveRepository,
@@ -69,6 +70,8 @@ from oniria.infrastructure.db.mw_repositories import (
 )
 from oniria.infrastructure.db.repositories import (
     TranslationRepository,
+)
+from oniria.infrastructure.db.mw_repositories import (
     MasterWorkshopRepository,
     GameSessionRepository,
 )
@@ -255,7 +258,7 @@ class GameSessionService:
                 f"No master workshop found with UUID: {master_workshop_uuid} or user {user.uuid} is not the owner"
             )
         game_sessions_entities: Sequence[GameSessionDB] = (
-            GameSessionRepository.get_game_sessions_by_master_workhop(
+            GameSessionRepository.get_game_sessions_by_master_workshop(
                 db_session, master_workshop_uuid
             )
         )
@@ -343,3 +346,27 @@ class MasterWorkshopService:
             db_session, master_workshop_db
         )
         return MasterWorkshopMapper.to_domain_from_entity(master_workshop_recorded)
+
+    @staticmethod
+    def update_master_workshop_properties(
+        user: User,
+        db_session: Session,
+        master_workshop_uuid: str,
+        update_properties_request: UpdatePropertiesRequest,
+    ) -> MasterWorkshop:
+        master_workshop_db: Optional[MasterWorkshopDB] = (
+            MasterWorkshopRepository.get_master_workshop_by_uuid_and_owner(
+                db_session, master_workshop_uuid, user.uuid
+            )
+        )
+        if not master_workshop_db:
+            raise NotFoundException(
+                f"No master workshop found with UUID: {master_workshop_uuid} or user {user.uuid} is not the owner"
+            )
+        master_workshop_db.properties = update_properties_request.properties
+        MasterWorkshopRepository.update_properties(
+            db_session,
+            uuid.UUID(master_workshop_uuid),
+            update_properties_request.properties,
+        )
+        return MasterWorkshopMapper.to_domain_from_entity(master_workshop_db)

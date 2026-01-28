@@ -1,7 +1,8 @@
-from typing import List, Sequence, Optional
-from sqlalchemy import select
+from typing import List, Sequence, Optional, Dict
+from sqlalchemy import select, UUID, update
 from sqlalchemy.orm import Session, selectinload, joinedload
 
+from oniria.infrastructure.db import CharacterSheetDB
 from oniria.infrastructure.db.cs_sql_models import (
     RenownDB,
     ExperienceDB,
@@ -32,6 +33,70 @@ from oniria.infrastructure.db.cs_sql_models import (
     MantraDB,
     BookDB,
 )
+
+
+class CharacterSheetRepository:
+    @staticmethod
+    def create_character_sheet(
+        db_session: Session, character_sheet: CharacterSheetDB
+    ) -> CharacterSheetDB:
+        db_session.add(character_sheet)
+        db_session.commit()
+        db_session.refresh(character_sheet)
+        return character_sheet
+
+    @staticmethod
+    def get_character_sheet_by_uuid(
+        db_session: Session, character_sheet_uuid: str
+    ) -> Optional[CharacterSheetDB]:
+        stmt = select(CharacterSheetDB).filter_by(uuid=character_sheet_uuid)
+        result = db_session.execute(stmt)
+        return result.scalars().first()
+
+    @staticmethod
+    def get_character_sheet_by_user_uuid(
+        db_session: Session, user_uuid: str
+    ) -> Optional[CharacterSheetDB]:
+        stmt = select(CharacterSheetDB).filter_by(user_uuid=user_uuid)
+        result = db_session.execute(stmt)
+        return result.scalars().first()
+
+    @staticmethod
+    def get_characters_sheets_by_game_session_uuid(
+        db_session: Session, game_session_uuid: str
+    ) -> Sequence[CharacterSheetDB]:
+        stmt = select(CharacterSheetDB).filter_by(game_session_uuid=game_session_uuid)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
+
+    @staticmethod
+    def get_character_sheet_by_user_uuid_and_game_session_uuid(
+        db_session: Session, user_uuid: str, game_session_uuid: str
+    ) -> Optional[CharacterSheetDB]:
+        stmt = select(CharacterSheetDB).filter_by(
+            user_uuid=user_uuid, game_session_uuid=game_session_uuid
+        )
+        result = db_session.execute(stmt)
+        return result.scalars().first()
+
+    @staticmethod
+    def update_properties(db_session: Session, uuid: UUID, properties: Dict):
+        stmt = (
+            update(CharacterSheetDB)
+            .where(CharacterSheetDB.uuid == uuid)
+            .values(properties=properties)
+            .execution_options(synchronize_session="fetch")
+        )
+        db_session.execute(stmt)
+        db_session.commit()
+
+    @staticmethod
+    def get_characters_sheets_by_user_uuid(
+        db_session: Session, user_uuid: str
+    ) -> Sequence[CharacterSheetDB]:
+        stmt = select(CharacterSheetDB).filter_by(user_uuid=user_uuid)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
 
 
 class RenownRepository:

@@ -56,7 +56,7 @@ class CharacterSheetRequest(BaseModel):
     properties: Optional[Dict] = None
 
 
-class CharacterSheetUpdatePropertiesRequest(BaseModel):
+class UpdatePropertiesRequest(BaseModel):
     properties: Dict
 
 

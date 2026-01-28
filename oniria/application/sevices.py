@@ -20,16 +20,13 @@ from oniria.interfaces import (
     MasterWorkshopRequest,
     CharacterSheetDTO,
     CharacterSheetRequest,
-    CharacterSheetUpdatePropertiesRequest,
+    UpdatePropertiesRequest,
 )
 from oniria.application import PlanMapper, UserMapper
 from oniria.infrastructure.db.repositories import (
     PlanRepository,
     UserRepository,
     UserStatusRepository,
-    GameSessionRepository,
-    MasterWorkshopRepository,
-    CharacterSheetRepository,
 )
 from oniria.infrastructure.db.sql_models import (
     PlanDB,

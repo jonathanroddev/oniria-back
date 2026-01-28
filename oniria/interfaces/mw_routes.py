@@ -17,6 +17,7 @@ from oniria.interfaces import (
     MasterWorkshopRequest,
     GameSessionDTO,
     GameSessionRequest,
+    UpdatePropertiesRequest,
 )
 
 from oniria.infrastructure.db import get_session
@@ -50,7 +51,24 @@ def create_master_workshop(
     )
 
 
-# TODO: Create endpoint to update master workshop properties
+@router.put(
+    "/masters-workshops/{master_workshop_uuid}/properties",
+    response_model=MasterWorkshopDTO,
+    tags=["campaigns"],
+)
+def update_master_workshop_properties(
+    master_workshop_uuid: str,
+    update_properties_request: UpdatePropertiesRequest,
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+):
+    check_permissions(user, "masters_workshops", "write")
+    return MasterWorkshopMapper.to_dto_from_domain(
+        MasterWorkshopService.update_master_workshop_properties(
+            user, db_session, master_workshop_uuid, update_properties_request
+        )
+    )
+
 
 # TODO: Create endpoint to get masters workshops of a user
 

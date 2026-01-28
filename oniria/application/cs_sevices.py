@@ -57,7 +57,7 @@ from oniria.interfaces import (
     MantraDTO,
     BookDTO,
     CharacterSheetRequest,
-    CharacterSheetUpdatePropertiesRequest,
+    UpdatePropertiesRequest,
 )
 from oniria.application.cs_mappers import (
     ExperienceMapper,
@@ -86,7 +86,11 @@ from oniria.infrastructure.db.cs_repositories import (
 )
 from oniria.infrastructure.db.repositories import (
     TranslationRepository,
+)
+from oniria.infrastructure.db.cs_repositories import (
     CharacterSheetRepository,
+)
+from oniria.infrastructure.db.mw_repositories import (
     GameSessionRepository,
     MasterWorkshopRepository,
 )
@@ -322,7 +326,7 @@ class CharacterSheetService:
         user: User,
         db_session: Session,
         character_sheet_uuid: str,
-        character_sheet_request: CharacterSheetUpdatePropertiesRequest,
+        update_properties_request: UpdatePropertiesRequest,
     ) -> CharacterSheet:
         character_sheet_db: CharacterSheetDB = (
             CharacterSheetRepository.get_character_sheet_by_uuid(
@@ -340,9 +344,9 @@ class CharacterSheetService:
             raise ForbiddenException(
                 "User is not allowed to modify this character sheet"
             )
-        character_sheet_db.properties = character_sheet_request.properties
+        character_sheet_db.properties = update_properties_request.properties
         CharacterSheetRepository.update_properties(
-            db_session, character_sheet_db.uuid, character_sheet_request.properties
+            db_session, character_sheet_db.uuid, update_properties_request.properties
         )
         return CharacterSheetMapper.to_domain_from_entity(character_sheet_db)
 
@@ -382,3 +386,20 @@ class CharacterSheetService:
                 for sheet in character_sheets_entities
             ]
         raise NotFoundException("No character sheets found for this game session")
+
+    @staticmethod
+    def get_character_sheet_by_user(
+        db_session: Session,
+        user: User,
+    ) -> List[CharacterSheet]:
+        character_sheets_entities: Sequence[CharacterSheetDB] = (
+            CharacterSheetRepository.get_characters_sheets_by_user_uuid(
+                db_session, user.uuid
+            )
+        )
+        if character_sheets_entities:
+            return [
+                CharacterSheetMapper.to_domain_from_entity(sheet)
+                for sheet in character_sheets_entities
+            ]
+        raise NotFoundException("No character sheets found for this user")

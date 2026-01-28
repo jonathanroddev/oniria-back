@@ -69,8 +69,8 @@ def get_application() -> FastAPI:
         allow_headers=["*"],
     )
     app.include_router(auth_routes, prefix=prefix)
-    app.include_router(cs_routes, prefix=prefix)
     app.include_router(mw_routes, prefix=prefix)
+    app.include_router(cs_routes, prefix=prefix)
     return app
 
 
