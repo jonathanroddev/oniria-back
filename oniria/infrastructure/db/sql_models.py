@@ -186,7 +186,7 @@ class GameSessionDB(Base):
         UUID(as_uuid=True),
         ForeignKey("masters_workshops.uuid"),
         nullable=False,
-        unique=True,
+        unique=False,
     )
     master_workshop: Mapped["MasterWorkshopDB"] = relationship(
         "MasterWorkshopDB", back_populates="game_sessions"

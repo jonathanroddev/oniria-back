@@ -64,10 +64,11 @@ class MasterWorkshopDTO(BaseModel):
     uuid: str
     owner: str
     game_sessions: List[GameSessionDTO]
+    properties: Optional[Dict] = None
 
 
 class MasterWorkshopRequest(BaseModel):
-    pass
+    properties: Optional[Dict] = None
 
 
 class UserDTO(BaseModel):

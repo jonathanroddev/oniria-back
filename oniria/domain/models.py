@@ -51,6 +51,7 @@ class MasterWorkshop:
     uuid: str
     owner: str
     game_sessions: List[GameSession]
+    properties: Dict
 
 
 @dataclass

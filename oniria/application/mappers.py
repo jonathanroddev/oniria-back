@@ -202,6 +202,7 @@ class MasterWorkshopMapper:
                 GameSessionMapper.to_dto_from_entity(game_session)
                 for game_session in master_workshop.game_sessions
             ],
+            properties=master_workshop.properties,
         )
 
     @staticmethod
@@ -213,6 +214,7 @@ class MasterWorkshopMapper:
                 GameSessionMapper.to_domain_from_entity(game_session)
                 for game_session in master_workshop.game_sessions
             ],
+            properties=master_workshop.properties,
         )
 
     @staticmethod
@@ -224,6 +226,7 @@ class MasterWorkshopMapper:
                 GameSessionMapper.to_dto_from_domain(game_session)
                 for game_session in domain.game_sessions
             ],
+            properties=domain.properties,
         )
 
 

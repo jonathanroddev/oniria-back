@@ -1,8 +1,11 @@
+import uuid
 from gettext import translation
 from typing import List, Sequence, Optional
 
+import bcrypt
 from sqlalchemy.orm import Session
 
+from oniria.application import MasterWorkshopMapper, GameSessionMapper
 from oniria.application.mw_mappers import (
     ObjectiveByTypeMapper,
     CommissionByTypeMapper,
@@ -16,6 +19,13 @@ from oniria.application.mw_mappers import (
     ToneModifierByTypeMapper,
     RewardByTypeMapper,
     EnemyMapper,
+)
+from oniria.domain import (
+    MasterWorkshop,
+    User,
+    NotFoundException,
+    ForbiddenException,
+    GameSession,
 )
 from oniria.interfaces import (
     ObjectiveDTO,
@@ -40,6 +50,8 @@ from oniria.interfaces import (
     EnemySubtypeDTO,
     EnemyDTO,
     MWBootstrapDTO,
+    MasterWorkshopRequest,
+    GameSessionRequest,
 )
 from oniria.infrastructure.db.mw_repositories import (
     ObjectiveRepository,
@@ -55,7 +67,11 @@ from oniria.infrastructure.db.mw_repositories import (
     RewardRepository,
     EnemyRepository,
 )
-from oniria.infrastructure.db.repositories import TranslationRepository
+from oniria.infrastructure.db.repositories import (
+    TranslationRepository,
+    MasterWorkshopRepository,
+    GameSessionRepository,
+)
 from oniria.infrastructure.db.mw_sql_models import (
     ObjectiveDB,
     CommissionDB,
@@ -70,7 +86,11 @@ from oniria.infrastructure.db.mw_sql_models import (
     RewardDB,
     EnemyDB,
 )
-from oniria.infrastructure.db.sql_models import TranslationDB
+from oniria.infrastructure.db.sql_models import (
+    TranslationDB,
+    MasterWorkshopDB,
+    GameSessionDB,
+)
 
 
 class MWBootstrapService:
@@ -172,3 +192,154 @@ class MWBootstrapService:
                 for enemy in enemies_entities
             ],
         )
+
+
+class GameSessionService:
+    @staticmethod
+    def hash_password(plain_password: str) -> str:
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(plain_password.encode("utf-8"), salt)
+        return hashed.decode("utf-8")
+
+    @staticmethod
+    def verify_password(plain_password: str, hashed_password: str) -> bool:
+        return bcrypt.checkpw(
+            plain_password.encode("utf-8"), hashed_password.encode("utf-8")
+        )
+
+    @staticmethod
+    def create_game_session(
+        user: User,
+        db_session: Session,
+        master_workshop_uuid: str,
+        game_session_request: GameSessionRequest,
+    ) -> GameSession:
+        master_workshop_db: Sequence[MasterWorkshopDB] = (
+            MasterWorkshopRepository.get_master_workshop_by_uuid_and_owner(
+                db_session, master_workshop_uuid, user.uuid
+            )
+        )
+        if not master_workshop_db:
+            raise NotFoundException(
+                f"No master workshop found with UUID: {master_workshop_uuid} or user {user.uuid} is not the owner"
+            )
+        if not game_session_request.max_players or game_session_request.max_players < 1:
+            game_session_request.max_players = 6
+        game_session_db: GameSessionDB = GameSessionDB(
+            uuid=uuid.uuid4(),
+            name=game_session_request.name,
+            password=(
+                GameSessionService.hash_password(game_session_request.password)
+                if game_session_request.password
+                else None
+            ),  # If not provided, it will be considered as public
+            max_players=game_session_request.max_players,
+            master_workshop_uuid=master_workshop_uuid,
+        )
+        game_session_recorded: GameSessionDB = (
+            GameSessionRepository.create_game_session(db_session, game_session_db)
+        )
+        return GameSessionMapper.to_domain_from_entity(game_session_recorded)
+
+    @staticmethod
+    def get_game_sessions_by_master_workshop(
+        user: User, db_session: Session, master_workshop_uuid: str
+    ) -> List[GameSession]:
+        master_workshop_db: Sequence[MasterWorkshopDB] = (
+            MasterWorkshopRepository.get_master_workshop_by_uuid_and_owner(
+                db_session, master_workshop_uuid, user.uuid
+            )
+        )
+        if not master_workshop_db:
+            raise NotFoundException(
+                f"No master workshop found with UUID: {master_workshop_uuid} or user {user.uuid} is not the owner"
+            )
+        game_sessions_entities: Sequence[GameSessionDB] = (
+            GameSessionRepository.get_game_sessions_by_master_workhop(
+                db_session, master_workshop_uuid
+            )
+        )
+        if game_sessions_entities:
+            return [
+                GameSessionMapper.to_domain_from_entity(game_session)
+                for game_session in game_sessions_entities
+            ]
+        raise NotFoundException("No game sessions found")
+
+    @staticmethod
+    def get_game_session_by_uuid(
+        db_session: Session, game_session_uuid: str, user: User
+    ) -> GameSession:
+        game_session_entity: Optional[GameSessionDB] = (
+            GameSessionRepository.get_game_session_by_uuid(
+                db_session, game_session_uuid
+            )
+        )
+        if not game_session_entity:
+            raise NotFoundException(
+                f"No game session found with UUID: {game_session_uuid}"
+            )
+        if str(game_session_entity.master_workshop.owner) not in str(user.uuid):
+            raise ForbiddenException(
+                f"User {user.uuid} is not the owner of this game session"
+            )
+        return GameSessionMapper.to_domain_from_entity(game_session_entity)
+
+    @staticmethod
+    def get_game_session_by_name(db_session: Session, name: str) -> GameSession:
+        game_session_entity: Optional[GameSessionDB] = (
+            GameSessionRepository.get_game_session_by_name(db_session, name)
+        )
+        if not game_session_entity:
+            raise NotFoundException(f"No game session found with name: {name}")
+        return GameSessionMapper.to_domain_from_entity(game_session_entity)
+
+    @staticmethod
+    def get_public_games_sessions(db_session: Session) -> List[GameSession]:
+        public_game_sessions: Sequence[GameSessionDB] = (
+            GameSessionRepository.get_public_games_sessions(db_session)
+        )
+        if public_game_sessions:
+            return [
+                GameSessionMapper.to_domain_from_entity(session)
+                for session in public_game_sessions
+            ]
+        raise NotFoundException("No public game sessions found")
+
+    @staticmethod
+    def get_private_game_session(
+        db_session: Session, game_session_request: GameSessionRequest
+    ) -> GameSession:
+        game_session_entity: Optional[GameSessionDB] = (
+            GameSessionRepository.get_game_session_by_name(
+                db_session, game_session_request.name
+            )
+        )
+        if not game_session_entity:
+            raise NotFoundException(
+                f"No private game session found with name: {game_session_request.name}"
+            )
+        if not GameSessionService.verify_password(
+            game_session_request.password, game_session_entity.password
+        ):
+            # TODO: Consider limiting the number of attempts to avoid brute force attacks
+            raise ForbiddenException("Invalid password for this game session")
+        return GameSessionMapper.to_domain_from_entity(game_session_entity)
+
+
+class MasterWorkshopService:
+    @staticmethod
+    def create_master_workshop(
+        user: User,
+        db_session: Session,
+        master_workshop_request: MasterWorkshopRequest,
+    ) -> MasterWorkshop:
+        master_workshop_db = MasterWorkshopDB(
+            uuid=uuid.uuid4(),
+            owner=user.uuid,
+            properties=master_workshop_request.properties,
+        )
+        master_workshop_recorded = MasterWorkshopRepository.create_master_workshop(
+            db_session, master_workshop_db
+        )
+        return MasterWorkshopMapper.to_domain_from_entity(master_workshop_recorded)

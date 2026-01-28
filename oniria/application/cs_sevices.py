@@ -1,9 +1,11 @@
+import uuid
 from gettext import translation
 from typing import List, Sequence, Optional
 
 from google.auth.metrics import token_request_id_token_mds
 from sqlalchemy.orm import Session
 
+from oniria.application.mw_sevices import GameSessionService
 from oniria.application.cs_mappers import (
     ExperienceMapper,
     RenownMapper,
@@ -24,7 +26,14 @@ from oniria.application.cs_mappers import (
     MantraMapper,
     BookMapper,
 )
-from oniria.domain import NotFoundException
+from oniria.domain import (
+    NotFoundException,
+    CharacterSheet,
+    GameSession,
+    UnauthorizedException,
+    ConflictException,
+    ForbiddenException,
+)
 from oniria.interfaces import (
     ExperienceDTO,
     RenownDTO,
@@ -47,8 +56,14 @@ from oniria.interfaces import (
     TotemByTypeDTO,
     MantraDTO,
     BookDTO,
+    CharacterSheetRequest,
+    CharacterSheetUpdatePropertiesRequest,
 )
-from oniria.application import ExperienceMapper, RenownMapper
+from oniria.application.cs_mappers import (
+    ExperienceMapper,
+    RenownMapper,
+)
+from oniria.application.mappers import GameSessionMapper, CharacterSheetMapper
 from oniria.infrastructure.db.cs_repositories import (
     ExperienceRepository,
     RenownRepository,
@@ -69,7 +84,12 @@ from oniria.infrastructure.db.cs_repositories import (
     MantraRepository,
     BookRepository,
 )
-from oniria.infrastructure.db.repositories import TranslationRepository
+from oniria.infrastructure.db.repositories import (
+    TranslationRepository,
+    CharacterSheetRepository,
+    GameSessionRepository,
+    MasterWorkshopRepository,
+)
 from oniria.infrastructure.db.cs_sql_models import (
     ExperienceDB,
     RenownDB,
@@ -90,7 +110,13 @@ from oniria.infrastructure.db.cs_sql_models import (
     MantraDB,
     BookDB,
 )
-from oniria.infrastructure.db.sql_models import TranslationDB
+from oniria.infrastructure.db.sql_models import (
+    TranslationDB,
+    CharacterSheetDB,
+    GameSessionDB,
+    MasterWorkshopDB,
+)
+from oniria.domain import User
 
 
 class CSBootstrapService:
@@ -242,3 +268,117 @@ class CSBootstrapService:
                 for book in books
             ],
         )
+
+
+class CharacterSheetService:
+    @staticmethod
+    def create_character_sheet(
+        user: User,
+        db_session: Session,
+        character_sheet_request: CharacterSheetRequest,
+    ) -> CharacterSheet:
+        game_session: GameSession = GameSessionService.get_game_session_by_name(
+            db_session, character_sheet_request.game_session.name
+        )
+        # TODO: Consider limiting the number of attempts to avoid brute force attacks
+        if game_session.password and (
+            not character_sheet_request.game_session.password
+            or not GameSessionService.verify_password(
+                character_sheet_request.game_session.password, game_session.password
+            )
+        ):
+            raise UnauthorizedException(
+                "Password is required for this game session or it is invalid"
+            )
+        character_sheet_exists = CharacterSheetRepository.get_character_sheet_by_user_uuid_and_game_session_uuid(
+            db_session, user.uuid, game_session.uuid
+        )
+        if character_sheet_exists:
+            raise ConflictException(
+                "Character sheet already exists for this user in this game session"
+            )
+        characters_sheets_on_this_game_session = (
+            CharacterSheetRepository.get_characters_sheets_by_game_session_uuid(
+                db_session, game_session.uuid
+            )
+        )
+        if len(characters_sheets_on_this_game_session) >= game_session.max_players:
+            raise ConflictException(
+                "Maximum number of players reached for this game session"
+            )
+        character_sheet_db = CharacterSheetDB(
+            uuid=uuid.uuid4(),
+            user_uuid=user.uuid,
+            game_session_uuid=game_session.uuid,
+            properties=character_sheet_request.properties,
+        )
+        character_sheet_recorded = CharacterSheetRepository.create_character_sheet(
+            db_session, character_sheet_db
+        )
+        return CharacterSheetMapper.to_domain_from_entity(character_sheet_recorded)
+
+    @staticmethod
+    def update_character_sheet_properties(
+        user: User,
+        db_session: Session,
+        character_sheet_uuid: str,
+        character_sheet_request: CharacterSheetUpdatePropertiesRequest,
+    ) -> CharacterSheet:
+        character_sheet_db: CharacterSheetDB = (
+            CharacterSheetRepository.get_character_sheet_by_uuid(
+                db_session, character_sheet_uuid
+            )
+        )
+        if not character_sheet_db:
+            raise NotFoundException("Character sheet not found")
+        game_session: GameSessionDB = GameSessionRepository.get_game_session_by_uuid(
+            db_session, str(character_sheet_db.game_session.uuid)
+        )
+        if (str(user.uuid) not in str(character_sheet_db.user_uuid)) and (
+            str(user.uuid) not in str(game_session.owner)
+        ):
+            raise ForbiddenException(
+                "User is not allowed to modify this character sheet"
+            )
+        character_sheet_db.properties = character_sheet_request.properties
+        CharacterSheetRepository.update_properties(
+            db_session, character_sheet_db.uuid, character_sheet_request.properties
+        )
+        return CharacterSheetMapper.to_domain_from_entity(character_sheet_db)
+
+    @staticmethod
+    def get_characters_sheets_by_master_workshop_and_game_session(
+        db_session: Session,
+        master_workshop_uuid: str,
+        game_session_uuid: str,
+        user: User,
+    ) -> List[CharacterSheet]:
+        master_workshop: MasterWorkshopDB = (
+            MasterWorkshopRepository.get_master_workshop_by_uuid_and_owner(
+                db_session, master_workshop_uuid, user.uuid
+            )
+        )
+        if not master_workshop:
+            raise NotFoundException(
+                f"No master workshop found with UUID: {master_workshop_uuid} or user {user.uuid} is not the owner"
+            )
+        game_session: GameSession = GameSessionService.get_game_session_by_uuid(
+            db_session,
+            game_session_uuid,
+            user,
+        )
+        if not game_session:
+            raise NotFoundException(
+                f"No game session found with UUID: {game_session_uuid} or user {user.uuid} is not the owner"
+            )
+        character_sheets_entities: Sequence[CharacterSheetDB] = (
+            CharacterSheetRepository.get_characters_sheets_by_game_session_uuid(
+                db_session, game_session.uuid
+            )
+        )
+        if character_sheets_entities:
+            return [
+                CharacterSheetMapper.to_domain_from_entity(sheet)
+                for sheet in character_sheets_entities
+            ]
+        raise NotFoundException("No character sheets found for this game session")

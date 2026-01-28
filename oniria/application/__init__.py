@@ -9,9 +9,13 @@ from oniria.application.mappers import (
 from oniria.application.sevices import (
     PlanService,
     UserService,
+)
+from oniria.application.cs_sevices import (
+    CharacterSheetService,
+)
+from oniria.application.mw_sevices import (
     GameSessionService,
     MasterWorkshopService,
-    CharacterSheetService,
 )
 from oniria.application.cs_mappers import (
     ExperienceMapper,
