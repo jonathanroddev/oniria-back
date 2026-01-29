@@ -176,6 +176,7 @@ class GameSessionDB(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(250), nullable=True)
     max_players: Mapped[int] = mapped_column(Integer, nullable=False, default=6)
+    properties: Mapped[dict] = mapped_column(JSONB, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, server_default=func.now(), onupdate=None
     )

@@ -30,14 +30,6 @@ from oniria.infrastructure.db.mw_sql_models import (
 
 class GameSessionRepository:
     @staticmethod
-    def get_game_session_by_uuid(
-        db_session: Session, uuid: str
-    ) -> Optional[GameSessionDB]:
-        stmt = select(GameSessionDB).filter_by(uuid=uuid)
-        result = db_session.execute(stmt)
-        return result.scalars().first()
-
-    @staticmethod
     def create_game_session(
         db_session: Session, game_session: GameSessionDB
     ) -> GameSessionDB:
@@ -81,6 +73,17 @@ class GameSessionRepository:
         stmt = select(GameSessionDB).filter_by(name=name)
         result = db_session.execute(stmt)
         return result.scalars().first()
+
+    @staticmethod
+    def update_properties(db_session: Session, uuid: UUID, properties: Dict):
+        stmt = (
+            update(GameSessionDB)
+            .where(GameSessionDB.uuid == uuid)
+            .values(properties=properties)
+            .execution_options(synchronize_session="fetch")
+        )
+        db_session.execute(stmt)
+        db_session.commit()
 
 
 class MasterWorkshopRepository:

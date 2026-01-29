@@ -86,7 +86,22 @@ def get_masters_workshops_by_user(
     return [MasterWorkshopMapper.to_dto_from_domain(mw) for mw in masters_workshops]
 
 
-# TODO: Add properties to game session and create endpoint to update them
+@router.get(
+    "/masters-workshops/{master_workshop_uuid}/games-sessions",
+    response_model=List[GameSessionDTO],
+    tags=["campaigns"],
+)
+def get_game_sessions_by_master_workshop(
+    master_workshop_uuid: str,
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+):
+    return [
+        GameSessionMapper.to_dto_from_domain(game_session)
+        for game_session in GameSessionService.get_game_sessions_by_master_workshop(
+            user, db_session, master_workshop_uuid
+        )
+    ]
 
 
 @router.post(
@@ -107,22 +122,23 @@ def create_game_session(
     )
 
 
-@router.get(
-    "/masters-workshops/{master_workshop_uuid}/games-sessions",
+@router.put(
+    "/masters-workshops/{master_workshop_uuid}/games-sessions/properties",
     response_model=List[GameSessionDTO],
     tags=["campaigns"],
 )
-def get_game_sessions_by_master_workshop(
+def update_game_session_properties(
     master_workshop_uuid: str,
+    update_properties_request: UpdatePropertiesRequest,
     db_session: Session = Depends(get_session),
     user: User = Depends(get_current_user),
 ):
-    return [
-        GameSessionMapper.to_dto_from_domain(game_session)
-        for game_session in GameSessionService.get_game_sessions_by_master_workshop(
-            user, db_session, master_workshop_uuid
+    check_permissions(user, "masters_workshops", "write")
+    return GameSessionMapper.to_dto_from_domain(
+        GameSessionService.update_game_session_properties(
+            user, db_session, master_workshop_uuid, update_properties_request
         )
-    ]
+    )
 
 
 @router.get(

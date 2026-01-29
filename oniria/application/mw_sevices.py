@@ -329,6 +329,34 @@ class GameSessionService:
             raise ForbiddenException("Invalid password for this game session")
         return GameSessionMapper.to_domain_from_entity(game_session_entity)
 
+    @staticmethod
+    def update_game_session_properties(
+        user: User,
+        db_session: Session,
+        game_session_uuid: str,
+        update_properties_request: UpdatePropertiesRequest,
+    ) -> GameSession:
+        game_session_db: Optional[GameSessionDB] = (
+            GameSessionRepository.get_game_session_by_uuid(
+                db_session, game_session_uuid
+            )
+        )
+        if not game_session_db:
+            raise NotFoundException(
+                f"No game session found with UUID: {game_session_uuid}"
+            )
+        if str(game_session_db.master_workshop.owner) not in str(user.uuid):
+            raise ForbiddenException(
+                f"User {user.uuid} is not the owner of this game session"
+            )
+        game_session_db.properties = update_properties_request.properties
+        GameSessionRepository.update_properties(
+            db_session,
+            uuid.UUID(game_session_uuid),
+            update_properties_request.properties,
+        )
+        return GameSessionMapper.to_domain_from_entity(game_session_db)
+
 
 class MasterWorkshopService:
     @staticmethod

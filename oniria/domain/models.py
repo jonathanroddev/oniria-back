@@ -30,6 +30,7 @@ class GameSession:
     name: str
     password: str
     max_players: int
+    properties: Dict
     master_workshop_uuid: str
 
 

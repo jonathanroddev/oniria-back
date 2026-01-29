@@ -30,6 +30,7 @@ CREATE TABLE games_sessions (
     "name" VARCHAR(50) NOT NULL,
     "password" VARCHAR(250) NULL,
     "max_players" INTEGER NOT NULL,
+    "properties" JSONB,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     "master_workshop_uuid" UUID NOT NULL REFERENCES masters_workshops(uuid) UNIQUE,
 );

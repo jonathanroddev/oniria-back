@@ -126,6 +126,7 @@ class GameSessionMapper:
             uuid=str(game_session.uuid),
             name=game_session.name,
             max_players=game_session.max_players,
+            properties=game_session.properties,
             master_workshop_uuid=str(game_session.master_workshop_uuid),
         )
 
@@ -136,6 +137,7 @@ class GameSessionMapper:
             name=game_session.name,
             password=game_session.password,
             max_players=game_session.max_players,
+            properties=game_session.properties,
             master_workshop_uuid=str(game_session.master_workshop_uuid),
         )
 
@@ -145,15 +147,8 @@ class GameSessionMapper:
             uuid=game_session.uuid,
             name=game_session.name,
             max_players=game_session.max_players,
+            properties=game_session.properties or None,
             master_workshop_uuid=game_session.master_workshop_uuid,
-        )
-
-    @staticmethod
-    def to_entity_from_dto(game_session_dto: GameSessionDTO) -> GameSessionDB:
-        return GameSessionDB(
-            name=game_session_dto.name,
-            password=game_session_dto.password,
-            max_players=game_session_dto.max_players,
         )
 
 

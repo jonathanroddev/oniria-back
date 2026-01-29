@@ -33,6 +33,7 @@ class GameSessionDTO(BaseModel):
     uuid: str
     name: str
     max_players: int
+    properties: Optional[Dict] = None
     master_workshop_uuid: str
 
 
@@ -42,6 +43,7 @@ class GameSessionRequest(BaseModel):
         None
     )
     max_players: Optional[int] = 6
+    properties: Optional[Dict] = None
 
 
 class CharacterSheetDTO(BaseModel):
