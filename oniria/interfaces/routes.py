@@ -35,6 +35,7 @@ def get_plans(db_session: Session = Depends(get_session)):
     ]
 
 
+# TODO: Create another dto for user self info without cs/mw properties data
 @router.get("/users/me", response_model=UserDTO, tags=["users"])
 def get_self_user(
     db_session: Session = Depends(get_session), user: User = Depends(get_current_user)

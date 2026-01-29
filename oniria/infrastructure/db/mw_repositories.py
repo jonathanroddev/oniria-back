@@ -114,6 +114,14 @@ class MasterWorkshopRepository:
         db_session.execute(stmt)
         db_session.commit()
 
+    @staticmethod
+    def get_masters_workshops_by_owner(
+        db_session: Session, owner: str
+    ) -> Sequence[MasterWorkshopDB]:
+        stmt = select(MasterWorkshopDB).filter_by(owner=owner)
+        result = db_session.execute(stmt)
+        return result.scalars().all()
+
 
 class ObjectiveRepository:
     @staticmethod

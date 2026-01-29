@@ -370,3 +370,20 @@ class MasterWorkshopService:
             update_properties_request.properties,
         )
         return MasterWorkshopMapper.to_domain_from_entity(master_workshop_db)
+
+    @staticmethod
+    def get_masters_workshops_by_user(
+        db_session: Session,
+        user: User,
+    ) -> List[MasterWorkshop]:
+        master_workshops_entities: Sequence[MasterWorkshopDB] = (
+            MasterWorkshopRepository.get_masters_workshops_by_owner(
+                db_session, user.uuid
+            )
+        )
+        if master_workshops_entities:
+            return [
+                MasterWorkshopMapper.to_domain_from_entity(mw)
+                for mw in master_workshops_entities
+            ]
+        raise NotFoundException(f"No master workshops found for user {user.uuid}")

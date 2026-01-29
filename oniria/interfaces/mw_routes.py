@@ -70,7 +70,21 @@ def update_master_workshop_properties(
     )
 
 
-# TODO: Create endpoint to get masters workshops of a user
+@router.get(
+    "/masters-workshops",
+    response_model=List[MasterWorkshopDTO],
+    tags=["campaigns"],
+)
+def get_masters_workshops_by_user(
+    db_session: Session = Depends(get_session),
+    user: User = Depends(get_current_user),
+) -> List[MasterWorkshopDTO]:
+    check_permissions(user, "masters_workshops", "read")
+    masters_workshops = MasterWorkshopService.get_masters_workshops_by_user(
+        db_session, user
+    )
+    return [MasterWorkshopMapper.to_dto_from_domain(mw) for mw in masters_workshops]
+
 
 # TODO: Add properties to game session and create endpoint to update them
 
