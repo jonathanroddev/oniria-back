@@ -66,17 +66,6 @@ def mock_external_user():
 
 
 @pytest.fixture
-def mock_user():
-    return User(
-        uuid="internal_user_123",
-        external_uuid="user_test_123",
-        dreamer_tag="TestDreamer#1234",
-        user_status=UserStatus(name="active"),
-        plan=Plan(name="basic", permissions=[]),
-    )
-
-
-@pytest.fixture
 def client(db_session):
 
     def override_get_db():
@@ -89,7 +78,15 @@ def client(db_session):
         return mock_external_user
 
     def override_get_current_user():
-        return mock_user
+        return User(
+            uuid="internal_user_123",
+            external_uuid="user_test_123",
+            dreamer_tag="TestDreamer#1234",
+            user_status=UserStatus(name="active"),
+            plan=Plan(name="basic", permissions=[]),
+            character_sheets=[],
+            masters_workshops=[],
+        )
 
     app.dependency_overrides[get_session] = override_get_db
     app.dependency_overrides[get_current_external_user] = (
